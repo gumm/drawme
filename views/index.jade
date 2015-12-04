@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+
+
+block bottomScripts
+
+  if jsCompiled
+    script(src = jsCompiled)
+  else
+    script(src = '/js/google-closure-library/closure/goog/base.js')
+    script(src = '/js/deps.js')
+    script.
+      goog.require('drawme')
+
+  script(src = '/js/bootstrap.js')
+  script.
+      bootstrap.setDefaults('landing')
+      bootstrap.addApp('site')

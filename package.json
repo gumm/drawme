@@ -1,0 +1,34 @@
+{
+  "name": "drawme",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "cde": "bin/build/build.sh `pwd` cde",
+    "build": "bin/build/build.sh `pwd` build",
+    "deps": "bin/build/build.sh `pwd` deps",
+    "lint:node": "bin/build/build.sh `pwd` lintnode",
+    "lint:app": "bin/build/build.sh `pwd` lintapp",
+    "compile:js": "bin/build/build.sh `pwd` compile_js",
+    "compile:css": "bin/build/build.sh `pwd` compile_css",
+    "compile": "npm run deps && npm run lint && npm run compile:js && npm run compile:css",
+    "lint": "npm run lint:node && npm run lint:app"
+  },
+  "dependencies": {
+    "body-parser": "~1.13.2",
+    "cookie-parser": "~1.3.5",
+    "debug": "~2.2.0",
+    "express": "~4.13.1",
+    "google-closure-compiler": "^20151015.0.0",
+    "google-closure-library": "^20151015.0.0",
+    "jade": "~1.11.0",
+    "kerberos": "0.0.17",
+    "less": "^2.5.3",
+    "less-middleware": "1.0.x",
+    "less-plugin-clean-css": "^1.5.1",
+    "merge": "^1.2.0",
+    "mongodb": "^2.0.49",
+    "morgan": "~1.6.1",
+    "serve-favicon": "~2.3.0"
+  }
+}

@@ -1,0 +1,154 @@
+@import (reference) "global_typo_ref";
+@import (reference) "global_col_ref";
+
+*:focus  {
+  outline: none;
+}
+
+html {
+  font-size: 100%;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a:hover, a:focus {
+  text-decoration: none !important;
+}
+
+abbr, acronym {
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+blockquote {
+  margin: 1em 30px;
+}
+
+body, html {
+  height: 100%;
+}
+
+body {
+  .typoBody1();
+  background-color: transparent;
+  overflow: hidden;
+}
+
+body.waiting * {
+  cursor: wait;
+}
+
+code {
+  font: 13px Monaco, Courier, monospace;
+  line-height: 1.6;
+}
+
+h1 {
+  .typoLightHeadline();
+  margin-top: 0;
+}
+h2 {
+  .typoSubhead();
+}
+
+i {
+  font-style: italic;
+}
+
+select, input, textarea {
+  .typoBody1(@col: @col_TYPO-NORM)
+}
+p {
+  margin: 10px 0;
+}
+pre {
+  width: 100%;
+  overflow: auto;
+  background: @col-PRE-bg;
+}
+
+pre.cleanPre {
+  width: initial;
+  overflow: initial;
+  background: transparent;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+  padding: 0;
+}
+
+select {
+  width: 80%;
+}
+textarea {
+  width: 90%;
+}
+table {
+  width: 100%;
+}
+
+caption {
+  text-align: left;
+  font-size: 1.5em;
+  padding: 5px 0 2px;
+  margin-top: 20px;
+}
+
+caption > p {
+  font-size: 10px;
+  margin-top: -1px;
+  padding: 5px;
+}
+
+td {
+  padding: 7px 5px 5px 10px;
+  display: table-cell;
+  .typoBody1();
+}
+
+th {
+  text-align: left;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 7px 10px;
+}
+
+th.row {
+  font-weight: bold;
+  text-transform: none;
+}
+
+div[role="button"] {
+  cursor: pointer;
+}
+
+/*Placeholder text in input elements*/
+::-webkit-input-placeholder {
+  color: #999;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+  color: #999;
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+  color: #999;
+}
+
+:-ms-input-placeholder {
+  color: #999;
+}
+
+.dom-remove {
+  display: none;
+  visibility: hidden;
+}
+
+.selectable {
+    cursor: pointer;
+}

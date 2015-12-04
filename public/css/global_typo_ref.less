@@ -1,0 +1,106 @@
+@rootFam: "Roboto", "Helvetica Neue", "Lucida Grande", "Lucida Sans Unicode", Helvetica, Verdana, arial, sans-serif;
+@monoFam: "Bitstream Vera Sans Mono", Monaco, "Courier New", Courier, monospace;
+@trinFam: trinfont_4book;
+
+.typo(@size:14, @fam:@rootFam) {
+  font-family: @fam;
+  font-size: @size;
+}
+
+.typoDisplay4(@col:@col_typoDisplay4) {
+  .typo(112px, 'Roboto-Light');
+  white-space: nowrap;
+  color: @col;
+}
+
+.typoDisplay3(@col:@col_typoDisplay3) {
+  .typo(56px);
+  white-space: nowrap;
+  color: @col;
+  line-height: 64px;
+}
+
+.typoDisplay2(@col:@col_typoDisplay2) {
+  .typo(45px);
+  line-height: 48px;
+  white-space: nowrap;
+  color: @col;
+}
+
+.typoDisplay1(@col:@col_typoDisplay1) {
+  .typo(34px);
+  line-height: 40px;
+  color: @col;
+}
+
+.typoHeadline(@col:@col_typoHeadline) {
+  .typo(24px);
+  line-height: 32px;
+  color: @col;
+}
+
+.typoLightHeadline(@col:@col_typoLightHeadline) {
+  .typo(20px, 'Roboto-Light');
+  line-height: 32px;
+  color: @col;
+}
+
+.typoTitle(@col:@col_typoTitle) {
+  .typo(20px, 'Roboto-Medium');
+  line-height: 24px;
+  color: @col;
+}
+
+.typoSubhead(@col:@col_typoSubhead) {
+  .typo(15px);
+  line-height: 24px;
+  color: @col;
+}
+
+.typoLiteSubhead(@col:@col_typoLiteSubhead) {
+  .typo(15px, 'Roboto-Light');
+  line-height: 24px;
+  color: @col;
+}
+
+.typoTree(@col:@col_typoTree) {
+  .typo(15px, 'Roboto-Light');
+  line-height: 24px;
+  font-weight: 400;
+  color: @col;
+}
+
+.typoBody2(@col:@col_typoBody2) {
+  .typo(13px, 'Roboto-Medium');
+  line-height: 24px;
+  color: @col;
+}
+
+.typoBody1(@col:@col_typoBody1) {
+  .typo(13px);
+  line-height: 20px;
+  color: @col;
+}
+
+.typoCaption(@col:@col_typoCaption) {
+  .typo(12px);
+  color: @col;
+}
+
+.typoButton(@col:@col_typoButton) {
+  .typo(14px, 'Roboto-Medium');
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: @col;
+}
+
+.typoButton1(@col: @col_typoButton) {
+  .typo(12px);
+  white-space: nowrap;
+  text-decoration: none !important;
+  color: @col;
+}
+
+.typoMono {
+  .typo(15px, @monoFam);
+}
