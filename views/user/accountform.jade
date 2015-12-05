@@ -1,0 +1,131 @@
+//- preset form values if we receive a userdata object
+- account = typeof(udata) != 'undefined' ? udata : { }
+
+//- store the userId on the client side in a hidden input field
+input(type='hidden', value= account._id)#accountId
+
+form()#account-form.form-horizontal.well
+    p#sub1.subheading #{subhead}
+    hr
+    fieldset
+        if (formtype === 'signup' || formtype === 'edit')
+            #name-cg.control-group
+                label.control-label(for='name-tf') Name
+                .controls
+                    input#name-tf.input-full-width(
+                    type='text',
+                    name='name',
+                    value=account.name,
+                    placeholder='Your real name',
+                    required)
+            #surname-cg.control-group
+                label.control-label(for='surname-tf') Surname
+                .controls
+                    input#surname-tf.input-full-width(
+                    type='text',
+                    name='surname',
+                    value=account.surname,user
+                    placeholder='Your surname')
+            #email-cg.control-group
+                label.control-label(for='email-tf') Email
+                .controls
+                    input#email-tf.input-full-width(
+                    type='email',
+                    name='email',
+                    value=account.email,
+                    placeholder='Your email address',
+                    required)
+        if (formtype === 'edit')
+            #url-cg.control-group
+                label.control-label(for='url-tf') URL
+                .controls
+                    input#url-tf.input-full-width(
+                    type='url',
+                    name='url',
+                    value=account.url,
+                    placeholder='Your personal URL')
+            hr
+            #city-cg.control-group
+                label.control-label(for='city-tf') City
+                .controls
+                    input#city-tf.input-full-width(
+                    type='text',
+                    name='city',
+                    value=account.location.city,
+                    placeholder='Where you live')
+            #clist-cg.control-group0
+                label.control-label(for='country-list') Country
+                .controls
+                    select#country-list(
+                    name='country')
+                        each item in countries
+                            option(selected=item.name == account.location.country)=item.name
+            hr
+            #cell-cg.control-group
+                label.control-label(for='cell-tf') Cell Phone
+                .controls
+                    input#cell-tf.input-full-width(
+                    type='text',
+                    name='cell',
+                    value=account.contact.cell,
+                    placeholder='+00 12 3456789')
+            #phone-cg.control-group
+                label.control-label(for='phone-tf') Landline
+                .controls
+                    input#phone-tf.input-full-width(
+                    type='text',
+                    name='phone',
+                    value=account.contact.phone,
+                    placeholder='+00 12 3456789')
+
+        if (formtype === 'signup')
+            hr
+            p#sub2.subheading
+            #user-cg.control-group
+                label.control-label(for='user-tf') Username
+                .controls
+                    input#user-tf.input-full-width.disabled(
+                    type='text',
+                    name='user',
+                    value='',
+                    placeholder='Pick a username',
+                    required)
+
+        if (formtype === 'editpassword')
+            #currpass-cg.control-group
+                label.control-label(for='currpass-tf') Current Password
+                .controls
+                    input#currpass-tf.input-full-width(
+                    type='password',
+                    name='currpass',
+                    value='',
+                    placeholder='Current password',
+                    required)
+
+        if (formtype === 'signup' || formtype === 'editpassword')
+            - var passLab = (formtype === 'editpassword' ? 'New Password' : 'Password')
+            #pass-cg.control-group
+                label.control-label(for='pass-tf') #{passLab}
+                .controls
+                    input#pass-tf.input-full-width(
+                    type='password',
+                    name='pass',
+                    value='',
+                    placeholder='Create a password',
+                    required)
+
+        if (formtype === 'editpassword')
+            #confpass-cg.control-group
+                label.control-label(for='confpass-tf') Confirm Password
+                .controls
+                    input#confpass-tf.input-full-width(
+                    type='password',
+                    name='confpass',
+                    value='',
+                    placeholder='Confirm password',
+                    required)
+
+        .form-actions
+            .form-action-right
+                #account-cancel Cancel
+                #account-submit.g-button-submit #{button_legend}

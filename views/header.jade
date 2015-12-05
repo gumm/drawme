@@ -1,0 +1,39 @@
+//- preset form values if we receive a userdata object
+- profile = typeof(data) != 'undefined' ? data : { }
+
+#logo_container
+    //img#logoImg(src="img/explogo.png")
+
+if (profile.name)
+    #active_user_container.topfixed
+        .signup Welcome
+            #user_button
+                i.icon-cog
+                | #{profile.name} #{profile.surname}
+
+    #sysreadout
+        .sysreadout.topfixed-left Active Clients:
+            #active_clients.numberreadout
+
+        .sysreadout.topfixed-left Bytes Sent:
+            #bytes_sent.numberreadout
+
+        .sysreadout.topfixed-left Bytes Received:
+            #bytes_received.numberreadout
+
+    #mqtt(style="position:absolute; display:none")
+        .span4
+            #in_mqtt
+        .span4
+            #in_sys
+
+//else
+//    #signup.topfixed
+//        .signup New Explorer?
+//            #create-account.g-button-red
+//                i.icon-user
+//                | Sign Up
+
+// script
+//    console.debug('Here is the user profile: ', !{JSON.stringify(data)})
+

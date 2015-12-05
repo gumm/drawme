@@ -1,6 +1,5 @@
 @rootFam: "Roboto", "Helvetica Neue", "Lucida Grande", "Lucida Sans Unicode", Helvetica, Verdana, arial, sans-serif;
 @monoFam: "Bitstream Vera Sans Mono", Monaco, "Courier New", Courier, monospace;
-@trinFam: trinfont_4book;
 
 .typo(@size:14, @fam:@rootFam) {
   font-family: @fam;
@@ -11,6 +10,7 @@
   .typo(112px, 'Roboto-Light');
   white-space: nowrap;
   color: @col;
+  line-height: initial;
 }
 
 .typoDisplay3(@col:@col_typoDisplay3) {

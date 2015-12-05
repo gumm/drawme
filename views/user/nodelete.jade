@@ -1,0 +1,10 @@
+extends ../orgs/list_
+
+block warning
+    - showCreate = false
+    .alert.alert-error
+        strong You still own orgnizations.
+        p First delete those or transfer ownership
+            | to a another user before deleting your profile. Below is a list of
+            | the orgs you are still identified as owner.
+

@@ -1,0 +1,35 @@
+
+.login-container
+  form()#login-form.well
+    h4 Sign in
+    p Already a circle-square-o-naut? Well done! Just log in to get to all
+      | the awesome you already made.
+
+    // This is the username field
+    label(for="user") Username
+    input(type="text", name="user", id='user-tf', required).required
+
+    // This is the password field
+    label(for="pass") Password
+    input(type="password", name="pass", id='pass-tf', required).required
+
+    label(for="remember")#remember-me.checkbox Remember Me
+      input(name="remember", type="checkbox", checked='checked')
+    .form-actions
+      .form-action-right
+        #btn-login.g-button-submit
+          i.icon-signin.icon-large
+          | Sign In
+
+      #forgot-password.linklike Forgot Your Password?
+
+.login-container
+  .well
+    h4 Join in
+    p All the fun of drawing squares and circles, with none of the tears.
+      | Things can't get better...
+    .form-actions
+      .form-action-right
+        #create-account.g-button-red
+          i.icon-user
+          | Sign Up

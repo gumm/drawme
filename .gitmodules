@@ -1,0 +1,3 @@
+[submodule "public/js/bad-library"]
+	path = public/js/bad-library
+	url = https://github.com/gumm/bad-library.git

@@ -73,6 +73,7 @@ case "${BUILD_JOB}" in
     # Prepare the Closure Development Environment
     build)  echo "Complete build"
         rm -rf ${NODE_MODULES}
+        npm cache clean
         npm install
         npm run cde
         npm run deps
@@ -90,10 +91,17 @@ case "${BUILD_JOB}" in
         ;;
 
     # Build the deps file needed by Node so we can use goog.provide and require.
-    appdeps) echo  "Build App Dependencies"
-       ${BUILD_PATH}/deps:app.sh \
+    deps_app) echo  "Build App Dependencies"
+       ${BUILD_PATH}/deps_app.sh \
             ${WORKSPACE} \
-            ${CLOSURE_LIBRARY_PATH} \
+            ${GOOG_BIN_PATH} \
+            ${PROJECT_NAME}
+       ;;
+
+    # Build the deps file needed by Node so we can use goog.provide and require.
+    deps_node) echo  "Build Node Dependencies"
+       ${BUILD_PATH}/deps_node.sh \
+            ${WORKSPACE} \
             ${GOOG_BIN_PATH} \
             ${PROJECT_NAME}
        ;;
@@ -114,15 +122,15 @@ case "${BUILD_JOB}" in
 
     # Compile the CSS files.
     compile_css)  echo  "Compile CSS"
-    time ${BUILD_PATH}/compile-css.sh \
-        ${WORKSPACE} \
-        ${PROJECT_NAME} \
-        ${SITE_VERSION} \
-        ${CSS_PATH} \
-        ${COMPILED_OUTPUT_PATH} \
-        ${LESS_COMPILER} \
-        ${BUILD_PARM}
-    ;;
+        time ${BUILD_PATH}/compile-css.sh \
+            ${WORKSPACE} \
+            ${PROJECT_NAME} \
+            ${SITE_VERSION} \
+            ${CSS_PATH} \
+            ${COMPILED_OUTPUT_PATH} \
+            ${LESS_COMPILER} \
+            ${BUILD_PARM}
+        ;;
 
     # Lint the node application files.
     lintnode) echo "Lint ${BUILD_PARM}"
