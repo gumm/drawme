@@ -76,9 +76,7 @@ case "${BUILD_JOB}" in
         npm cache clean
         npm install
         npm run cde
-        npm run deps
-        npm run lint
-        npm run test
+        npm run compile
         ;;
 
     # Prepare the Closure Development Environment

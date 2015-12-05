@@ -23,8 +23,8 @@ goog.addDependency('../../../bad-library/bad/util/utils.js', ['bad.utils'], ['go
 goog.addDependency('../../../contracts/urlmap.js', ['contracts.urlMap'], [], false);
 goog.addDependency('../../../drawme/base/constants.js', ['app.base.EventType'], ['bad.utils'], false);
 goog.addDependency('../../../drawme/base/panels/homepanel.js', ['app.base.panel.Home'], ['bad.ui.Panel', 'bad.utils', 'goog.dom', 'goog.json'], false);
-goog.addDependency('../../../drawme/base/panels/navpanel.js', ['app.base.NavPanel'], ['app.base.EventType', 'bad.ui.MenuFlatRenderer', 'bad.ui.MenuItemRenderer', 'bad.ui.Panel', 'bad.utils', 'goog.dom.classes', 'goog.events.EventType'], false);
-goog.addDependency('../../../drawme/base/panels/persistentpanel.js', ['app.base.panel.Persistent'], ['app.base.EventType', 'app.user.EventType', 'bad.ui.MenuFloatRenderer', 'bad.ui.MenuItemRenderer', 'bad.ui.Panel', 'bad.utils', 'goog.Uri', 'goog.dom', 'goog.ui.Css3MenuButtonRenderer', 'goog.ui.MenuButton', 'goog.uri.utils'], false);
+goog.addDependency('../../../drawme/base/panels/navpanel.js', ['app.base.NavPanel'], ['app.base.EventType', 'bad.ui.MenuFlatRenderer', 'bad.ui.MenuItemRenderer', 'bad.ui.Panel', 'bad.utils', 'contracts.urlMap', 'goog.dom.classes', 'goog.events.EventType'], false);
+goog.addDependency('../../../drawme/base/panels/persistentpanel.js', ['app.base.panel.Persistent'], ['app.base.EventType', 'app.user.EventType', 'bad.ui.MenuFloatRenderer', 'bad.ui.MenuItemRenderer', 'bad.ui.Panel', 'bad.utils', 'contracts.urlMap', 'goog.Uri', 'goog.dom', 'goog.ui.Css3MenuButtonRenderer', 'goog.ui.MenuButton', 'goog.uri.utils'], false);
 goog.addDependency('../../../drawme/base/views/basic.js', ['app.BasicView'], ['bad.ui.View'], false);
 goog.addDependency('../../../drawme/base/views/homeview.js', ['app.base.view.Home'], ['app.base.panel.Home', 'bad.ui.View', 'contracts.urlMap', 'goog.Uri'], false);
 goog.addDependency('../../../drawme/drawme.js', ['drawme'], ['bad.Net', 'drawme.Site', 'goog.net.XhrManager'], false);

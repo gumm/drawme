@@ -350,8 +350,8 @@ java -server -XX:+TieredCompilation -jar ${CLOSURE_COMPILER_PATH}/compiler.jar \
 
 echo "-----------------------------------------------------"
 NUM_CLIB_FILES=$(grep -o closure-library/ ${COMPILED_OUTPUT_PATH}/${PROJECT_NAME}.min.js.manifest | wc -l)
-NUM_TLIB_FILES=$(grep -o trin/ ${COMPILED_OUTPUT_PATH}/${PROJECT_NAME}.min.js.manifest | wc -l)
-NUM_SAPP_FILES=$(grep -o ${PROJECT_NAME}/ ${COMPILED_OUTPUT_PATH}/${PROJECT_NAME}.min.js.manifest | wc -l)
+NUM_BLIB_FILES=$(grep -o bad-library/ ${COMPILED_OUTPUT_PATH}/${PROJECT_NAME}.min.js.manifest | wc -l)
+NUM_SAPP_FILES=$(grep -o public/js/${PROJECT_NAME}/ ${COMPILED_OUTPUT_PATH}/${PROJECT_NAME}.min.js.manifest | wc -l)
 FILE_SIZE=$(stat -c%s ${COMPILED_OUTPUT_PATH}/${PROJECT_NAME}.min.js)
 QUALITY=$(sed '/error(s).*warning(s).*typed/!d' < ${BUILD_LOG_FILE})
 RESULT='SUCCESS'
@@ -366,8 +366,8 @@ fi
 echo "FULL COMPILE"
 echo "Results:                  ${RESULT}"
 echo "Closure Library files:    ${NUM_CLIB_FILES}"
-echo "Trin Library files:       ${NUM_TLIB_FILES}"
-echo "${PROJECT_NAME} App files:${NUM_SAPP_FILES}"
+echo "Bad-Library files:        ${NUM_BLIB_FILES}"
+echo "${PROJECT_NAME} App files:         ${NUM_SAPP_FILES}"
 echo "Compiled size:            ${FILE_SIZE}"
 echo "${SUCCESS_COL} Quality:   ${QUALITY}"
 echo ""
