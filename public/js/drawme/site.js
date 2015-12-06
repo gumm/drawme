@@ -4,10 +4,9 @@
 goog.provide('drawme.Site');
 
 goog.require('app.base.view.Home');
-goog.require('app.base.view.Persistent');
+goog.require('app.base.ViewManager');
 goog.require('app.user.view.Login');
 goog.require('bad.UserManager');
-goog.require('bad.ui.EventType');
 goog.require('bad.ui.Layout');
 goog.require('contracts.urlMap');
 goog.require('goog.Uri');
@@ -45,6 +44,11 @@ drawme.Site = function(xManWrapper) {
    */
   this.user_ = new bad.UserManager();
 
+  /**
+   * A manager that collects and acts on events from views.
+   * @type {app.base.ViewManager}
+   */
+  this.viewManager = new app.base.ViewManager();
 };
 goog.inherits(drawme.Site, goog.events.EventHandler);
 
@@ -148,6 +152,7 @@ drawme.Site.prototype.initLayout_ = function() {
 };
 
 drawme.Site.prototype.onLayoutReady = function() {
+  this.initViewManager();
   this.hideAllNests();
   this.autoLogin();
 };
@@ -159,20 +164,10 @@ drawme.Site.prototype.onLayoutReady = function() {
  * It should only appear on sign-in, and be destroyed on sign out.
  * This uses a special view with its own panel components to dive this.
  */
-drawme.Site.prototype.initHeader = function() {
-
-  /**
-   * @type {app.base.view.Persistent}
-   * @private
-   */
-  this.persistentView_ = new app.base.view.Persistent();
-  this.persistentView_.setLayout(this.layout_);
-  this.persistentView_.setXMan(this.xMan_);
-  this.persistentView_.setUser(this.user_);
-  this.persistentView_.render();
-  this.listen(
-    this.persistentView_, bad.ui.EventType.APP_DO, this.onApDo);
-
+drawme.Site.prototype.initViewManager = function() {
+  this.viewManager.setLayout(this.layout_);
+  this.viewManager.setXMan(this.xMan_);
+  this.viewManager.setUser(this.user_);
 };
 
 //--------------------------------------------------------------[ Auto Login ]--
@@ -204,9 +199,9 @@ drawme.Site.prototype.onAutoLoginReply = function(e) {
  */
 drawme.Site.prototype.userSignedIn = function(userData) {
   goog.dom.classes.add(goog.dom.getElement('body-background'), 'noimg');
-  this.user_.updateProfile(userData);
-  this.initHeader();
-  this.switchView(new app.base.view.Home());
+  this.updateUser_(userData);
+  this.viewManager.render();
+  this.viewManager.switchView(new app.base.view.Home());
 };
 
 /**
@@ -215,10 +210,7 @@ drawme.Site.prototype.userSignedIn = function(userData) {
  */
 drawme.Site.prototype.updateUser_ = function(userData) {
   this.user_.updateProfile(userData);
-  this.persistentView_.setUser(this.user_);
-  if (this.activeView_) {
-    this.activeView_.setUser(this.user_);
-  }
+  this.viewManager.setUser(this.user_);
 };
 
 
@@ -231,26 +223,7 @@ drawme.Site.prototype.viewLogin = function(opt_reset) {
    * @type {app.user.view.Login}
    */
   var view = new app.user.view.Login(opt_reset);
-  this.switchView(view);
-};
-
-//---------------------------------------------------------[ Views Utilities ]--
-
-/**
- * @param {bad.ui.View} view
- */
-drawme.Site.prototype.switchView = function(view) {
-  if (this.activeView_) {
-    this.activeView_.dispose();
-  }
-  this.activeView_ = view;
-  this.activeView_.setLayout(this.layout_);
-  this.activeView_.setXMan(this.xMan_);
-  this.activeView_.setUser(this.user_);
-  this.activeView_.render();
-  if (this.persistentView_) {
-    this.persistentView_.setActiveView(this.activeView_);
-  }
+  this.viewManager.switchView(view);
 };
 
 //-----------------------------------------------------[ Utility Stuff Below ]--

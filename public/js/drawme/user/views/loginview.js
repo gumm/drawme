@@ -1,6 +1,7 @@
 goog.provide('app.user.view.Login');
 
 goog.require('app.BasicView');
+goog.require('app.base.ViewEventType');
 goog.require('app.user.EventType');
 goog.require('app.user.panel.Login');
 goog.require('app.user.panel.LostPassword');
@@ -8,6 +9,7 @@ goog.require('app.user.panel.ResetPassword');
 goog.require('app.user.panel.SignUp');
 goog.require('bad.ui.EventType');
 goog.require('bad.ui.Panel');
+goog.require('bad.ui.ViewEvent');
 goog.require('bad.utils');
 goog.require('contracts.urlMap');
 goog.require('goog.Uri');
@@ -118,6 +120,7 @@ app.user.view.Login.prototype.onPanelAction = function(e) {
       this.enterLostPasswordForm();
       break;
     case app.user.EventType.LOGIN_SUCCESS:
+        console.debug('The login view got this:', data);
       this.fetchHomePage(/** @type {Object} */ (data));
       break;
     case app.user.EventType.SIGNUP_CANCEL:
@@ -203,10 +206,15 @@ app.user.view.Login.prototype.exitLostPasswordForm = function() {
  * @param {Object} data The logged in users profile data.
  */
 app.user.view.Login.prototype.fetchHomePage = function(data) {
+  console.debug('Logged in, Attempting to fetch home page...');
   var callback = goog.bind(function() {
 
-    console.debug('We need to emit an event on which the ' +
-        'view manager can react.')
+    this.dispatchEvent(new bad.ui.ViewEvent(
+        app.base.ViewEventType.USER_LOGGED_IN,
+        this,
+        data
+    ));
+
   }, this);
   this.slideLoginOut(callback);
 };

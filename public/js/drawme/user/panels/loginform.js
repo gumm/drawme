@@ -63,7 +63,8 @@ app.user.panel.Login.prototype.loginCallback = function(e) {
   this.clearAlerts();
   if (xhr.isSuccess()) {
 
-    console.debug('THIS CAME BACK FROM THE SERVER', data);
+    console.debug('THE LOGIN PANEL GOT THIS...', data);
+    console.debug('Now dispatching', app.user.EventType.LOGIN_SUCCESS);
 
     var userProfile = data['data'];
     this.dispatchActionEvent(

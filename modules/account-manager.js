@@ -35,51 +35,38 @@ module.exports = {
       pass: null
     };
 
-    console.log('Trying to log in...');
-
     var matchUsers = function(db, cb) {
       var accounts = db.collection(ACCOUNTS);
       var pwHashes = db.collection(PASSWORDS);
-
-      console.log('Finding account...');
       accounts.find({'user': user}).limit(1).next(
           function(err, account) {
             if (account) {
-              console.log('Got account account...', account);
               pwHashes.find({'user': user}).limit(1).next(
                   function(err, hashDoc) {
-                    console.log('Looking for passwords with this id...', user);
                     if (hashDoc) {
-                      console.log('Got account password hash...', hashDoc);
 
                       // Validate a match
                       validatePassword(pass, hashDoc.pw, function(isValid) {
                         if (!isValid) {
                           db.close();
-                          console.log('Found passwords but they did not match');
-                          error.pass = 'User password mismatch. Exit.';
+                          error.pass = 'User password mismatch.';
                           cb(error);
                         } else {
                           db.close();
-                          console.log('Found matching passwords. All OK. Exit...');
                           cb(null, account);
                         }
                       });
 
                     } else {
                       db.close();
-                      console.log('Nope could not find this id in the PW hash collection. Exit...');
                       // Password hash not found...
                       // This is a problem
-                      error.pass = 'Could not find this...';
                       cb(error);
-
                     }
                   }
               )
             } else {
               db.close();
-              console.log('Account not found. Exit...');
               error.pass = 'User password mismatch';
               cb(error);
             }
@@ -94,7 +81,6 @@ module.exports = {
   },
 
   addNewAccount: function(newAccount, clearPW, callback) {
-    console.log('addNewAccount');
     var targetUName = newAccount.user;
     var targetPass = clearPW;
     var targetEmail = newAccount.email;
@@ -124,17 +110,14 @@ module.exports = {
             {"email": targetEmail}
           ]}
       ).limit(1).next(function(err, doc) {
-        console.log('finding existing accounts with this uname or email...');
         if (doc && doc.user == targetUName) {
           db.close();
-          console.log('username already exist... exit');
           // Username is taken...
           error.user = 'This username is not available';
           cb(error, null);
 
         } else if (doc &&  doc.email == targetEmail) {
           db.close();
-          console.log('email already exist... exit');
 
           // Email exists...
           error.email = 'This email is already registered. ' +
@@ -142,27 +125,21 @@ module.exports = {
           cb(error, null);
 
         } else {
-          console.log('all good. can create');
           // All OK. Create a password hash
           saltAndHash(targetPass, function(hash) {
-            console.log('hashing password');
             // At last. Store the account and password in their collections.
             accounts.insertOne(newAccount, function(err, r) {
-              console.log('inserted user...');
               if (r) {
                 var newUser = r.ops[0];
                 var pWord = {'user': targetUName, 'pw': hash};
                 pwHashes.insertOne(pWord, function(err, pRes) {
                   db.close();
-                  console.log('inserted password... exit');
                   cb(err, newUser);
                 })
               } else {
                 db.close();
-                console.log('error trying to create account');
 
                 // Email exists...
-                error.email = 'Error trying to create account';
                 cb(error, null);
               }
 

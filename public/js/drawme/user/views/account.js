@@ -2,7 +2,6 @@ goog.provide('app.user.view.Account');
 
 goog.require('app.BasicView');
 goog.require('app.base.EventType');
-goog.require('app.doMap');
 goog.require('app.org.panel.List');
 goog.require('app.user.EventType');
 goog.require('app.user.panel.DeleteAccount');
@@ -70,7 +69,7 @@ app.user.view.Account.prototype.onPanelAction = function(e) {
       this.enterOverview();
       break;
     case app.user.EventType.SIGNUP_SUCCESS:
-        console.debug('WE ENDED HERE...', dat, value);
+        console.debug('WE ENDED HERE...', data, value);
       this.displayPanels();
       break;
     case app.user.EventType.ACCOUNT_REMOVE_CANCELED:
@@ -88,16 +87,9 @@ app.user.view.Account.prototype.onPanelAction = function(e) {
     case app.user.EventType.VIEW_PIC:
       this.enterOrgsList();
       break;
-    case app.user.EventType.CANCEL_VIEW_ORG:
+    case app.user.EventType.CANCEL_VIEW_PIC:
       this.enterOverview();
       break;
-    //case app.doMap.VIEW_ORG_CREATE:
-    //  this.switchView(goog.bind(this.appDo, this, value));
-    //  break;
-    //case app.user.EventType.EDIT_ORG:
-    //  this.switchView(
-    //    goog.bind(this.appDo, this, app.doMap.VIEW_PIC, data.id));
-    //  break;
     case app.base.EventType.MENU_HEAD:
       this.enterOverview();
       break;
