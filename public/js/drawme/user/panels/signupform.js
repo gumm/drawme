@@ -37,13 +37,6 @@ app.user.panel.SignUp.prototype.initDom = function() {
     );
   }
 
-  var connectAv = goog.dom.getElement('connect_av');
-  if (connectAv) {
-    bad.utils.makeButton('connect_av', this,
-      goog.bind(this.dispatchActionEvent, this,
-        app.user.EventType.CONNECT_AV)
-    );
-  }
 
 };
 

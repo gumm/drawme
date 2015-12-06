@@ -22,7 +22,7 @@ app.user.panel.NavPanel.prototype.getMenuItems = function() {
     ['Security Settings', 'icon-key', goog.bind(this.dispatchActionEvent,
       this, app.user.EventType.EDIT_PW)],
     ['Organizations', 'icon-building', goog.bind(this.dispatchActionEvent,
-      this, app.user.EventType.VIEW_ORG)],
+      this, app.user.EventType.VIEW_PIC)],
 
     // TODO: Implement these...
     ['Notification Center', 'icon-flag', goog.nullFunction]

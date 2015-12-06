@@ -101,6 +101,20 @@ module.exports = {
     }
   },
 
+  logout: function(req, res) {
+    var postCall = function() {
+      if (req.body['logout'] === 'true') {
+        res.clearCookie('user');
+        res.clearCookie('pass');
+        req.session.destroy(function() {
+          res.status(200).send('ok');
+        });
+      }
+    };
+    helper.okGo(req, res, {'POST': postCall});
+  },
+
+
   /**
    * View the home page
    * @param req

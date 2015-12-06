@@ -11,11 +11,12 @@ module.exports = {
     app.get(urlMap.ROOT.HEADER, routeTo.header);
     app.get(urlMap.ROOT.INTRO, routeTo.intro);
 
-    // LOG IN
+    // LOG IN and OUT
     app.get(urlMap.LOG.IN, routeTo.login);
     app.post(urlMap.LOG.IN, routeTo.login);
     app.get(urlMap.LOG.AUTO, routeTo.autoLogin);
     app.post(urlMap.LOG.AUTO, routeTo.autoLogin);
+    app.post(urlMap.LOG.OUT, routeTo.logout);
 
     // HOME
     app.get(urlMap.ROOT.HOME, routeTo.home);

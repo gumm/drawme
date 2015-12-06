@@ -3,14 +3,17 @@
  */
 goog.provide('drawme.Site');
 
-goog.require('app.user.view.Login');
-goog.require('app.user.UserManager');
 goog.require('app.base.view.Home');
+goog.require('app.base.view.Persistent');
+goog.require('app.user.view.Login');
+goog.require('bad.UserManager');
 goog.require('bad.ui.EventType');
 goog.require('bad.ui.Layout');
 goog.require('contracts.urlMap');
+goog.require('goog.Uri');
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.dom.classes');
 goog.require('goog.events.EventHandler');
 
 
@@ -40,7 +43,7 @@ drawme.Site = function(xManWrapper) {
    * @type {bad.UserManager}
    * @private
    */
-  this.user_ = new app.user.UserManager();
+  this.user_ = new bad.UserManager();
 
 };
 goog.inherits(drawme.Site, goog.events.EventHandler);
@@ -145,15 +148,36 @@ drawme.Site.prototype.initLayout_ = function() {
 };
 
 drawme.Site.prototype.onLayoutReady = function() {
-  console.debug('The LAYOUT IS READY!');
   this.hideAllNests();
   this.autoLogin();
+};
+
+//------------------------------------------------------------------[ Header ]--
+
+/**
+ * Some stuff should stay in the header as long as the user is signed in.
+ * It should only appear on sign-in, and be destroyed on sign out.
+ * This uses a special view with its own panel components to dive this.
+ */
+drawme.Site.prototype.initHeader = function() {
+
+  /**
+   * @type {app.base.view.Persistent}
+   * @private
+   */
+  this.persistentView_ = new app.base.view.Persistent();
+  this.persistentView_.setLayout(this.layout_);
+  this.persistentView_.setXMan(this.xMan_);
+  this.persistentView_.setUser(this.user_);
+  this.persistentView_.render();
+  this.listen(
+    this.persistentView_, bad.ui.EventType.APP_DO, this.onApDo);
+
 };
 
 //--------------------------------------------------------------[ Auto Login ]--
 
 drawme.Site.prototype.autoLogin = function() {
-  console.debug('Attempting auto login...');
   var callback = goog.bind(this.onAutoLoginReply, this);
   this.xMan_.get(new goog.Uri(contracts.urlMap.LOG.AUTO), callback);
 };
@@ -162,21 +186,15 @@ drawme.Site.prototype.autoLogin = function() {
  * {goog.events.EventLike} e Event object.
  */
 drawme.Site.prototype.onAutoLoginReply = function(e) {
-  console.debug('Got auto login reply');
   var xhr = e.target;
   if (xhr.isSuccess()) {
-    console.debug('Got success...');
     var data = xhr.getResponseJson();
-    console.debug('Here the data...', data);
     if (data.error) {
-      console.debug('Oops. Data shows error. View the login panels.');
       this.viewLogin();
     } else {
-      console.debug('Cool. This is as if the user signed in...');
       this.userSignedIn(data['data']);
     }
   } else {
-    console.debug('Nope no auto login possible. View the login panels.');
     this.viewLogin();
   }
 };
@@ -185,13 +203,22 @@ drawme.Site.prototype.onAutoLoginReply = function(e) {
  * @param {Object} userData User profile data.
  */
 drawme.Site.prototype.userSignedIn = function(userData) {
-  console.debug('userSignedIn', userData);
   goog.dom.classes.add(goog.dom.getElement('body-background'), 'noimg');
   this.user_.updateProfile(userData);
-  console.debug('here is the user object', this.user_);
-  //this.initHeader();
-  console.debug('switching to the home view...');
-  this.switchView(new app.base.view.Home())
+  this.initHeader();
+  this.switchView(new app.base.view.Home());
+};
+
+/**
+ * @param {Object} userData User profile data.
+ * @private
+ */
+drawme.Site.prototype.updateUser_ = function(userData) {
+  this.user_.updateProfile(userData);
+  this.persistentView_.setUser(this.user_);
+  if (this.activeView_) {
+    this.activeView_.setUser(this.user_);
+  }
 };
 
 
@@ -221,8 +248,9 @@ drawme.Site.prototype.switchView = function(view) {
   this.activeView_.setXMan(this.xMan_);
   this.activeView_.setUser(this.user_);
   this.activeView_.render();
-  this.listen(
-    this.activeView_, bad.ui.EventType.APP_DO);
+  if (this.persistentView_) {
+    this.persistentView_.setActiveView(this.activeView_);
+  }
 };
 
 //-----------------------------------------------------[ Utility Stuff Below ]--
@@ -242,9 +270,4 @@ drawme.Site.prototype.hideAllNests = function() {
   goog.array.forEach(nests, function(nest) {
     nest.hide();
   }, this);
-};
-
-drawme.Site.prototype.swapCss = function(filename) {
-  document.getElementById('pagestyle').setAttribute('href',
-    'css/themes/' + filename + '.css');
 };

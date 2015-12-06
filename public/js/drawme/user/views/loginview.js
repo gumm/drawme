@@ -204,10 +204,9 @@ app.user.view.Login.prototype.exitLostPasswordForm = function() {
  */
 app.user.view.Login.prototype.fetchHomePage = function(data) {
   var callback = goog.bind(function() {
-    //this.appDo(app.doMap.USER_LOGGED_IN, data);
 
-    console.debug('THE USER LOGGED IN --- YIPPEEE!!!', data);
-
+    console.debug('We need to emit an event on which the ' +
+        'view manager can react.')
   }, this);
   this.slideLoginOut(callback);
 };

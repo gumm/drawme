@@ -1,9 +1,7 @@
 goog.provide('app.base.panel.Home');
 
 goog.require('bad.ui.Panel');
-goog.require('bad.utils');
 goog.require('goog.dom');
-goog.require('goog.json');
 
 /**
  * The home panel.

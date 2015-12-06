@@ -44,20 +44,16 @@ app.base.panel.Persistent.prototype.buildUserButton = function() {
     ['Profile', 'icon-user', goog.bind(this.dispatchActionEvent,
       this, app.base.EventType.EDIT_PROFILE)],
     ['Drawings', 'icon-building', goog.bind(this.dispatchActionEvent,
-      this, app.user.EventType.VIEW_ORG)],
+      this, app.user.EventType.VIEW_PIC)],
     [/* menu separator */],
     ['Sign Out', 'icon-signout', goog.bind(this.logOut, this)]
   ];
 
-  /**
-   * @type {bad.ui.MenuFloatRenderer}
-   */
-  var renderer = bad.ui.MenuFloatRenderer.getInstance();
+  var renderer = /** @type {bad.ui.MenuFloatRenderer} */ (
+      bad.ui.MenuFloatRenderer.getInstance());
 
-  /**
-   * @type {bad.ui.MenuItemRenderer}
-   */
-  var itemRenderer = bad.ui.MenuItemRenderer.getInstance();
+  var itemRenderer = /** @type {bad.ui.MenuItemRenderer} */ (
+      bad.ui.MenuItemRenderer.getInstance());
 
   var menu = bad.utils.makeMenu(
     menuItems, this.dom_, this.getHandler(), this, renderer, itemRenderer);
@@ -72,7 +68,7 @@ app.base.panel.Persistent.prototype.buildUserButton = function() {
 };
 
 /**
- * @param {Object} user
+ * @param {bad.UserManager} user
  */
 app.base.panel.Persistent.prototype.setUser = function(user) {
   app.base.panel.Persistent.superClass_.setUser.call(this, user);
@@ -88,7 +84,7 @@ app.base.panel.Persistent.prototype.updateUser = function() {
 };
 
 app.base.panel.Persistent.prototype.logOut = function() {
-  var uri = new goog.Uri(urlMap.BASIC.LOGOUT);
+  var uri = new goog.Uri(contracts.urlMap.LOG.OUT);
   var queryData = goog.uri.utils.buildQueryDataFromMap({'logout': true});
   this.xMan.post(uri, queryData, goog.bind(this.onLogOut, this));
 };
@@ -99,7 +95,7 @@ app.base.panel.Persistent.prototype.logOut = function() {
 app.base.panel.Persistent.prototype.onLogOut = function(e) {
   var xhr = e.target;
   if (xhr.isSuccess()) {
-    window.open(exp.urlMap.INDEX, '_self');
+    window.open(contracts.urlMap.INDEX, '_self');
   } else {
     console.debug('Log Out was not successful. Try again...', e, xhr);
   }

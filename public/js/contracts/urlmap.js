@@ -30,9 +30,9 @@ contracts.urlMap = {
     DELETE: '/accs/delete'
   },
   PICS: {
-    CREATE: '/org/create',
-    READ: '/org/read',
-    UPDATE: '/org/update',
-    DELETE: '/org/delete'
+    CREATE: '/pic/create',
+    READ: '/pic/read',
+    UPDATE: '/pic/update',
+    DELETE: '/pic/delete'
   }
 };

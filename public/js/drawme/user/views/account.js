@@ -71,7 +71,6 @@ app.user.view.Account.prototype.onPanelAction = function(e) {
       break;
     case app.user.EventType.SIGNUP_SUCCESS:
         console.debug('WE ENDED HERE...', dat, value);
-      //this.appDo(app.doMap.UPDATE_USER, data.reply['data']);
       this.displayPanels();
       break;
     case app.user.EventType.ACCOUNT_REMOVE_CANCELED:
@@ -86,41 +85,25 @@ app.user.view.Account.prototype.onPanelAction = function(e) {
     case app.user.EventType.EDIT_PW:
       this.enterSignUpForm(value);
       break;
-    case app.user.EventType.VIEW_ORG:
+    case app.user.EventType.VIEW_PIC:
       this.enterOrgsList();
       break;
     case app.user.EventType.CANCEL_VIEW_ORG:
       this.enterOverview();
       break;
-    case app.doMap.VIEW_ORG_CREATE:
-      this.switchView(goog.bind(this.appDo, this, value));
-      break;
-    case app.user.EventType.EDIT_ORG:
-      this.switchView(
-        goog.bind(this.appDo, this, app.doMap.VIEW_ORG, data.id));
-      break;
+    //case app.doMap.VIEW_ORG_CREATE:
+    //  this.switchView(goog.bind(this.appDo, this, value));
+    //  break;
+    //case app.user.EventType.EDIT_ORG:
+    //  this.switchView(
+    //    goog.bind(this.appDo, this, app.doMap.VIEW_PIC, data.id));
+    //  break;
     case app.base.EventType.MENU_HEAD:
       this.enterOverview();
-      break;
-    case app.user.EventType.CONNECT_AV:
-      this.connectAv();
       break;
     default:
       console.log('app.user.view.Account No action for: ', value);
   }
-};
-
-//--------------------------------------------------------------[ Connect AV ]--
-
-app.user.view.Account.prototype.connectAv = function() {
-  var uri = new goog.Uri(exp.urlMap.AUTH.AV);
-  console.debug('Calling uri', exp.urlMap.AUTH.AV);
-  this.getXMan().get(
-    uri,
-    function(reply) {
-      console.debug(reply);
-    }
-  );
 };
 
 //------------------------------------------------------------[ Sign-Up Form ]--

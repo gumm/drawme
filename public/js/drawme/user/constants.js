@@ -8,7 +8,7 @@ goog.require('bad.utils');
 app.user.EventType = {
   EDIT_ACCOUNT: bad.utils.privateRandom(),
   EDIT_PW: bad.utils.privateRandom(),
-  VIEW_ORG: bad.utils.privateRandom(),
+  VIEW_PIC: bad.utils.privateRandom(),
   VIEW_TRACE: bad.utils.privateRandom(),
   CANCEL_VIEW_ORG: bad.utils.privateRandom(),
   VIEW_ACCOUNT: bad.utils.privateRandom(),
@@ -19,6 +19,5 @@ app.user.EventType = {
   ACCOUNT_REMOVE_CANCELED: bad.utils.privateRandom(),
   LOGIN_SUCCESS: bad.utils.privateRandom(),
   FORGOT_PW: bad.utils.privateRandom(),
-  FORGOT_PW_CANCEL: bad.utils.privateRandom(),
-  CONNECT_AV: bad.utils.privateRandom()
+  FORGOT_PW_CANCEL: bad.utils.privateRandom()
 };
