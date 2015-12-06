@@ -187,32 +187,12 @@ drawme.Site.prototype.onAutoLoginReply = function(e) {
     if (data.error) {
       this.viewLogin();
     } else {
-      this.userSignedIn(data['data']);
+      this.viewManager.userSignedIn(data['data']);
     }
   } else {
     this.viewLogin();
   }
 };
-
-/**
- * @param {Object} userData User profile data.
- */
-drawme.Site.prototype.userSignedIn = function(userData) {
-  goog.dom.classes.add(goog.dom.getElement('body-background'), 'noimg');
-  this.updateUser_(userData);
-  this.viewManager.render();
-  this.viewManager.switchView(new app.base.view.Home());
-};
-
-/**
- * @param {Object} userData User profile data.
- * @private
- */
-drawme.Site.prototype.updateUser_ = function(userData) {
-  this.user_.updateProfile(userData);
-  this.viewManager.setUser(this.user_);
-};
-
 
 /**
  * @param {boolean=} opt_reset

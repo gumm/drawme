@@ -63,16 +63,10 @@ app.base.ViewManager.prototype.onPanelAction = function(e) {
 };
 
 app.base.ViewManager.prototype.onViewAction = function(e) {
-  console.debug('THE VIEW MANAGER GOT THIS', e);
   var data = e.data;
   switch (e.type) {
     case app.base.ViewEventType.USER_LOGGED_IN:
-
-      this.user_.updateProfile(data);
-      this.render();
-      this.setUser(this.user_);
-      this.switchView(new app.base.view.Home());
-      console.debug('Go home', data);
+      this.userSignedIn(data);
       break;
     default:
       console.debug('Not recognised...', e.value);
@@ -88,6 +82,21 @@ app.base.ViewManager.prototype.setActiveView = function(view) {
       this.listOfViewEvents_,
       this.onViewAction
   );
+};
+
+
+//------------------------------------------------------------[ User Sign IN ]--
+/**
+ * All sign in comes here. Auto sign in via an recognised session on the server
+ * or manual log in from the front.
+ * @param {bad.UserLike} userData User profile data.
+ */
+app.base.ViewManager.prototype.userSignedIn = function(userData) {
+  goog.dom.classes.add(goog.dom.getElement('body-background'), 'noimg');
+  this.user_.updateProfile(userData);
+  this.setUser(this.user_);
+  this.render();
+  this.switchView(new app.base.view.Home());
 };
 
 
