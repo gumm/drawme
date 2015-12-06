@@ -4,21 +4,10 @@
     .span4
         h2 Hello #{profile.name}
         p
-            | We are waiting for your devices to register to:
-        // h4 @reg/#{account._id}
+            | So you are here to draw squares and circles? Draw away!
         p
-            | To register your device needs to publish to the above topic, with a
-            | PID (personal ID) of your choosing in the payload. We will then reply
-            | with a device specific UID that your device will have to use as a
-            | topic prefix for all further publishing. Our reply will be published to:
-        // h4 @regok/#{account._id}/PID
-        p
-            | so your device can register to listen to that topic
-        p
-            | All further comms from your device will have to have the topic prefix
-        // h4 #{account._id}/UID
+            | For a bit of help, note the following:
+            ul
+                li Ctr: Draw perfect squares or circles
+                li Shift: Draw from the center point
 
-    .span4
-        h4 Physical Address
-            .control-group
-                #mapCanvas(style=' background-color: rgb(229, 227, 223); overflow: hidden; -webkit-transform: translateZ(0px); position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 0;')
