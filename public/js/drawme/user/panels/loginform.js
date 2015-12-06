@@ -34,8 +34,10 @@ app.user.panel.Login.prototype.initDom = function() {
 };
 
 app.user.panel.Login.prototype.submitLoginForm = function() {
+  console.debug('submitLoginForm');
   this.checkValidation();
   if (this.getForm().checkValidity()) {
+    console.debug('ALL GOOD');
     this.logIn(this.getPostContentFromForm(this.getForm()));
   }
 };
@@ -44,6 +46,7 @@ app.user.panel.Login.prototype.submitLoginForm = function() {
  * @param {string} credential The users login credentials.
  */
 app.user.panel.Login.prototype.logIn = function(credential) {
+  console.debug('logIn', credential);
   this.xMan.post(
     this.getUri(),
     credential,
@@ -59,6 +62,9 @@ app.user.panel.Login.prototype.loginCallback = function(e) {
   var data = xhr.getResponseJson();
   this.clearAlerts();
   if (xhr.isSuccess()) {
+
+    console.debug('THIS CAME BACK FROM THE SERVER', data);
+
     var userProfile = data['data'];
     this.dispatchActionEvent(
       app.user.EventType.LOGIN_SUCCESS, userProfile);

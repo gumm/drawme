@@ -206,7 +206,7 @@ app.user.view.Login.prototype.fetchHomePage = function(data) {
   var callback = goog.bind(function() {
     //this.appDo(app.doMap.USER_LOGGED_IN, data);
 
-    console.debug('THE USER LOGGED IN --- YIPPEEE!!!');
+    console.debug('THE USER LOGGED IN --- YIPPEEE!!!', data);
 
   }, this);
   this.slideLoginOut(callback);

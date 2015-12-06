@@ -4,8 +4,11 @@
 goog.provide('drawme.Site');
 
 goog.require('app.user.view.Login');
+goog.require('app.user.UserManager');
+goog.require('app.base.view.Home');
 goog.require('bad.ui.EventType');
 goog.require('bad.ui.Layout');
+goog.require('contracts.urlMap');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.events.EventHandler');
@@ -32,6 +35,12 @@ drawme.Site = function(xManWrapper) {
    * @private
    */
   this.layout_ = null;
+
+  /**
+   * @type {bad.UserManager}
+   * @private
+   */
+  this.user_ = new app.user.UserManager();
 
 };
 goog.inherits(drawme.Site, goog.events.EventHandler);
@@ -138,7 +147,51 @@ drawme.Site.prototype.initLayout_ = function() {
 drawme.Site.prototype.onLayoutReady = function() {
   console.debug('The LAYOUT IS READY!');
   this.hideAllNests();
-  this.viewLogin();
+  this.autoLogin();
+};
+
+//--------------------------------------------------------------[ Auto Login ]--
+
+drawme.Site.prototype.autoLogin = function() {
+  console.debug('Attempting auto login...');
+  var callback = goog.bind(this.onAutoLoginReply, this);
+  this.xMan_.get(new goog.Uri(contracts.urlMap.LOG.AUTO), callback);
+};
+
+/**
+ * {goog.events.EventLike} e Event object.
+ */
+drawme.Site.prototype.onAutoLoginReply = function(e) {
+  console.debug('Got auto login reply');
+  var xhr = e.target;
+  if (xhr.isSuccess()) {
+    console.debug('Got success...');
+    var data = xhr.getResponseJson();
+    console.debug('Here the data...', data);
+    if (data.error) {
+      console.debug('Oops. Data shows error. View the login panels.');
+      this.viewLogin();
+    } else {
+      console.debug('Cool. This is as if the user signed in...');
+      this.userSignedIn(data['data']);
+    }
+  } else {
+    console.debug('Nope no auto login possible. View the login panels.');
+    this.viewLogin();
+  }
+};
+
+/**
+ * @param {Object} userData User profile data.
+ */
+drawme.Site.prototype.userSignedIn = function(userData) {
+  console.debug('userSignedIn', userData);
+  goog.dom.classes.add(goog.dom.getElement('body-background'), 'noimg');
+  this.user_.updateProfile(userData);
+  console.debug('here is the user object', this.user_);
+  //this.initHeader();
+  console.debug('switching to the home view...');
+  this.switchView(new app.base.view.Home())
 };
 
 
@@ -166,6 +219,7 @@ drawme.Site.prototype.switchView = function(view) {
   this.activeView_ = view;
   this.activeView_.setLayout(this.layout_);
   this.activeView_.setXMan(this.xMan_);
+  this.activeView_.setUser(this.user_);
   this.activeView_.render();
   this.listen(
     this.activeView_, bad.ui.EventType.APP_DO);

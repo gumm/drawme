@@ -1,74 +1,30 @@
 var crypto = require('crypto');
-var moment = require('moment');
 var MongoClient = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectID;
 var assert = require('assert');
-
 var url = 'mongodb://localhost:27017/DRAWME';
+var ACCOUNTS = 'accounts';
+var PASSWORDS = 'pwhash';
 
-// ---------------------------------------------------------------[ Mongo DB ]--
-
-
-
-
-
-
-
-
+/**
+ * This takes care of all the DB interactions for an account - a user
+ */
 module.exports = {
 
   /**
- * @param data
- * @returns {Object.<string, (Object|boolean|string|number)>}
- */
+   * @param data
+   * @returns {Object.<string, (Object|boolean|string|number)>}
+   */
   accountMap: function(data) {
     return {
-      profile: {
         name: data.name || null,
         surname: data.surname || null,
         email: data.email || null,
-        url: data.url || null,
-        location: {
-          city: data.city || null,
-          country: data.country || null
-        },
-        contact: {
-          phone: data.phone || null,
-          mobile: data.mobile || null
-        }
-      },
-      credentials: {
-        pass: data.pass || null,
         user: data.user || null
-      }
     };
   },
 
   /**
-   * BEWARE: Unless the transform strips this,
-   *      the full account with credentials is passed into the callback.
-   * @param user
-   * @param pass
-   * @param callback
-   * @param {Function=} opt_transform An optional transform to run the successful
-   *      result through before it is passed into the callback.
-   */
-  autoLogin: function(user, pass, callback, opt_transform) {
-    accounts.findOne({'credentials.user': user}, function(err, account) {
-      if (account && account.credentials.pass === pass) {
-        var result = account;
-        if (opt_transform) {
-          result = opt_transform(account);
-        }
-        callback(result);
-      } else {
-        callback(null);
-      }
-    });
-  },
-
-  /**
-   * BEWARE: This passes the account with credentials into the callback.
    * @param user
    * @param pass
    * @param callback
@@ -79,40 +35,69 @@ module.exports = {
       pass: null
     };
 
+    console.log('Trying to log in...');
+
     var matchUsers = function(db, cb) {
-      var accounts = db.collection('accounts');
-      accounts.find(
-            {"credentials.user": user}
-      ).limit(1).next(function(err, doc) {
-        db.close();
-        if (doc) {
-          validatePassword(pass, doc.credentials.pass, function(isValid) {
-            if (!isValid) {
+      var accounts = db.collection(ACCOUNTS);
+      var pwHashes = db.collection(PASSWORDS);
+
+      console.log('Finding account...');
+      accounts.find({'user': user}).limit(1).next(
+          function(err, account) {
+            if (account) {
+              console.log('Got account account...', account);
+              pwHashes.find({'user': user}).limit(1).next(
+                  function(err, hashDoc) {
+                    console.log('Looking for passwords with this id...', user);
+                    if (hashDoc) {
+                      console.log('Got account password hash...', hashDoc);
+
+                      // Validate a match
+                      validatePassword(pass, hashDoc.pw, function(isValid) {
+                        if (!isValid) {
+                          db.close();
+                          console.log('Found passwords but they did not match');
+                          error.pass = 'User password mismatch. Exit.';
+                          cb(error);
+                        } else {
+                          db.close();
+                          console.log('Found matching passwords. All OK. Exit...');
+                          cb(null, account);
+                        }
+                      });
+
+                    } else {
+                      db.close();
+                      console.log('Nope could not find this id in the PW hash collection. Exit...');
+                      // Password hash not found...
+                      // This is a problem
+                      error.pass = 'Could not find this...';
+                      cb(error);
+
+                    }
+                  }
+              )
+            } else {
+              db.close();
+              console.log('Account not found. Exit...');
               error.pass = 'User password mismatch';
               cb(error);
-            } else {
-              cb(null, doc);
             }
-          })
-        } else {
-          error.pass = 'User password mismatch';
-          cb(error);
-        }
-      })
+          }
+      );
     };
 
     MongoClient.connect(url, function(err, db) {
       assert.equal(null, err);
       matchUsers(db, callback);
     });
-
-
   },
 
-  addNewAccount: function(newAccount, callback) {
-    var targetUName = newAccount.credentials.user;
-    var targetPass = newAccount.credentials.pass;
-    var targetEmail = newAccount.profile.email;
+  addNewAccount: function(newAccount, clearPW, callback) {
+    console.log('addNewAccount');
+    var targetUName = newAccount.user;
+    var targetPass = clearPW;
+    var targetEmail = newAccount.email;
 
     /**
      * An error object that maps to the form's field names.
@@ -125,45 +110,62 @@ module.exports = {
 
     /**
      * A method to check that we only store unique user names and emails.
-     * @param {Db} db
+     * @param {Object} db
      * @param {Function} cb
      */
     var insertAccount = function(db, cb) {
-      var accounts = db.collection('accounts');
+      var accounts = db.collection(ACCOUNTS);
+      var pwHashes = db.collection(PASSWORDS);
 
       // See if this username or email already exists
       accounts.find(
           { $or: [
-            {"credentials.user": targetUName},
-            {"profile.email": targetEmail}
+            {"user": targetUName},
+            {"email": targetEmail}
           ]}
       ).limit(1).next(function(err, doc) {
-
-        if (doc && doc.credentials.user == targetUName) {
-
-          // Username is taken...
+        console.log('finding existing accounts with this uname or email...');
+        if (doc && doc.user == targetUName) {
           db.close();
+          console.log('username already exist... exit');
+          // Username is taken...
           error.user = 'This username is not available';
           cb(error, null);
 
-        } else if (doc &&  doc.profile.email == targetEmail) {
+        } else if (doc &&  doc.email == targetEmail) {
+          db.close();
+          console.log('email already exist... exit');
 
           // Email exists...
-          db.close();
           error.email = 'This email is already registered. ' +
               'Maybe request a password reset.';
           cb(error, null);
 
         } else {
-
+          console.log('all good. can create');
           // All OK. Create a password hash
           saltAndHash(targetPass, function(hash) {
-            newAccount.credentials.pass = hash;
-
-            // At last. Store the account.
+            console.log('hashing password');
+            // At last. Store the account and password in their collections.
             accounts.insertOne(newAccount, function(err, r) {
-              db.close();
-              cb(err, r);
+              console.log('inserted user...');
+              if (r) {
+                var newUser = r.ops[0];
+                var pWord = {'user': targetUName, 'pw': hash};
+                pwHashes.insertOne(pWord, function(err, pRes) {
+                  db.close();
+                  console.log('inserted password... exit');
+                  cb(err, newUser);
+                })
+              } else {
+                db.close();
+                console.log('error trying to create account');
+
+                // Email exists...
+                error.email = 'Error trying to create account';
+                cb(error, null);
+              }
+
             })
           });
 
@@ -175,7 +177,6 @@ module.exports = {
       assert.equal(null, err);
       insertAccount(db, callback);
     });
-
   },
 
   ///**
@@ -361,8 +362,8 @@ module.exports = {
   //}
 };
 
-/* private encryption & validation methods */
 
+//----------------------------------------------------[ Passwords and Hashes ]--
 var generateSalt = function() {
   var set = '0123456789abcdefghijklmnopqurstuvwxyzABCDEFGHIJKLMNOPURSTUVWXYZ';
   var salt = '';
@@ -382,67 +383,8 @@ var saltAndHash = function(pass, callback) {
   callback(salt + md5(pass + salt));
 };
 
-/**
- * For newly created accounts, this converts the given pass field in the
- * given account to a salted hash of the password.
- */
-var convertPwToSaltedHash = function(account, newPass, callback) {
-
-  var shCallback = function(hash) {
-    account.credentials.pass = hash;
-    accounts.insert(account, {safe: true},
-        function() {
-          callback(null, account.profile);
-        }
-    );
-  };
-
-  saltAndHash(newPass, shCallback);
-};
-
-/**
- * Checks that the given user name is unique in the accounts collection.
- * @param {string} username The username to check for uniqueness.
- * @param {function} callback The callback function, should take 2 parameters:
- *      error - The error object if something went wrong with the query.
- *      account - The account - Null if the given username is unique, else the
- *              account that was found with the given username.
- */
-var checkUniqueUsername = function(username, callback) {
-  accounts.findOne(
-      {'credentials.user': username},
-      callback
-  );
-};
-
-var checkUniqueEmail = function(email, callback) {
-  accounts.findOne(
-      {'profile.email': email},
-      callback
-  );
-};
-
 var validatePassword = function(plainPass, hashedPass, callback) {
   var salt = hashedPass.substr(0, 10);
   var validHash = salt + md5(plainPass + salt);
   callback(hashedPass === validHash);
-};
-
-/* auxiliary methods */
-
-var getObjectId = function(id) {
-  return accounts.db.bson_serializer.ObjectID.createFromHexString(id);
-};
-
-var findByMultipleFields = function(a, callback) {
-  // this takes an array of name/val pairs to search
-  // against {fieldName : 'value'}
-  accounts.find({ $or: a }).toArray(
-      function(e, results) {
-        if (e) {
-          callback(e);
-        } else {
-          callback(null, results);
-        }
-      });
 };

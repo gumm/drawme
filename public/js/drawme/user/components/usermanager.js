@@ -1,44 +1,60 @@
-goog.provide('bad.UserManager');
+goog.provide('app.user.UserManager');
 
-goog.require('exp.accountMap');
+/** @typedef {{
+*     name: (null|string),
+*     surname: (null|string),
+*     email: (null|string),
+*     user: (null|string)
+*     }}
+ */
+app.user.UserLike;
 
 /**
  * A class to manage the setting and getting of permissions.
  * @constructor
  */
-bad.UserManager = function() {
-  this.user_ = exp.accountMap({});
+app.user.UserManager = function() {
+  /**
+   * @type {app.user.UserLike}
+   * @private
+   */
+  this.user_ =  {
+        name: null,
+        surname: null,
+        email: null,
+        user: null
+    }
 };
 
-bad.UserManager.prototype.updateData = function(data) {
+app.user.UserManager.prototype.updateData = function(data) {
   this.user_ = data;
 };
 
-bad.UserManager.prototype.updateProfile = function(data) {
+app.user.UserManager.prototype.updateProfile = function(data) {
   this.user_['profile'] = data;
 };
 
-bad.UserManager.prototype.getId = function() {
+app.user.UserManager.prototype.getId = function() {
   return this.user_['_id'];
 };
 
-bad.UserManager.prototype.setId = function(id) {
+app.user.UserManager.prototype.setId = function(id) {
   this.user_['_id'] = id;
 };
 
-bad.UserManager.prototype.getProfile = function() {
+app.user.UserManager.prototype.getProfile = function() {
   return this.user_['profile'];
 };
 
-bad.UserManager.prototype.getName = function() {
+app.user.UserManager.prototype.getName = function() {
   return this.getProfile()['name'];
 };
 
-bad.UserManager.prototype.getSurname = function() {
+app.user.UserManager.prototype.getSurname = function() {
   return this.getProfile()['surname'];
 };
 
-bad.UserManager.prototype.getSalutation = function() {
+app.user.UserManager.prototype.getSalutation = function() {
   var salutation = this.getName();
   var surname = this.getSurname();
   if (surname) {

@@ -35,7 +35,7 @@ module.exports = {
         res.render('header', {});
       } else {
         res.render('header',
-            helper.makeReplyWith(null, req.session.user.profile));
+            helper.makeReplyWith(null, req.session.user));
       }
     };
     helper.okGo(req, res, {'GET': getCall});
@@ -60,8 +60,6 @@ module.exports = {
   login: function(req, res) {
 
     /**
-     * BEWARE: The account passed in here contains the full account.
-     * Only pass the profile component to the user.
      * @param {Object} err The Error object if any.
      * @param {Object} account The full account object from mongo.
      */
@@ -71,7 +69,7 @@ module.exports = {
       } else {
         req.session.user = account;
         res.status(200).send(helper.makeReplyWith(
-            null, account.profile, 'Login Successful'))
+            null, account, 'Login Successful'))
       }
     };
 
@@ -93,42 +91,14 @@ module.exports = {
    * @param res
    */
   autoLogin: function(req, res) {
-    var noAuto = 'No Auto Login Possible';
-
-    /**
-     * BEWARE: The account passed in here contains the full account.
-     * Only pass the profile component to the user.
-     * @param {Object} account The full account object from mongo.
-     */
-    var callback = function(account) {
-      if (account) {
-        req.session.user = account;
-        res.status(200)(helper.makeReplyWith(null, account.profile));
-      } else {
-        res.status(200).send(helper.makeReplyWith(noAuto));
-      }
-    };
-
-    /**
-     * If the session has all the required info to identify a user,
-     * use the session info to log in.
-     */
-    var getCall = function() {
-      if (req.session &&
-        req.session.user &&
-        req.session.user.credentials &&
-        req.session.user.credentials.user &&
-        req.session.user.credentials.pass) {
-        AM.autoLogin(
-          req.session.user.credentials.user,
-          req.session.user.credentials.pass,
-          callback);
-      } else {
-        res.status(200).send(helper.makeReplyWith(noAuto));
-      }
-    };
-
-    helper.okGo(req, res, {'GET': getCall});
+    console.log('autoLogin attempt');
+    if (req.session &&  req.session.user) {
+      var account = req.session.user;
+      res.status(200).send(helper.makeReplyWith(null, account));
+    } else {
+      console.log('We just dropped through here because there is no active session', req.session.user);
+      res.status(200).send(helper.makeReplyWith('No Auto Login Possible'));
+    }
   },
 
   /**
@@ -142,7 +112,7 @@ module.exports = {
         res.redirect('/');
       } else {
         res.render('home',
-            helper.makeReplyWith(null, req.session.user.profile));
+            helper.makeReplyWith(null, req.session.user));
       }
     };
     helper.okGo(req, res, {'GET': getCall});
@@ -154,32 +124,29 @@ module.exports = {
    * @param res
    */
   signUp: function(req, res) {
+    console.log('signUp');
     var getCall = function() {
-      var user = AM.accountMap({});
-      res.render('user/create', {udata: user.profile});
+      res.render('user/create', {udata: AM.accountMap({})});
     };
 
     var postCall = function() {
-      var cleanCountry = req.body['country'] === countries[0].name ?
-          null : req.body['country'];
+      var clearPW = req.body['pass'];
       var newAccount = AM.accountMap({
         name: req.body['name'],
         surname: req.body['surname'],
         email: req.body['email'],
-        user: req.body['user'],
-        pass: req.body['pass'],
-        country: cleanCountry
+        user: req.body['user']
       });
-      var callback = function(err, r) {
+      var callback = function(err, newUser) {
+        console.log('BACK AFTER CREATING THE USER...', newUser);
         if (err) {
           res.status(400).send(helper.makeReplyWith(err));
         } else {
-          var profile = r.ops[0].profile;
           res.status(200).send(helper.makeReplyWith(
-              null, profile, 'New account created'));
+              null, newUser, 'New account created'));
         }
       };
-      AM.addNewAccount(newAccount, callback);
+      AM.addNewAccount(newAccount, clearPW, callback);
     };
 
     helper.okGo(req, res, {'GET': getCall, 'POST': postCall});

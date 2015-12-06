@@ -6,12 +6,18 @@ module.exports = {
    */
   setRouts: function(app, urlMap) {
 
-    /** BASICS */
+    // Outside View
     app.get(urlMap.INDEX, routeTo.slash);
     app.get(urlMap.ROOT.HEADER, routeTo.header);
     app.get(urlMap.ROOT.INTRO, routeTo.intro);
+
+    // LOG IN
     app.get(urlMap.LOG.IN, routeTo.login);
     app.post(urlMap.LOG.IN, routeTo.login);
+    app.get(urlMap.LOG.AUTO, routeTo.autoLogin);
+    app.post(urlMap.LOG.AUTO, routeTo.autoLogin);
+
+    // HOME
     app.get(urlMap.ROOT.HOME, routeTo.home);
 
     //------------------------------------------------------------[ Password ]--

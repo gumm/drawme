@@ -28,8 +28,8 @@ goog.addDependency('../../../drawme/base/panels/persistentpanel.js', ['app.base.
 goog.addDependency('../../../drawme/base/views/basic.js', ['app.BasicView'], ['bad.ui.View'], false);
 goog.addDependency('../../../drawme/base/views/homeview.js', ['app.base.view.Home'], ['app.base.panel.Home', 'bad.ui.View', 'contracts.urlMap', 'goog.Uri'], false);
 goog.addDependency('../../../drawme/drawme.js', ['drawme'], ['bad.Net', 'drawme.Site', 'goog.net.XhrManager'], false);
-goog.addDependency('../../../drawme/site.js', ['drawme.Site'], ['app.user.view.Login', 'bad.ui.EventType', 'bad.ui.Layout', 'goog.array', 'goog.dom', 'goog.events.EventHandler'], false);
-goog.addDependency('../../../drawme/user/components/usermanager.js', ['bad.UserManager'], ['exp.accountMap'], false);
+goog.addDependency('../../../drawme/site.js', ['drawme.Site'], ['app.base.view.Home', 'app.user.UserManager', 'app.user.view.Login', 'bad.ui.EventType', 'bad.ui.Layout', 'contracts.urlMap', 'goog.array', 'goog.dom', 'goog.events.EventHandler'], false);
+goog.addDependency('../../../drawme/user/components/usermanager.js', ['app.user.UserManager'], [], false);
 goog.addDependency('../../../drawme/user/constants.js', ['app.user.EventType'], ['bad.utils'], false);
 goog.addDependency('../../../drawme/user/panels/deleteaccountform.js', ['app.user.panel.DeleteAccount'], ['app.user.EventType', 'bad.ui.Form', 'bad.utils', 'goog.dom.forms', 'goog.uri.utils'], false);
 goog.addDependency('../../../drawme/user/panels/loginform.js', ['app.user.panel.Login'], ['app.user.EventType', 'bad.ui.Form', 'bad.utils', 'goog.dom', 'goog.events.EventType'], false);
