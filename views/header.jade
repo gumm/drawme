@@ -1,12 +1,15 @@
 //- preset form values if we receive a userdata object
 - profile = typeof(data) != 'undefined' ? data : { }
 
-#logo_container
-    //img#logoImg(src="img/explogo.png")
+logo_container
+  //img#logoImg(src="img/explogo.png")
 
 if (profile.name)
-    #active_user_container
-        .signup Welcome
-            #user_button
-                i.icon-cog
-                | #{profile.name} #{profile.surname}
+  .active_user_container
+    .salutation Welcome
+    #user_button
+      i.material-icons face
+      | #{profile.name} #{profile.surname}
+
+
+//

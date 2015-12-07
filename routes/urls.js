@@ -2,6 +2,7 @@ var routeTo = require('./basic');
 
 module.exports = {
   /**
+   * @param {Object} app
    * @param {contracts.urlMap} urlMap
    */
   setRouts: function(app, urlMap) {
@@ -11,14 +12,14 @@ module.exports = {
     app.get(urlMap.ROOT.HEADER, routeTo.header);
     app.get(urlMap.ROOT.INTRO, routeTo.intro);
 
-    // LOG IN and OUT
+    // Log IN and OUT
     app.get(urlMap.LOG.IN, routeTo.login);
     app.post(urlMap.LOG.IN, routeTo.login);
     app.get(urlMap.LOG.AUTO, routeTo.autoLogin);
     app.post(urlMap.LOG.AUTO, routeTo.autoLogin);
     app.post(urlMap.LOG.OUT, routeTo.logout);
 
-    // HOME
+    // Home
     app.get(urlMap.ROOT.HOME, routeTo.home);
 
     // Password Lost
@@ -32,7 +33,6 @@ module.exports = {
     //// Password Editing
     //app.get(urlMap.PW.EDIT, routeTo.editPassword);
     //app.post(urlMap.PW.EDIT, routeTo.editPassword);
-
 
     // Account Create
     app.get(urlMap.ACCOUNTS.CREATE, routeTo.signUp);

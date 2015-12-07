@@ -2,6 +2,7 @@ goog.provide('app.base.panel.Persistent');
 
 goog.require('app.base.EventType');
 goog.require('app.user.EventType');
+goog.require('bad.ui.MenuButtonRenderer');
 goog.require('bad.ui.MenuFloatRenderer');
 goog.require('bad.ui.MenuItemRenderer');
 goog.require('bad.ui.Panel');
@@ -9,7 +10,6 @@ goog.require('bad.utils');
 goog.require('contracts.urlMap');
 goog.require('goog.Uri');
 goog.require('goog.dom');
-goog.require('goog.ui.Css3MenuButtonRenderer');
 goog.require('goog.ui.MenuButton');
 goog.require('goog.uri.utils');
 
@@ -55,13 +55,14 @@ app.base.panel.Persistent.prototype.buildUserButton = function() {
   var itemRenderer = /** @type {bad.ui.MenuItemRenderer} */ (
       bad.ui.MenuItemRenderer.getInstance());
 
+  var menuButRender = /** @type {bad.ui.MenuButtonRenderer} */ (
+      bad.ui.MenuButtonRenderer.getInstance());
+
   var menu = bad.utils.makeMenu(
     menuItems, this.dom_, this.getHandler(), this, renderer, itemRenderer);
 
   // Menu Button
-  var menuButton = new goog.ui.MenuButton('', menu,
-    new goog.ui.Css3MenuButtonRenderer(), this.dom_
-  );
+  var menuButton = new goog.ui.MenuButton('', menu, menuButRender, this.dom_);
   menuButton.decorate(goog.dom.getElement('user_button'));
 
   this.userButton = menuButton;

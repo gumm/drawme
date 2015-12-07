@@ -100,8 +100,8 @@ module.exports = {
   logout: function(req, res) {
     var postCall = function() {
       if (req.body['logout'] === 'true') {
-        res.clearCookie('user');
-        res.clearCookie('pass');
+        res.clearCookie('user', {});
+        res.clearCookie('pass', {});
         req.session.destroy(function() {
           res.status(200).send('ok');
         });
@@ -205,8 +205,11 @@ module.exports = {
    * @param res
    */
   lostPassword: function(req, res) {
-    var transporter = req.app.get('setup').transporter;
-    var siteUrl = req.app.get('setup').siteUrl;
+    var settings = req.app.get('setup');
+    var transporter = settings.transporter;
+
+    //noinspection JSUnresolvedVariable
+    var siteUrl = settings.siteUrl;
 
     var getCall = function() {
       res.render('lost-password', {});
@@ -316,6 +319,7 @@ module.exports = {
 
 /**
  * TODO: Surely we can somehow hook Jade up to do this for us.
+ * This is fugly!
  * @param {Object} account
  * @param {String} target
  * @returns {{html: string, txt: string}}
