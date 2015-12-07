@@ -1,4 +1,4 @@
-goog.provide('app.base.panel.Home');
+goog.provide('app.base.panel.MainCanvas');
 
 goog.require('bad.ui.Panel');
 goog.require('goog.dom');
@@ -9,13 +9,13 @@ goog.require('goog.dom');
  * @extends {bad.ui.Panel}
  * @constructor
  */
-app.base.panel.Home = function(opt_domHelper) {
+app.base.panel.MainCanvas = function(opt_domHelper) {
   bad.ui.Panel.call(this, opt_domHelper);
 };
-goog.inherits(app.base.panel.Home, bad.ui.Panel);
+goog.inherits(app.base.panel.MainCanvas, bad.ui.Panel);
 
-app.base.panel.Home.prototype.enterDocument = function() {
+app.base.panel.MainCanvas.prototype.enterDocument = function() {
   this.dom_ = goog.dom.getDomHelper(this.getElement());
 
-  app.base.panel.Home.superClass_.enterDocument.call(this);
+  app.base.panel.MainCanvas.superClass_.enterDocument.call(this);
 };

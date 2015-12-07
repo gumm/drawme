@@ -24,12 +24,12 @@ goog.addDependency('../../../bad-library/bad/user/usermanager.js', ['bad.UserMan
 goog.addDependency('../../../bad-library/bad/util/typecheck.js', ['bad.typeCheck'], [], false);
 goog.addDependency('../../../bad-library/bad/util/utils.js', ['bad.utils'], ['bad.ui.FlatButtonRenderer', 'goog.array', 'goog.dom', 'goog.object', 'goog.string', 'goog.ui.Component', 'goog.ui.CustomButton', 'goog.ui.Menu', 'goog.ui.MenuItem', 'goog.ui.MenuSeparator', 'goog.ui.ToggleButton'], false);
 goog.addDependency('../../../contracts/urlmap.js', ['contracts.urlMap'], [], false);
-goog.addDependency('../../../drawme/base/components/viewmanager.js', ['app.base.ViewManager'], ['app.base.EventType', 'app.base.ViewEventType', 'app.base.panel.Persistent', 'app.base.view.Home', 'app.user.EventType', 'app.user.view.Account', 'app.user.view.Login', 'bad.UserManager', 'bad.ui.View', 'bad.utils', 'contracts.urlMap', 'goog.Uri', 'goog.array', 'goog.dom', 'goog.dom.classes', 'goog.object'], false);
+goog.addDependency('../../../drawme/base/components/topbarpanel.js', ['app.base.TopBarPanel'], ['app.base.EventType', 'bad.ui.MenuButtonRenderer', 'bad.ui.MenuFloatRenderer', 'bad.ui.MenuItemRenderer', 'bad.ui.Panel', 'bad.utils', 'contracts.urlMap', 'goog.Uri', 'goog.dom', 'goog.ui.MenuButton', 'goog.uri.utils'], false);
+goog.addDependency('../../../drawme/base/components/viewmanager.js', ['app.base.ViewManager'], ['app.base.EventType', 'app.base.TopBarPanel', 'app.base.ViewEventType', 'app.base.view.Home', 'app.user.EventType', 'app.user.view.Account', 'app.user.view.Login', 'bad.UserManager', 'bad.ui.View', 'bad.utils', 'contracts.urlMap', 'goog.Uri', 'goog.array', 'goog.dom', 'goog.dom.classes', 'goog.object'], false);
 goog.addDependency('../../../drawme/base/constants.js', ['app.base.EventType', 'app.base.ViewEventType'], ['bad.utils'], false);
-goog.addDependency('../../../drawme/base/panels/homepanel.js', ['app.base.panel.Home'], ['bad.ui.Panel', 'goog.dom'], false);
-goog.addDependency('../../../drawme/base/panels/persistentpanel.js', ['app.base.panel.Persistent'], ['app.base.EventType', 'app.user.EventType', 'bad.ui.MenuButtonRenderer', 'bad.ui.MenuFloatRenderer', 'bad.ui.MenuItemRenderer', 'bad.ui.Panel', 'bad.utils', 'contracts.urlMap', 'goog.Uri', 'goog.dom', 'goog.ui.MenuButton', 'goog.uri.utils'], false);
+goog.addDependency('../../../drawme/base/panels/canvas.js', ['app.base.panel.MainCanvas'], ['bad.ui.Panel', 'goog.dom'], false);
 goog.addDependency('../../../drawme/base/views/basic.js', ['app.BasicView'], ['bad.ui.View'], false);
-goog.addDependency('../../../drawme/base/views/homeview.js', ['app.base.view.Home'], ['app.base.panel.Home', 'bad.ui.View', 'contracts.urlMap', 'goog.Uri'], false);
+goog.addDependency('../../../drawme/base/views/homeview.js', ['app.base.view.Home'], ['app.base.panel.MainCanvas', 'bad.ui.EventType', 'bad.ui.View', 'contracts.urlMap', 'goog.Uri'], false);
 goog.addDependency('../../../drawme/drawme.js', ['drawme'], ['bad.Net', 'drawme.Site', 'goog.net.XhrManager'], false);
 goog.addDependency('../../../drawme/site.js', ['drawme.Site'], ['app.base.ViewManager', 'bad.ui.Layout', 'contracts.urlMap', 'goog.Uri', 'goog.dom', 'goog.events.EventHandler'], false);
 goog.addDependency('../../../drawme/user/constants.js', ['app.user.EventType'], ['bad.utils'], false);

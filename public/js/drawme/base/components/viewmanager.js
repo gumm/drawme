@@ -1,8 +1,8 @@
 goog.provide('app.base.ViewManager');
 
 goog.require('app.base.EventType');
+goog.require('app.base.TopBarPanel');
 goog.require('app.base.ViewEventType');
-goog.require('app.base.panel.Persistent');
 goog.require('app.base.view.Home');
 goog.require('app.user.EventType');
 goog.require('app.user.view.Account');
@@ -42,7 +42,7 @@ goog.inherits(app.base.ViewManager, bad.ui.View);
  */
 app.base.ViewManager.prototype.configurePanels = function() {
 
-  var headerPanel = new app.base.panel.Persistent();
+  var headerPanel = new app.base.TopBarPanel();
   headerPanel.setUri(new goog.Uri(contracts.urlMap.ROOT.HEADER));
   headerPanel.setUser(this.getUser());
   headerPanel.setNestAsTarget(this.getLayout().getNest('header'));
@@ -61,7 +61,10 @@ app.base.ViewManager.prototype.onPanelAction = function(e) {
 
   switch (value) {
     case app.base.EventType.EDIT_PROFILE:
-        this.viewEditUser();
+        var cb = goog.bind(function() {
+          this.viewEditUser();
+        }, this);
+        this.activeView_.slideAllClosed(cb);
       break;
     case app.user.EventType.VIEW_PIC:
         console.debug('We need to go to the list drawings view');
@@ -153,6 +156,7 @@ app.base.ViewManager.prototype.viewEditUser = function() {
  * @param {bad.ui.View} view
  */
 app.base.ViewManager.prototype.switchView = function(view) {
+  this.hideAllNests();
   if (this.activeView_) {
     this.activeView_.dispose();
   }

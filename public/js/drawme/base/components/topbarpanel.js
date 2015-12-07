@@ -1,7 +1,6 @@
-goog.provide('app.base.panel.Persistent');
+goog.provide('app.base.TopBarPanel');
 
 goog.require('app.base.EventType');
-goog.require('app.user.EventType');
 goog.require('bad.ui.MenuButtonRenderer');
 goog.require('bad.ui.MenuFloatRenderer');
 goog.require('bad.ui.MenuItemRenderer');
@@ -19,23 +18,23 @@ goog.require('goog.uri.utils');
  * @extends {bad.ui.Panel}
  * @constructor
  */
-app.base.panel.Persistent = function(opt_domHelper) {
+app.base.TopBarPanel = function(opt_domHelper) {
   bad.ui.Panel.call(this, opt_domHelper);
 
 };
-goog.inherits(app.base.panel.Persistent, bad.ui.Panel);
+goog.inherits(app.base.TopBarPanel, bad.ui.Panel);
 
-app.base.panel.Persistent.prototype.enterDocument = function() {
+app.base.TopBarPanel.prototype.enterDocument = function() {
   this.dom_ = goog.dom.getDomHelper(this.getElement());
   this.initDom();
-  app.base.panel.Persistent.superClass_.enterDocument.call(this);
+  app.base.TopBarPanel.superClass_.enterDocument.call(this);
 };
 
-app.base.panel.Persistent.prototype.initDom = function() {
+app.base.TopBarPanel.prototype.initDom = function() {
   this.buildUserButton();
 };
 
-app.base.panel.Persistent.prototype.buildUserButton = function() {
+app.base.TopBarPanel.prototype.buildUserButton = function() {
 
   /**
    * @type {Array}
@@ -71,12 +70,12 @@ app.base.panel.Persistent.prototype.buildUserButton = function() {
 /**
  * @param {bad.UserManager} user
  */
-app.base.panel.Persistent.prototype.setUser = function(user) {
-  app.base.panel.Persistent.superClass_.setUser.call(this, user);
+app.base.TopBarPanel.prototype.setUser = function(user) {
+  app.base.TopBarPanel.superClass_.setUser.call(this, user);
   this.updateUser();
 };
 
-app.base.panel.Persistent.prototype.updateUser = function() {
+app.base.TopBarPanel.prototype.updateUser = function() {
   var salutation = this.getUser().getSalutation();
   if (this.userButton) {
     var icon = goog.dom.createDom('i', 'icon-cog');
@@ -84,7 +83,7 @@ app.base.panel.Persistent.prototype.updateUser = function() {
   }
 };
 
-app.base.panel.Persistent.prototype.logOut = function() {
+app.base.TopBarPanel.prototype.logOut = function() {
   var uri = new goog.Uri(contracts.urlMap.LOG.OUT);
   var queryData = goog.uri.utils.buildQueryDataFromMap({'logout': true});
   this.xMan.post(uri, queryData, goog.bind(this.onLogOut, this));
@@ -93,7 +92,7 @@ app.base.panel.Persistent.prototype.logOut = function() {
 /**
  * @param {goog.events.EventLike} e Event object.
  */
-app.base.panel.Persistent.prototype.onLogOut = function(e) {
+app.base.TopBarPanel.prototype.onLogOut = function(e) {
   var xhr = e.target;
   if (xhr.isSuccess()) {
     window.open(contracts.urlMap.INDEX, '_self');
