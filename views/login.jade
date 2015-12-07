@@ -6,15 +6,13 @@
       | the awesome you already made.
 
     // This is the username field
-    label(for="user") Username
+    label(for="user-tf") Username
     input(type="text", name="user", id='user-tf', required).required
 
     // This is the password field
-    label(for="pass") Password
+    label(for="pass-tf") Password
     input(type="password", name="pass", id='pass-tf', required).required
 
-    label(for="remember")#remember-me.checkbox Remember Me
-      input(name="remember", type="checkbox", checked='checked')
     .form-actions
       .form-action-right
         #btn-login.g-button-submit

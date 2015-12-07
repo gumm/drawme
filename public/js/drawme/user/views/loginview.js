@@ -120,7 +120,10 @@ app.user.view.Login.prototype.onPanelAction = function(e) {
       this.enterLostPasswordForm();
       break;
     case app.user.EventType.LOGIN_SUCCESS:
-        console.debug('The login view got this:', data);
+      this.fetchHomePage(/** @type {Object} */ (data));
+      break;
+    case app.user.EventType.PW_RESET_SUCCESS:
+      this.resetPasswordForm.dispose();
       this.fetchHomePage(/** @type {Object} */ (data));
       break;
     case app.user.EventType.SIGNUP_CANCEL:

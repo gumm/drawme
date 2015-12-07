@@ -1,0 +1,53 @@
+#confaccdel.container-440-left
+    .detail-head
+            .content
+                block warningOne
+    form()#confaccdel-form.well
+        .alert.alert-error
+            h3.text-center
+                i.icon-large.icon-warning-sign
+                |   Warning
+            strong
+                block warningTwo
+        p
+            block warningThree
+        hr
+        fieldset
+            #user-cg
+                label.control-label(for='user-tf') Enter your username
+                .controls
+                    input#uname-tf.input-full-width(
+                    type='text',
+                    name='user',
+                    value='',
+                    placeholder='Your login name',
+                    required)
+
+            #confphrase-cg
+                label.control-label(for='confphrase-tf') Type the following phrase:&nbsp;
+                    em.text-info #{confPhrase}
+                .controls
+                    input#confphrase-tf.input-full-width(
+                    type='text',
+                    name='confphrase',
+                    pattern="#{confPhrase}"
+                    value='',
+                    placeholder='We will be sad to see you go',
+                    required)
+
+            #pass-cg
+                label.control-label(for='pass-tf') Confirm your password
+                .controls
+                    input#pass-tf.input-full-width(
+                    type='password',
+                    name='pass',
+                    value='',
+                    placeholder='Your login password',
+                    required)
+
+            .form-actions
+                .form-action-right
+                    #but-cancel Cancel
+                    #remove-account-confirm(style="margin-left: 10px").g-button-red
+                        i.icon-user
+                        | Delete

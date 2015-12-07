@@ -3,16 +3,11 @@
  */
 goog.provide('drawme.Site');
 
-goog.require('app.base.view.Home');
 goog.require('app.base.ViewManager');
-goog.require('app.user.view.Login');
-goog.require('bad.UserManager');
 goog.require('bad.ui.Layout');
 goog.require('contracts.urlMap');
 goog.require('goog.Uri');
-goog.require('goog.array');
 goog.require('goog.dom');
-goog.require('goog.dom.classes');
 goog.require('goog.events.EventHandler');
 
 
@@ -21,10 +16,12 @@ goog.require('goog.events.EventHandler');
  * can simply subscribe to events on its children.
  * @param {!bad.Net} xManWrapper This site's XhrManager wrapped in a bad.Net
  *      convenience wrapper.
+ * @param {string=} opt_landing Pass in optional behavior, such as when a
+ *      password is being reset.
  * @constructor
  * @extends {goog.events.EventHandler}
  */
-drawme.Site = function(xManWrapper) {
+drawme.Site = function(xManWrapper, opt_landing) {
   goog.events.EventHandler.call(this);
 
   /**
@@ -33,16 +30,16 @@ drawme.Site = function(xManWrapper) {
   this.xMan_ = xManWrapper;
 
   /**
+   * @type {?string}
+   * @private
+   */
+  this.landing_ = opt_landing ? opt_landing : null;
+
+  /**
    * @type {bad.ui.Layout}
    * @private
    */
   this.layout_ = null;
-
-  /**
-   * @type {bad.UserManager}
-   * @private
-   */
-  this.user_ = new bad.UserManager();
 
   /**
    * A manager that collects and acts on events from views.
@@ -151,27 +148,22 @@ drawme.Site.prototype.initLayout_ = function() {
   this.layout_.render();
 };
 
-drawme.Site.prototype.onLayoutReady = function() {
-  this.initViewManager();
-  this.hideAllNests();
-  this.autoLogin();
-};
-
-//------------------------------------------------------------------[ Header ]--
-
 /**
- * Some stuff should stay in the header as long as the user is signed in.
- * It should only appear on sign-in, and be destroyed on sign out.
- * This uses a special view with its own panel components to dive this.
+ * Once the layout is ready, it fires a final layout ready event that
+ * brings us here.
  */
-drawme.Site.prototype.initViewManager = function() {
+drawme.Site.prototype.onLayoutReady = function() {
   this.viewManager.setLayout(this.layout_);
   this.viewManager.setXMan(this.xMan_);
-  this.viewManager.setUser(this.user_);
+  this.viewManager.hideAllNests();
+  this.autoLogin();
 };
 
 //--------------------------------------------------------------[ Auto Login ]--
 
+/**
+ * Try to log in by attaching to an existing session on the server.
+ */
 drawme.Site.prototype.autoLogin = function() {
   var callback = goog.bind(this.onAutoLoginReply, this);
   this.xMan_.get(new goog.Uri(contracts.urlMap.LOG.AUTO), callback);
@@ -185,42 +177,11 @@ drawme.Site.prototype.onAutoLoginReply = function(e) {
   if (xhr.isSuccess()) {
     var data = xhr.getResponseJson();
     if (data.error) {
-      this.viewLogin();
+      this.viewManager.viewLogin(this.landing_);
     } else {
       this.viewManager.userSignedIn(data['data']);
     }
   } else {
-    this.viewLogin();
+    this.viewManager.viewLogin(this.landing_);
   }
-};
-
-/**
- * @param {boolean=} opt_reset
- */
-drawme.Site.prototype.viewLogin = function(opt_reset) {
-
-  /**
-   * @type {app.user.view.Login}
-   */
-  var view = new app.user.view.Login(opt_reset);
-  this.viewManager.switchView(view);
-};
-
-//-----------------------------------------------------[ Utility Stuff Below ]--
-
-drawme.Site.prototype.hideAllNests = function() {
-  /**
-   * @type {Array}
-   */
-  var nests = [
-    this.layout_.getNest('main', 'left'),
-    this.layout_.getNest('main', 'left', 'top'),
-    this.layout_.getNest('main', 'left', 'bottom'),
-    this.layout_.getNest('main', 'right'),
-    this.layout_.getNest('main', 'right', 'top'),
-    this.layout_.getNest('main', 'right', 'bottom')
-  ];
-  goog.array.forEach(nests, function(nest) {
-    nest.hide();
-  }, this);
 };

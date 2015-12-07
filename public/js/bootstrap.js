@@ -19,7 +19,7 @@ var bootstrap = {
     bootstrap.todo = name;
   },
   setDefaults: function(var_args) {
-    bootstrap.landing = arguments[1];
+    bootstrap.landing = arguments[0];
   },
   loadScript: function(src, callback) {
     var head = document.getElementsByTagName('head')[0],

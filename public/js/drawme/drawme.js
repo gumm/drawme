@@ -10,9 +10,9 @@ goog.require('goog.net.XhrManager');
 /**
  * Init the site
  */
-drawme.initSite = function() {
+drawme.initSite = function(opt_landing) {
 
-  console.debug('THE JS STARTED IN THE BROWSER!!!');
+  console.debug('THE JS STARTED IN THE BROWSER!!! --> ', opt_landing);
 
   var opt_maxRetries = 0,
     opt_headers = null,
@@ -38,7 +38,7 @@ drawme.initSite = function() {
   /**
    * @type {drawme.Site}
    */
-  var site = new drawme.Site(xMan);
+  var site = new drawme.Site(xMan, opt_landing);
   site.initSite();
 };
 

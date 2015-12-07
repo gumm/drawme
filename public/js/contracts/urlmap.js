@@ -20,14 +20,12 @@ contracts.urlMap = {
   },
   PW: {
     LOST: '/pw/lost',
-    RESET: '/pw/reset',
+    RESET: '/pwreset',
     EDIT: '/pw/edit'
   },
   ACCOUNTS: {
     CREATE: '/accs/create',
-    READ: '/accs/read',
-    UPDATE: '/accs/update',
-    DELETE: '/accs/delete'
+    EDIT_OR_DELETE: '/accs/eord'
   },
   PICS: {
     CREATE: '/pic/create',

@@ -65,7 +65,7 @@ app.user.panel.ResetPassword.prototype.loginCallback = function(e) {
   this.clearAlerts();
   if (xhr.isSuccess()) {
     this.dispatchActionEvent(
-      app.user.EventType.LOGIN_SUCCESS, data.data);
+      app.user.EventType.PW_RESET_SUCCESS, data.data);
   } else {
     this.displayErrors(data);
   }

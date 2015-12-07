@@ -3,6 +3,7 @@ goog.provide('app.user.panel.DeleteAccount');
 goog.require('app.user.EventType');
 goog.require('bad.ui.Form');
 goog.require('bad.utils');
+goog.require('contracts.urlMap');
 goog.require('goog.dom.forms');
 goog.require('goog.uri.utils');
 
@@ -56,7 +57,7 @@ app.user.panel.DeleteAccount.prototype.onConfirmation = function(queryData, e) {
   var xhr = e.target;
   this.clearAlerts();
   if (xhr.isSuccess()) {
-    window.open(exp.urlMap.INDEX, '_self');
+    window.open(contracts.urlMap.INDEX, '_self');
   } else {
     var data = xhr.getResponseJson();
     this.displayErrors(data);

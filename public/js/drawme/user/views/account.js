@@ -1,58 +1,26 @@
 goog.provide('app.user.view.Account');
 
 goog.require('app.BasicView');
-goog.require('app.base.EventType');
-goog.require('app.org.panel.List');
+goog.require('app.base.ViewEventType');
 goog.require('app.user.EventType');
 goog.require('app.user.panel.DeleteAccount');
-goog.require('app.user.panel.NavPanel');
-goog.require('app.user.panel.SignUp');
-goog.require('bad.ui.Panel');
-goog.require('bad.utils');
+goog.require('bad.ui.ViewEvent');
+goog.require('contracts.urlMap');
 goog.require('goog.Uri');
-goog.require('goog.dom');
-goog.require('goog.events.EventType');
 
 /**
- * @param {string=} opt_landing Optional panel to land on.
  * @extends {app.BasicView}
  * @constructor
  */
-app.user.view.Account = function(opt_landing) {
+app.user.view.Account = function() {
   app.BasicView.call(this);
 
-  this.landing_ = opt_landing || null;
 };
 goog.inherits(app.user.view.Account, app.BasicView);
 
-app.user.view.Account.prototype.createNavPanel = function() {
-  /**
-   * @type {bad.ui.Panel}
-   */
-  this.nav = new app.user.panel.NavPanel();
-  this.nav.setUser(this.getUser());
-  this.nav.setNestAsTarget(this.getLayout().getNest('main', 'left', 'mid'));
-  this.nav.setBeforeReadyCallback(goog.bind(this.slideNavIn, this));
-  this.addPanelToView(bad.utils.makeId(), this.nav);
-  this.nav.render();
-};
-
 app.user.view.Account.prototype.displayPanels = function() {
 
-  if (this.nav) {
-    this.nav.setUser(this.getUser());
-    this.nav.resetMenu();
-  } else {
-    this.createNavPanel();
-  }
-
-  switch (this.landing_) {
-    case 'orgList':
-      this.enterOrgsList();
-      break;
-    default:
-      this.enterOverview(this.landing_);
-  }
+  this.enterSignUpForm();
 };
 
 /**
@@ -66,32 +34,13 @@ app.user.view.Account.prototype.onPanelAction = function(e) {
 
   switch (value) {
     case app.user.EventType.SIGNUP_CANCEL:
-      this.enterOverview();
+      this.goHome();
       break;
     case app.user.EventType.SIGNUP_SUCCESS:
-        console.debug('WE ENDED HERE...', data, value);
       this.displayPanels();
       break;
     case app.user.EventType.ACCOUNT_REMOVE_CANCELED:
-      this.enterOverview();
-      break;
-    case app.user.EventType.ACCOUNT_REMOVE:
-      this.confirmRemoveAccount();
-      break;
-    case app.user.EventType.EDIT_ACCOUNT:
-      this.enterSignUpForm(value);
-      break;
-    case app.user.EventType.EDIT_PW:
-      this.enterSignUpForm(value);
-      break;
-    case app.user.EventType.VIEW_PIC:
-      this.enterOrgsList();
-      break;
-    case app.user.EventType.CANCEL_VIEW_PIC:
-      this.enterOverview();
-      break;
-    case app.base.EventType.MENU_HEAD:
-      this.enterOverview();
+      this.goHome();
       break;
     default:
       console.log('app.user.view.Account No action for: ', value);
@@ -103,19 +52,12 @@ app.user.view.Account.prototype.onPanelAction = function(e) {
 /**
  * The sign-up form is used for sign-up, editing accounts, and passwords.
  * It is destroyed on exit, and is thus recreated here each time it is called.
- * @param {string} value The event value describes the required form.
  */
-app.user.view.Account.prototype.enterSignUpForm = function(value) {
+app.user.view.Account.prototype.enterSignUpForm = function() {
 
-  var urlString = exp.urlMap.ACCOUNTS.UPDATE;
-  if (value === app.user.EventType.EDIT_PW) {
-    urlString = exp.urlMap.PW.EDIT;
-  }
+  var urlString = contracts.urlMap.ACCOUNTS.EDIT_OR_DELETE;
 
-  /**
-   * @type {app.user.panel.SignUp}
-   */
-  var form = new app.user.panel.SignUp('account-form');
+  var form = new app.user.panel.DeleteAccount('confaccdel-form');
   form.setUri(new goog.Uri(urlString));
   form.setUser(this.getUser());
   form.setNestAsTarget(this.getLayout().getNest('main', 'center'));
@@ -123,66 +65,8 @@ app.user.view.Account.prototype.enterSignUpForm = function(value) {
   form.renderWithTemplate();
 };
 
-/**
- * The sign-up form is used for sign-up, editing accounts, and passwords.
- * It is destroyed on exit, and is thus recreated here each time it is called.
- */
-app.user.view.Account.prototype.enterOrgsList = function() {
-
-  /**
-   * @type {app.org.panel.List}
-   */
-  var panel = new app.org.panel.List();
-  panel.setUri(new goog.Uri(exp.urlMap.ORGS.READ));
-  panel.setUser(this.getUser());
-  panel.setNestAsTarget(this.getLayout().getNest('main', 'center'));
-  this.addPanelToView('replace', panel);
-  panel.renderWithTemplate();
-};
-
-/**
- * An overview of the account
- * @param {(string|null)=} opt_id
- */
-app.user.view.Account.prototype.enterOverview = function(opt_id) {
-
-  if (this.nav) {
-    this.nav.resetMenu();
-  }
-
-  var uriString = exp.urlMap.ACCOUNTS.READ;
-  if (opt_id) {
-    uriString = uriString + '/' + opt_id;
-  }
-
-  /**
-   * @type {bad.ui.Panel}
-   */
-  var panel = new bad.ui.Panel();
-  panel.setUri(new goog.Uri(uriString));
-  panel.setUser(this.getUser());
-  panel.setNestAsTarget(this.getLayout().getNest('main', 'center'));
-  var beforeReadyCallback = goog.bind(function() {
-    var editProfile = goog.dom.getElement('editProfile');
-    this.getHandler().listen(
-      editProfile,
-      goog.events.EventType.CLICK,
-      function() {
-        this.dispatchActionEvent(app.user.EventType.EDIT_ACCOUNT);
-      }
-    );
-  }, panel);
-  panel.setBeforeReadyCallback(beforeReadyCallback);
-  this.addPanelToView('replace', panel);
-  panel.renderWithTemplate();
-};
-
-app.user.view.Account.prototype.confirmRemoveAccount = function() {
-
-  var form = new app.user.panel.DeleteAccount('confaccdel-form');
-  form.setUri(new goog.Uri(exp.urlMap.ACCOUNTS.DELETE));
-  form.setUser(this.getUser());
-  form.setNestAsTarget(this.getLayout().getNest('main', 'center'));
-  this.addPanelToView('replace', form);
-  form.renderWithTemplate();
+app.user.view.Account.prototype.goHome = function() {
+  this.dispatchEvent(new bad.ui.ViewEvent(
+      app.base.ViewEventType.VIEW_HOME, this
+  ));
 };
