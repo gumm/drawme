@@ -14,9 +14,13 @@ contracts.urlMap = {
     HEADER: '/login/header'
   },
   ROOT: {
-    HOME: '/home',
     INTRO: '/intro',
     HEADER: '/header'
+  },
+  DRAW: {
+    LEFT: '/pan/left',
+    RIGHT: '/pan/right',
+    CANVAS: '/canvas'
   },
   PW: {
     LOST: '/pw/lost',

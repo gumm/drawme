@@ -116,17 +116,42 @@ module.exports = {
    * @param req
    * @param res
    */
-  home: function(req, res) {
+  canvas: function(req, res) {
     var getCall = function() {
       if (!req.session.user) {
         res.redirect('/');
       } else {
-        res.render('home',
+        res.render('draw/canvas',
             helper.makeReplyWith(null, req.session.user));
       }
     };
     helper.okGo(req, res, {'GET': getCall});
   },
+
+  panLeft: function(req, res) {
+    var getCall = function() {
+      if (!req.session.user) {
+        res.redirect('/');
+      } else {
+        res.render('draw/left',
+            helper.makeReplyWith(null, req.session.user));
+      }
+    };
+    helper.okGo(req, res, {'GET': getCall});
+  },
+
+  panRight: function(req, res) {
+    var getCall = function() {
+      if (!req.session.user) {
+        res.redirect('/');
+      } else {
+        res.render('draw/right',
+            helper.makeReplyWith(null, req.session.user));
+      }
+    };
+    helper.okGo(req, res, {'GET': getCall});
+  },
+
 
   /**
    * Creates a new account

@@ -19,8 +19,10 @@ module.exports = {
     app.post(urlMap.LOG.AUTO, routeTo.autoLogin);
     app.post(urlMap.LOG.OUT, routeTo.logout);
 
-    // Home
-    app.get(urlMap.ROOT.HOME, routeTo.home);
+    // Drawing
+    app.get(urlMap.DRAW.CANVAS, routeTo.canvas);
+    app.get(urlMap.DRAW.LEFT, routeTo.panLeft);
+    app.get(urlMap.DRAW.RIGHT, routeTo.panRight);
 
     // Password Lost
     app.get(urlMap.PW.LOST, routeTo.lostPassword);

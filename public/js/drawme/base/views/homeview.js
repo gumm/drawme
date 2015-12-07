@@ -2,6 +2,7 @@ goog.provide('app.base.view.Home');
 
 goog.require('app.base.panel.MainCanvas');
 goog.require('bad.ui.EventType');
+goog.require('bad.ui.Panel');
 goog.require('bad.ui.View');
 goog.require('contracts.urlMap');
 goog.require('goog.Uri');
@@ -20,15 +21,15 @@ app.base.view.Home.prototype.configurePanels = function() {
   var user = this.getUser();
 
   var mainCanvas = new app.base.panel.MainCanvas();
-  mainCanvas.setUri(new goog.Uri(contracts.urlMap.ROOT.HOME));
+  mainCanvas.setUri(new goog.Uri(contracts.urlMap.DRAW.CANVAS));
   mainCanvas.setUser(user);
   mainCanvas.setNestAsTarget(layout.getNest('main', 'center'));
   this.addPanelToView('home', mainCanvas);
   mainCanvas.renderWithTemplate();
 
 
-  var leftPalette = new app.base.panel.MainCanvas();
-  leftPalette.setUri(new goog.Uri(contracts.urlMap.ROOT.HOME));
+  var leftPalette = new bad.ui.Panel();
+  leftPalette.setUri(new goog.Uri(contracts.urlMap.DRAW.LEFT));
   leftPalette.setUser(user);
   leftPalette.setNestAsTarget(layout.getNest('main', 'left', 'mid'));
   leftPalette.setSlideNest(layout.getNest('main', 'left'));
@@ -36,8 +37,8 @@ app.base.view.Home.prototype.configurePanels = function() {
   leftPalette.renderWithTemplate();
 
 
-  var rightPalette = new app.base.panel.MainCanvas();
-  rightPalette.setUri(new goog.Uri(contracts.urlMap.ROOT.HOME));
+  var rightPalette = new bad.ui.Panel();
+  rightPalette.setUri(new goog.Uri(contracts.urlMap.DRAW.RIGHT));
   rightPalette.setUser(user);
   rightPalette.setNestAsTarget(layout.getNest('main', 'right', 'mid'));
   rightPalette.setSlideNest(layout.getNest('main', 'right'));

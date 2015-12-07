@@ -3,24 +3,33 @@
  */
 
 goog.provide('shapes.Circle');
+goog.require('shapes.Rect');
 
 /**
- * A basic rectangle shape
+ * A basic circle shape
+ * @extends {shapes.Rect}
  * @constructor
  */
 shapes.Circle = function() {
-  this.x = 0;
-  this.y = 0;
-  this.a = 0;
-  this.t = 0;
+  shapes.Rect.call(this);
+};
+goog.inherits(shapes.Circle, shapes.Rect);
+
+
+shapes.Circle.prototype.rectToCircle = function(clone) {
+  var reply = {
+    cx: clone.x + clone.width / 2,
+    cy: clone.y + clone.height / 2,
+    rx: clone.width / 2,
+    ry: clone.height / 2
+  };
+  return reply;
 };
 
-shapes.Circle.prototype.setPosition = function(x,y) {
-  this.x = x;
-  this.y = y;
-};
-
-shapes.Circle.prototype.setSize = function(a,t) {
-  this.a = a;
-  this.t = t;
+shapes.Circle.prototype.updateEl = function(el) {
+  var clone = this.rectToCircle(this.normalise());
+  el.setAttribute('ry', clone.ry.toString());
+  el.setAttribute('rx', clone.rx.toString());
+  el.setAttribute('cx', clone.cx);
+  el.setAttribute('cy', clone.cy);
 };
