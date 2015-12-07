@@ -1,15 +1,6 @@
 var helper = require('./helper');
 var AM = require('../modules/account-manager');
 
-var nodemailer = require('nodemailer');
-var transporter = nodemailer.createTransport({
-  service: 'Gmail',
-  auth: {
-    user: 'explore.iot@gmail.com',
-    pass: 'wwtstqmlidsshdh'
-  }
-});
-
 module.exports = {
 
   /**
@@ -214,6 +205,8 @@ module.exports = {
    * @param res
    */
   lostPassword: function(req, res) {
+    var transporter = req.app.get('setup').transporter;
+    var siteUrl = req.app.get('setup').siteUrl;
 
     var getCall = function() {
       res.render('lost-password', {});
@@ -223,11 +216,9 @@ module.exports = {
       var email = req.body['email'];
       AM.seedAccountWithResetKey(email, function(err, accountDoc) {
         if (accountDoc) {
-          var account = accountDoc.value;
 
-          //TODO: Get this from the setup.
-          var target = 'http://localhost:3000';
-          var content = composeEmail(account, target);
+          var account = accountDoc.value;
+          var content = composeEmail(account, siteUrl);
 
           // setup e-mail data with unicode symbols
           var mailOptions = {

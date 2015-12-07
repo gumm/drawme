@@ -20,6 +20,20 @@ var mSettings = require('merge').recursive(
     require('./settings.json'),
     require('./settings_local.json'));
 mSettings.version = require('./package.json').version;
+
+
+// ----------------------------------------------------[ An Email Dispatcher ]--
+var nodemailer = require('nodemailer');
+var transporter = nodemailer.createTransport({
+  service: 'Gmail',
+  auth: {
+    user: mSettings.mailUser,
+    pass: mSettings.mailPass
+  }
+});
+mSettings.transporter = transporter;
+
+// -----------------------------------------------------------[ Seed the app ]--
 app.set('setup', mSettings); // This goes into locals.settings
 console.log('\n[SETTINGS]\n', app.get('setup'));
 
