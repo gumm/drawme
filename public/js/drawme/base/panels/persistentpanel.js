@@ -41,10 +41,10 @@ app.base.panel.Persistent.prototype.buildUserButton = function() {
    * @type {Array}
    */
   var menuItems = [
-    ['Profile', 'icon-user', goog.bind(this.dispatchActionEvent,
+    ['Delete Profile', 'icon-user', goog.bind(this.dispatchActionEvent,
       this, app.base.EventType.EDIT_PROFILE)],
-    ['Drawings', 'icon-building', goog.bind(this.dispatchActionEvent,
-      this, app.user.EventType.VIEW_PIC)],
+    //['Drawings', 'icon-building', goog.bind(this.dispatchActionEvent,
+    //  this, app.user.EventType.VIEW_PIC)],
     [/* menu separator */],
     ['Sign Out', 'icon-signout', goog.bind(this.logOut, this)]
   ];
