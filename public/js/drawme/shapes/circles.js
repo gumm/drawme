@@ -33,13 +33,12 @@ shapes.Circle.prototype.initFromEl = function(el) {
 
 
 shapes.Circle.prototype.rectToCircle = function(clone) {
-  var reply = {
+  return {
     cx: clone.x + clone.width / 2,
     cy: clone.y + clone.height / 2,
     rx: clone.width / 2,
     ry: clone.height / 2
   };
-  return reply;
 };
 
 shapes.Circle.prototype.updateEl = function(el) {

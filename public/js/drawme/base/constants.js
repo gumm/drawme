@@ -10,7 +10,9 @@ goog.require('bad.utils');
 app.base.EventType = {
   EDIT_PROFILE: bad.utils.privateRandom(),
   MENU_HEAD: bad.utils.privateRandom(),
-  DRAWING_TOOL_SELECTED: bad.utils.privateRandom()
+  DRAWING_TOOL_SELECTED: bad.utils.privateRandom(),
+  DRAWING_SELECTED: bad.utils.privateRandom(),
+  TOGGLE_RIGHT_PANEL: bad.utils.privateRandom()
 };
 
 /**

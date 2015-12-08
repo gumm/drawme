@@ -161,11 +161,11 @@ app.base.ViewManager.prototype.switchView = function(view) {
     this.activeView_.dispose();
   }
   this.activeView_ = view;
+  this.setActiveView(this.activeView_);
   this.activeView_.setLayout(this.layout_);
   this.activeView_.setXMan(this.xMan_);
   this.activeView_.setUser(this.user_);
   this.activeView_.render();
-  this.setActiveView(this.activeView_);
 };
 
 

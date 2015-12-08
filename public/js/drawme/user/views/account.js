@@ -1,6 +1,6 @@
 goog.provide('app.user.view.Account');
 
-goog.require('app.BasicView');
+goog.require('bad.ui.View');
 goog.require('app.base.ViewEventType');
 goog.require('app.user.EventType');
 goog.require('app.user.panel.DeleteAccount');
@@ -9,14 +9,14 @@ goog.require('contracts.urlMap');
 goog.require('goog.Uri');
 
 /**
- * @extends {app.BasicView}
+ * @extends {bad.ui.View}
  * @constructor
  */
 app.user.view.Account = function() {
-  app.BasicView.call(this);
+  bad.ui.View.call(this);
 
 };
-goog.inherits(app.user.view.Account, app.BasicView);
+goog.inherits(app.user.view.Account, bad.ui.View);
 
 app.user.view.Account.prototype.displayPanels = function() {
 

@@ -1,6 +1,5 @@
 goog.provide('app.user.view.Login');
 
-goog.require('app.BasicView');
 goog.require('app.base.ViewEventType');
 goog.require('app.user.EventType');
 goog.require('app.user.panel.Login');
@@ -13,18 +12,19 @@ goog.require('bad.ui.ViewEvent');
 goog.require('bad.utils');
 goog.require('contracts.urlMap');
 goog.require('goog.Uri');
+goog.require('bad.ui.View');
 
 /**
  * @param {boolean=} opt_reset True if this view should present the
  *      reset password form, and not the usual login forms.
  * @constructor
- * @extends {app.BasicView}
+ * @extends {bad.ui.View}
  */
 app.user.view.Login = function(opt_reset) {
   this.reset = opt_reset;
-  app.BasicView.call(this);
+  bad.ui.View.call(this);
 };
-goog.inherits(app.user.view.Login, app.BasicView);
+goog.inherits(app.user.view.Login, bad.ui.View);
 
 app.user.view.Login.prototype.configurePanels = function() {
   var layout = this.getLayout();

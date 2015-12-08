@@ -44,5 +44,11 @@ module.exports = {
     app.get(urlMap.ACCOUNTS.EDIT_OR_DELETE, routeTo.deleteAccount);
     app.post(urlMap.ACCOUNTS.EDIT_OR_DELETE, routeTo.deleteAccount);
 
+    // Pictures
+    app.post(urlMap.PICS.CREATE, routeTo.createPic);
+    app.get(urlMap.PICS.READ, routeTo.readPics);
+    app.post(urlMap.PICS.UPDATE, routeTo.updatePic);
+    app.delete(urlMap.PICS.DELETE, routeTo.deletePic);
+
   }
 };

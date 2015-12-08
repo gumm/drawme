@@ -1,5 +1,6 @@
 var helper = require('./helper');
-var AM = require('../modules/account-manager');
+var AccMan = require('../modules/account-manager');
+var PicMan = require('../modules/pic-manager');
 
 module.exports = {
 
@@ -78,7 +79,7 @@ module.exports = {
     var postCall = function() {
       var user = req.body['user'];
       var pass = req.body['pass'];
-      AM.manualLogin(user, pass, callback);
+      AccMan.manualLogin(user, pass, callback);
     };
 
     helper.okGo(req, res, {'GET': getCall, 'POST': postCall});
@@ -160,12 +161,12 @@ module.exports = {
    */
   signUp: function(req, res) {
     var getCall = function() {
-      res.render('user/create', {udata: AM.accountMap({})});
+      res.render('user/create', {udata: AccMan.accountMap({})});
     };
 
     var postCall = function() {
       var clearPW = req.body['pass'];
-      var newAccount = AM.accountMap({
+      var newAccount = AccMan.accountMap({
         name: req.body['name'],
         surname: req.body['surname'],
         email: req.body['email'],
@@ -179,7 +180,7 @@ module.exports = {
               null, newUser, 'New account created'));
         }
       };
-      AM.addNewAccount(newAccount, clearPW, callback);
+      AccMan.addNewAccount(newAccount, clearPW, callback);
     };
 
     helper.okGo(req, res, {'GET': getCall, 'POST': postCall});
@@ -212,14 +213,14 @@ module.exports = {
       if (!account) {
         res.status(400).send(helper.makeReplyWith(err));
       } else {
-        AM.deleteAccount(account, onDeleteCallback);
+        AccMan.deleteAccount(account, onDeleteCallback);
       }
     };
 
     var postCall = function() {
       var user = req.body['user'];
       var pass = req.body['pass'];
-      AM.manualLogin(user, pass, onGetAccountCallback);
+      AccMan.manualLogin(user, pass, onGetAccountCallback);
     };
 
     helper.okGo(req, res, {'GET': getCall, 'POST': postCall});
@@ -242,7 +243,7 @@ module.exports = {
 
     var postCall = function() {
       var email = req.body['email'];
-      AM.seedAccountWithResetKey(email, function(err, accountDoc) {
+      AccMan.seedAccountWithResetKey(email, function(err, accountDoc) {
         if (accountDoc) {
 
           var account = accountDoc.value;
@@ -291,7 +292,7 @@ module.exports = {
       var email = req.query["e"];
       var passH = req.query["p"];
 
-      AM.validateResetLink(email, passH, function(err, account) {
+      AccMan.validateResetLink(email, passH, function(err, account) {
         if (!account) {
           console.log('Error:', err);
           res.redirect('/');
@@ -323,7 +324,7 @@ module.exports = {
       var passH = req.session.reset.passHash;
       req.session.destroy();
 
-      AM.resetPassword(email, passH, nPass, function(err, profile) {
+      AccMan.resetPassword(email, passH, nPass, function(err, profile) {
         if (profile) {
           res.status(200).send(helper.makeReplyWith(
               null,
@@ -337,7 +338,107 @@ module.exports = {
       });
     };
     helper.okGo(req, res, {'GET': getCall, 'POST': postCall});
+  },
+
+  /**
+   * Save a picture to the db.
+   * @param req
+   * @param res
+   */
+  createPic: function(req, res) {
+
+    var postCall = function() {
+      var pic = req.body['svgText'];
+      var uid =  req.session.user._id;
+
+      var callback = function(err, reply) {
+        if (err) {
+          res.status(400).send(helper.makeReplyWith(err));
+        } else {
+          res.status(200).send(helper.makeReplyWith(
+              null, reply, 'Pic Created'));
+        }
+      };
+      PicMan.addNewPic(pic, uid, callback);
+    };
+
+    helper.okGo(req, res, {'POST': postCall});
+  },
+
+  /**
+   * Save a picture to the db.
+   * @param req
+   * @param res
+   */
+  updatePic: function(req, res) {
+
+    var postCall = function() {
+      var pic = req.body['svgText'];
+      var svgId = req.body['svgId'];
+      var uid =  req.session.user._id;
+
+      var callback = function(err, reply) {
+        if (err) {
+          res.status(400).send(helper.makeReplyWith(err));
+        } else {
+          res.status(200).send(helper.makeReplyWith(
+              null, reply, 'Pic Updated'));
+        }
+      };
+      PicMan.updatePic('some name', pic, svgId, uid, callback);
+    };
+
+    helper.okGo(req, res, {'POST': postCall});
+  },
+
+  /**
+   * Save a picture to the db.
+   * @param req
+   * @param res
+   */
+  deletePic: function(req, res) {
+
+    var delCall = function() {
+      var svgId = req.body['svgId'];
+      var uid =  req.session.user._id;
+
+      var callback = function(err, reply) {
+        if (err) {
+          res.status(400).send(helper.makeReplyWith(err));
+        } else {
+          res.status(200).send(helper.makeReplyWith(
+              null, reply, 'Pic Deleted'));
+        }
+      };
+      PicMan.deletePic(svgId, uid, callback);
+    };
+
+    helper.okGo(req, res, {'DELETE': delCall});
+  },
+
+  /**
+   * Get a list of pictures for this user.
+   * @param req
+   * @param res
+   */
+  readPics: function(req, res) {
+
+    var getCall = function() {
+      var uid =  req.session.user._id;
+
+      var callback = function(err, pics) {
+        if (err) {
+          res.status(400).send(helper.makeReplyWith(err));
+        } else {
+          res.status(200).render('draw/right', {picList: pics})
+        }
+      };
+      PicMan.getPicsForUser(uid, callback);
+    };
+
+    helper.okGo(req, res, {'GET': getCall});
   }
+
 };
 
 //-----------------------------------------------------------[ Utility Stuff ]--

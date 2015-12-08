@@ -1,5 +1,6 @@
-//
-   Created by gumm on 2015/12/07.
+- pictures = typeof(picList) != 'undefined' ? picList : []
 
-h1
- | Nothing is right
+.toolbox
+  if (pictures.length > 0)
+    for pic in pictures
+      div.pic-preview(id=pic._id, data-pic=pic.svg)

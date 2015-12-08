@@ -1,6 +1,7 @@
 goog.provide('app.base.panel.MainCanvas');
 
 goog.require('bad.ui.Panel');
+goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.classlist');
 goog.require('goog.events.EventType');
@@ -22,33 +23,50 @@ app.base.panel.MainCanvas = function(opt_domHelper) {
   this.activeEl_ = null;
 
   /**
+   * An abstract rect object that is used to manipulate the SVG elements with.
    * @type {shapes.Rect}
    */
   this.rect = new shapes.Rect();
 
   /**
+   * An abstract circle object that is used to manipulate the SVG elements with.
    * @type {shapes.Circle}
    */
   this.circle = new shapes.Circle();
 
+  /**
+   * Hand rolled dragging used for draw functions
+   * @type {boolean}
+   * @private
+   */
   this.mouseDown_ = false;
 
-  this.activeTool = 'draw_circle';
+  /**
+   * The currently selected active tool item.
+   * @type {string}
+   */
+  this.activeTool = '';
 
 };
 goog.inherits(app.base.panel.MainCanvas, bad.ui.Panel);
 
 
 app.base.panel.MainCanvas.prototype.setSelectedTool = function(tool) {
-  this.activeTool = tool;
+  if (tool == 'delete_tool') {
+    this.onDelete_();
+  } else {
+    this.activeTool = tool;
+  }
   console.debug('HERE THE TOOL', this.activeTool);
 };
-
 
 app.base.panel.MainCanvas.prototype.enterDocument = function() {
   this.dom_ = goog.dom.getDomHelper(this.getElement());
   this.createSvgEl_();
+  this.initListners();
+};
 
+app.base.panel.MainCanvas.prototype.initListners = function() {
   this.getHandler().listen(
       this.svgElement,
       goog.events.EventType.MOUSEDOWN,
@@ -61,23 +79,56 @@ app.base.panel.MainCanvas.prototype.enterDocument = function() {
       this.svgElement,
       goog.events.EventType.MOUSEUP,
       this.onMouseUp_
+  ).listen(
+      this.svgElement,
+      goog.events.EventType.CLICK,
+      this.onClick_
   );
+};
+
+app.base.panel.MainCanvas.prototype.getSvgDrawing = function() {
+  return this.svgElement || null;
+};
+
+app.base.panel.MainCanvas.prototype.setSvgDrawing = function(svg) {
+  goog.dom.replaceNode(svg, this.svgElement);
+  this.svgElement = svg;
+  this.initListners();
+};
+
+app.base.panel.MainCanvas.prototype.clearSvgDrawing = function() {
+  goog.dom.removeNode(this.svgElement);
+  this.svgElement = null;
+  this.createSvgEl_();
+  this.initListners();
 };
 
 //--------------------------------------------------------------[ Transforms ]--
 
+app.base.panel.MainCanvas.prototype.onDelete_ = function() {
+  // Delete selected
+  var condemned = goog.dom.getElementsByClass('selected', this.svgElement);
+  goog.array.forEach(condemned, function(node) {
+    goog.dom.removeNode(node);
+  });
+};
+
+app.base.panel.MainCanvas.prototype.onClick_ = function(e) {
+  // Select or un-select
+  if (e.target != this.svgElement && this.activeTool == 'pic_tool') {
+    this.activeEl_ = e.target;
+    goog.dom.classlist.toggle(this.activeEl_, 'selected');
+  }
+};
+
 app.base.panel.MainCanvas.prototype.selectToDrag_ = function(e) {
   if (e.target != this.svgElement) {
-
-    console.debug('We came here...');
     this.activeEl_ = e.target;
-
+    goog.dom.classlist.add(this.activeEl_, 'selected');
     var tool = this.circle;
     if (goog.dom.classlist.contains(this.activeEl_, 'svg-rect')) {
       tool = this.rect;
     }
-
-
 
     tool.initFromEl(this.activeEl_);
 
@@ -103,42 +154,53 @@ app.base.panel.MainCanvas.prototype.selectToDrag_ = function(e) {
 };
 
 app.base.panel.MainCanvas.prototype.onMouseDown_ = function(e) {
-  var actionMap = {
-    'draw_circle': goog.bind(this.createCircle, this),
-    'draw_rect': goog.bind(this.createRect, this),
-    'select_tool': goog.bind(this.selectToDrag_, this)
-  };
-  actionMap[this.activeTool](e);
+  switch (this.activeTool) {
+    case 'draw_circle':
+      this.createCircle(e);
+      break;
+    case 'draw_rect':
+      this.createRect(e);
+      break;
+    case 'select_tool':
+      this.selectToDrag_(e);
+      break;
+    default:
+      goog.nullFunction();
+  }
 };
 
 app.base.panel.MainCanvas.prototype.onMouseMove_ = function(e) {
-  var actionMap = {
-    'draw_circle': goog.bind(this.drawCircle, this),
-    'draw_rect': goog.bind(this.drawRect, this),
-    'select_tool': goog.nullFunction
-  };
-  actionMap[this.activeTool](e);
+  switch (this.activeTool) {
+    case 'draw_circle':
+      this.drawCircle(e);
+      break;
+    case 'draw_rect':
+      this.drawRect(e);
+      break;
+    default:
+      goog.nullFunction();
+  }
 };
 
 app.base.panel.MainCanvas.prototype.onMouseUp_ = function(e) {
-  var actionMap = {
-    'draw_circle': goog.bind(this.endCircle, this),
-    'draw_rect': goog.bind(this.endRect, this),
-    'select_tool': goog.nullFunction
-  };
-  actionMap[this.activeTool](e);
+  switch (this.activeTool) {
+    case 'draw_circle':
+      this.endCircle(e);
+      break;
+    case 'draw_rect':
+      this.endRect(e);
+      break;
+    default:
+      goog.nullFunction();
+  }
 };
 
 
 app.base.panel.MainCanvas.prototype.createSvgEl_ = function() {
-  this.workBench = goog.dom.getElement('workbench');
   this.svgElement = this.dom_.getDocument().createElementNS(this.svgns, 'svg');
   this.svgElement.setAttribute('width', '500');
   this.svgElement.setAttribute('height', '500');
-  goog.style.setStyle(this.svgElement, {
-    border: '1px solid #cccccc'
-  });
-  goog.dom.appendChild(this.workBench, this.svgElement);
+  goog.dom.appendChild(this.getElement(), this.svgElement);
 };
 
 //-----------------------------------------------------------------[ Squares ]--
@@ -212,6 +274,7 @@ app.base.panel.MainCanvas.prototype.endCircle = function(e) {
 
 //-----------------------------------------------------------------[ Utility ]--
 app.base.panel.MainCanvas.prototype.stopActivity = function() {
+  goog.dom.classlist.remove(this.activeEl_, 'selected');
   this.mouseDown_ = false;
   this.activeEl_ = null;
   this.activeIsInDoc = false;
