@@ -2,6 +2,40 @@
   cursor: crosshair;
 }
 
+.cursor_crosshair {
+  cursor: crosshair;
+}
+
 .selected {
   outline: 1px solid red;
+}
+
+.svg-icon-outline {
+  fill: @Grey700;
+}
+
+.svg-icon-fill {
+  fill: @Grey700;
+  fill-opacity: 0.1;
+}
+
+.toolbox {
+  margin: 20px auto;
+
+  .tool-item {
+    float: left;
+    height: 66px;
+    margin: 0 10px 10px 0;
+    width: 66px;
+    clear: right;
+    position: relative;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 3px;
+    padding: 10px;
+    i.material-icons.md-48 {
+      margin: 8px;
+      color: @Grey700;
+    }
+  }
 }

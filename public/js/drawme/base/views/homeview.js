@@ -1,6 +1,8 @@
 goog.provide('app.base.view.Home');
 
+goog.require('app.base.EventType');
 goog.require('app.base.panel.MainCanvas');
+goog.require('app.base.panel.ToolBox');
 goog.require('bad.ui.EventType');
 goog.require('bad.ui.Panel');
 goog.require('bad.ui.View');
@@ -26,9 +28,10 @@ app.base.view.Home.prototype.configurePanels = function() {
   mainCanvas.setNestAsTarget(layout.getNest('main', 'center'));
   this.addPanelToView('home', mainCanvas);
   mainCanvas.renderWithTemplate();
+  this.mainCanvas = mainCanvas;
 
 
-  var leftPalette = new bad.ui.Panel();
+  var leftPalette = new app.base.panel.ToolBox();
   leftPalette.setUri(new goog.Uri(contracts.urlMap.DRAW.LEFT));
   leftPalette.setUser(user);
   leftPalette.setNestAsTarget(layout.getNest('main', 'left', 'mid'));
@@ -61,6 +64,9 @@ app.base.view.Home.prototype.onPanelAction = function(e) {
   switch (value) {
     case bad.ui.EventType.READY:
       this.slidePanelIn(/** @type bad.ui.Panel */ (panel));
+      break;
+    case app.base.EventType.DRAWING_TOOL_SELECTED:
+      this.mainCanvas.setSelectedTool(data);
       break;
     default:
       console.debug('Action not taken.');

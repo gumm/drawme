@@ -15,6 +15,22 @@ shapes.Circle = function() {
 };
 goog.inherits(shapes.Circle, shapes.Rect);
 
+shapes.Circle.prototype.initFromEl = function(el) {
+
+  var cx = Number(el.getAttribute('cx'));
+  var cy = Number(el.getAttribute('cy'));
+  var rx = Number(el.getAttribute('rx'));
+  var ry = Number(el.getAttribute('ry'));
+
+  this.x = cx - rx;
+  this.y = cy - ry;
+  this.width = rx * 2;
+  this.height = ry * 2;
+  this.shiftKey = false;
+  this.grabX = this.x;
+  this.grabY = this.y;
+};
+
 
 shapes.Circle.prototype.rectToCircle = function(clone) {
   var reply = {

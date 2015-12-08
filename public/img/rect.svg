@@ -1,0 +1,33 @@
+<svg
+        xmlns="http://www.w3.org/2000/svg"
+        version="1.1"
+        width="300"
+        height="500"
+        viewBox="0 0 300 500"
+        preserveAspectRatio="xMinYMin meet"
+        style="border: 1px solid #cccccc;"
+        id="can_we_get_here">
+    <rect
+            style="
+            fill:#cccccc;
+            fill-opacity:1;
+            stroke:#123;
+            stroke-width:3.5;
+            stroke-opacity:1"
+            id="rect3336"
+            width="50"
+            height="50"
+            x="100"
+            y="100" />
+    <circle
+            style="
+            fill:#cccccc;
+            fill-opacity:1;
+            stroke:#123;
+            stroke-width:3.5;
+            stroke-opacity:1"
+            id="path3376"
+            cx="200"
+            cy="200"
+            r="50" />
+</svg>

@@ -34,7 +34,6 @@ app.user.panel.Login.prototype.initDom = function() {
 };
 
 app.user.panel.Login.prototype.submitLoginForm = function() {
-  console.debug('submitLoginForm');
   this.checkValidation();
   if (this.getForm().checkValidity()) {
     console.debug('ALL GOOD');
@@ -62,10 +61,6 @@ app.user.panel.Login.prototype.loginCallback = function(e) {
   var data = xhr.getResponseJson();
   this.clearAlerts();
   if (xhr.isSuccess()) {
-
-    console.debug('THE LOGIN PANEL GOT THIS...', data);
-    console.debug('Now dispatching', app.user.EventType.LOGIN_SUCCESS);
-
     var userProfile = data['data'];
     this.dispatchActionEvent(
       app.user.EventType.LOGIN_SUCCESS, userProfile);

@@ -27,9 +27,10 @@ goog.addDependency('../../../contracts/urlmap.js', ['contracts.urlMap'], [], fal
 goog.addDependency('../../../drawme/base/components/topbarpanel.js', ['app.base.TopBarPanel'], ['app.base.EventType', 'bad.ui.MenuButtonRenderer', 'bad.ui.MenuFloatRenderer', 'bad.ui.MenuItemRenderer', 'bad.ui.Panel', 'bad.utils', 'contracts.urlMap', 'goog.Uri', 'goog.dom', 'goog.ui.MenuButton', 'goog.uri.utils'], false);
 goog.addDependency('../../../drawme/base/components/viewmanager.js', ['app.base.ViewManager'], ['app.base.EventType', 'app.base.TopBarPanel', 'app.base.ViewEventType', 'app.base.view.Home', 'app.user.EventType', 'app.user.view.Account', 'app.user.view.Login', 'bad.UserManager', 'bad.ui.View', 'bad.utils', 'contracts.urlMap', 'goog.Uri', 'goog.array', 'goog.dom', 'goog.dom.classes', 'goog.object'], false);
 goog.addDependency('../../../drawme/base/constants.js', ['app.base.EventType', 'app.base.ViewEventType'], ['bad.utils'], false);
-goog.addDependency('../../../drawme/base/panels/canvas.js', ['app.base.panel.MainCanvas'], ['bad.ui.Panel', 'goog.dom', 'goog.events.EventType', 'goog.style', 'shapes.Circle', 'shapes.Rect'], false);
+goog.addDependency('../../../drawme/base/panels/canvas.js', ['app.base.panel.MainCanvas'], ['bad.ui.Panel', 'goog.dom', 'goog.dom.classlist', 'goog.events.EventType', 'goog.fx.Dragger', 'goog.style', 'shapes.Circle', 'shapes.Rect'], false);
+goog.addDependency('../../../drawme/base/panels/toolboxpanel.js', ['app.base.panel.ToolBox'], ['app.base.EventType', 'bad.ui.Panel', 'bad.utils', 'contracts.urlMap', 'goog.array', 'goog.dom'], false);
 goog.addDependency('../../../drawme/base/views/basic.js', ['app.BasicView'], ['bad.ui.View'], false);
-goog.addDependency('../../../drawme/base/views/homeview.js', ['app.base.view.Home'], ['app.base.panel.MainCanvas', 'bad.ui.EventType', 'bad.ui.Panel', 'bad.ui.View', 'contracts.urlMap', 'goog.Uri'], false);
+goog.addDependency('../../../drawme/base/views/homeview.js', ['app.base.view.Home'], ['app.base.EventType', 'app.base.panel.MainCanvas', 'app.base.panel.ToolBox', 'bad.ui.EventType', 'bad.ui.Panel', 'bad.ui.View', 'contracts.urlMap', 'goog.Uri'], false);
 goog.addDependency('../../../drawme/drawme.js', ['drawme'], ['bad.Net', 'drawme.Site', 'goog.net.XhrManager'], false);
 goog.addDependency('../../../drawme/shapes/circles.js', ['shapes.Circle'], ['shapes.Rect'], false);
 goog.addDependency('../../../drawme/shapes/rects.js', ['shapes.Rect'], [], false);

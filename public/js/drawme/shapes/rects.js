@@ -13,11 +13,30 @@ shapes.Rect = function() {
   this.y = 0;
   this.width = 0;
   this.height = 0;
+
+  this.grabX = 0;
+  this.grabY = 0;
 };
 
 shapes.Rect.prototype.init = function(e) {
   this.x = e.offsetX;
   this.y = e.offsetY;
+};
+
+shapes.Rect.prototype.initFromEl = function(el) {
+
+  this.x = Number(el.getAttribute('x'));
+  this.y = Number(el.getAttribute('y'));
+  this.width = Number(el.getAttribute('width'));
+  this.height = Number(el.getAttribute('height'));
+  this.shiftKey = false;
+  this.grabX = this.x;
+  this.grabY = this.y;
+};
+
+shapes.Rect.prototype.translate = function(e) {
+  this.x = this.grabX + e.left;
+  this.y = this.grabY + e.top;
 };
 
 shapes.Rect.prototype.move = function(e) {
