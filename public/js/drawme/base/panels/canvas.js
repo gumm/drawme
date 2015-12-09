@@ -47,6 +47,11 @@ app.base.panel.MainCanvas = function(opt_domHelper) {
    */
   this.activeTool = '';
 
+  this.colMap = {
+    'fill': '#cccccc',
+    'stroke': '#123'
+  };
+
 };
 goog.inherits(app.base.panel.MainCanvas, bad.ui.Panel);
 
@@ -79,7 +84,9 @@ app.base.panel.MainCanvas.prototype.updateSvgSize = function() {
   this.svgElement.setAttribute('height', bounds.height.toString());
 };
 
-
+app.base.panel.MainCanvas.prototype.updateSvgId = function(id) {
+  this.svgElement.setAttribute('id', id);
+};
 
 app.base.panel.MainCanvas.prototype.initListners = function() {
   this.getHandler().listen(
@@ -116,6 +123,17 @@ app.base.panel.MainCanvas.prototype.clearSvgDrawing = function() {
   this.svgElement = null;
   this.createSvgEl_();
   this.initListners();
+};
+
+app.base.panel.MainCanvas.prototype.setColor = function(data) {
+  this.colMap[data.tpe] = data.color;
+  console.debug(this.colMap);
+
+  var blessed = goog.dom.getElementsByClass('selected', this.svgElement);
+  goog.array.forEach(blessed, function(node) {
+    this.applyFilAndStroke(node);
+  }, this);
+
 };
 
 //--------------------------------------------------------------[ Transforms ]--
@@ -290,9 +308,9 @@ app.base.panel.MainCanvas.prototype.stopActivity = function() {
 
 app.base.panel.MainCanvas.prototype.applyFilAndStroke = function(el) {
   goog.style.setStyle(el, {
-    'fill': '#cccccc',
+    'fill': this.colMap['fill'],
+    'stroke': this.colMap['stroke'],
     'fill-opacity': 0.2,
-    'stroke': '#123',
     'stroke-width': 1.5,
     'stroke-opacity': 0.5
   });

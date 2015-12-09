@@ -35,6 +35,7 @@ contracts.urlMap = {
     CREATE: '/pic/create',
     READ: '/pic/read',
     UPDATE: '/pic/update',
-    DELETE: '/pic/delete'
+    DELETE: '/pic/delete',
+    COLORS: '/pic/colors'
   }
 };

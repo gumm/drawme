@@ -13,7 +13,9 @@ app.base.EventType = {
   DRAWING_TOOL_SELECTED: bad.utils.privateRandom(),
   DRAWING_SELECTED: bad.utils.privateRandom(),
   TOGGLE_RIGHT_PANEL: bad.utils.privateRandom(),
-  CLEAR_CANVAS: bad.utils.privateRandom()
+  CLEAR_CANVAS: bad.utils.privateRandom(),
+  COLOR_SELECTED: bad.utils.privateRandom(),
+  CHANGE_COLOR: bad.utils.privateRandom()
 };
 
 /**

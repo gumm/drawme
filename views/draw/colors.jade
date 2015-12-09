@@ -1,0 +1,9 @@
+- colors = typeof(colorsMap) != 'undefined' ? colorsMap : {}
+
+#swatches.toolbox
+  if (colors)
+    each v, k in colors
+      div.col_picker(id=k, data-col=v, style={"background-color":v})
+
+.toolbox
+  input(type= "color")

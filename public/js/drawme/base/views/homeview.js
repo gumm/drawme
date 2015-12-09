@@ -1,6 +1,7 @@
 goog.provide('app.base.view.Home');
 
 goog.require('app.base.EventType');
+goog.require('app.base.panel.ColorList');
 goog.require('app.base.panel.MainCanvas');
 goog.require('app.base.panel.PicsList');
 goog.require('app.base.panel.ToolBox');
@@ -59,18 +60,34 @@ app.base.view.Home.prototype.createPicPalette = function() {
   picPal.setSlideSize(10);
   this.addPanelToView('right_pal', picPal);
   this.picPal = picPal;
+  this.picPal.renderWithTemplate();
 };
 
 app.base.view.Home.prototype.reloadPicPalette = function() {
   this.createPicPalette();
   this.picPal.renderWithTemplate();
-  console.debug('We reloadedtht pic pal...');
 };
 
 app.base.view.Home.prototype.displayPanels = function() {
   this.mainCanvas.renderWithTemplate();
   this.toolPal.renderWithTemplate();
-  this.picPal.renderWithTemplate();
+};
+
+
+app.base.view.Home.prototype.createColPal = function(tpe) {
+  var layout = this.getLayout();
+  var user = this.getUser();
+
+  // The existing pictures
+  var colPal = new app.base.panel.ColorList(tpe);
+  colPal.setUri(new goog.Uri(contracts.urlMap.PICS.COLORS));
+  colPal.setUser(user);
+  colPal.setNestAsTarget(layout.getNest('main', 'right', 'mid'));
+  colPal.setSlideNest(layout.getNest('main', 'right'));
+  colPal.setSlideSize(262);
+  this.addPanelToView('right_pal', colPal);
+  this.colPal = colPal;
+  this.colPal.renderWithTemplate();
 };
 
 
@@ -103,6 +120,8 @@ app.base.view.Home.prototype.onPanelAction = function(e) {
       this.mainCanvas.setSelectedTool(data);
       data == 'save_tool' ? this.saveDrawing() : goog.nullFunction();
       data == 'remove_tool' ? this.removeDrawing() : goog.nullFunction();
+      data == 'fill_tool' ? this.createColPal('fill') : goog.nullFunction();
+      data == 'border_fill' ? this.createColPal('stroke') : goog.nullFunction();
       break;
 
     case app.base.EventType.TOGGLE_RIGHT_PANEL:
@@ -115,6 +134,10 @@ app.base.view.Home.prototype.onPanelAction = function(e) {
     case app.base.EventType.CLEAR_CANVAS:
       this.mainCanvas.clearSvgDrawing();
       this.reloadPicPalette();
+      break;
+
+    case app.base.EventType.CHANGE_COLOR:
+      this.mainCanvas.setColor(data);
       break;
 
     default:
@@ -173,8 +196,11 @@ app.base.view.Home.prototype.onSave = function(e) {
   var data = xhr.getResponseJson();
   if (xhr.isSuccess()) {
     this.reloadPicPalette();
-    var id = data['data']['_id'];
-    console.debug(id);
+
+    if (data['data'] && data['data']['_id']) {
+      this.mainCanvas.updateSvgId(data['data']['_id']);
+    }
+
   } else {
     // Display the errors
   }

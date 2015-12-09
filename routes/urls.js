@@ -32,10 +32,6 @@ module.exports = {
     app.get(urlMap.PW.RESET, routeTo.resetPassword);
     app.post(urlMap.PW.RESET, routeTo.resetPassword);
 
-    //// Password Editing
-    //app.get(urlMap.PW.EDIT, routeTo.editPassword);
-    //app.post(urlMap.PW.EDIT, routeTo.editPassword);
-
     // Account Create
     app.get(urlMap.ACCOUNTS.CREATE, routeTo.signUp);
     app.post(urlMap.ACCOUNTS.CREATE, routeTo.signUp);
@@ -49,6 +45,9 @@ module.exports = {
     app.get(urlMap.PICS.READ, routeTo.readPics);
     app.post(urlMap.PICS.UPDATE, routeTo.updatePic);
     app.delete(urlMap.PICS.DELETE, routeTo.deletePic);
+
+    // Colors
+    app.get(urlMap.PICS.COLORS, routeTo.readColors);
 
   }
 };
