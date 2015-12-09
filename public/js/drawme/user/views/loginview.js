@@ -8,11 +8,11 @@ goog.require('app.user.panel.ResetPassword');
 goog.require('app.user.panel.SignUp');
 goog.require('bad.ui.EventType');
 goog.require('bad.ui.Panel');
+goog.require('bad.ui.View');
 goog.require('bad.ui.ViewEvent');
 goog.require('bad.utils');
 goog.require('contracts.urlMap');
 goog.require('goog.Uri');
-goog.require('bad.ui.View');
 
 /**
  * @param {boolean=} opt_reset True if this view should present the

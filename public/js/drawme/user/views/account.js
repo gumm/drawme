@@ -1,9 +1,9 @@
 goog.provide('app.user.view.Account');
 
-goog.require('bad.ui.View');
 goog.require('app.base.ViewEventType');
 goog.require('app.user.EventType');
 goog.require('app.user.panel.DeleteAccount');
+goog.require('bad.ui.View');
 goog.require('bad.ui.ViewEvent');
 goog.require('contracts.urlMap');
 goog.require('goog.Uri');

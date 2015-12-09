@@ -9,8 +9,8 @@ goog.require('bad.ui.View');
 goog.require('contracts.urlMap');
 goog.require('goog.Uri');
 goog.require('goog.dom');
-goog.require('goog.uri.utils');
-goog.require('goog.net.XhrIo.ResponseType');
+goog.require('goog.net.XhrIo');
+goog.require('goog.style');
 
 /**
  * @constructor
@@ -88,7 +88,10 @@ app.base.view.Home.prototype.onPanelAction = function(e) {
   switch (value) {
 
     case bad.ui.EventType.READY:
-      this.slidePanelIn(/** @type bad.ui.Panel */ (panel));
+      var cb = goog.bind(function() {
+        this.mainCanvas.updateSvgSize();
+      }, this);
+      this.slidePanelIn(/** @type bad.ui.Panel */ (panel), cb);
       break;
 
     case app.base.EventType.DRAWING_SELECTED:
@@ -98,14 +101,19 @@ app.base.view.Home.prototype.onPanelAction = function(e) {
 
     case app.base.EventType.DRAWING_TOOL_SELECTED:
       this.mainCanvas.setSelectedTool(data);
-      data == 'save_tool' ? this.saveDrawing(data) : goog.nullFunction();
-      data == 'remove_tool' ? this.removeDrawing(data) : goog.nullFunction();
+      data == 'save_tool' ? this.saveDrawing() : goog.nullFunction();
+      data == 'remove_tool' ? this.removeDrawing() : goog.nullFunction();
       break;
 
     case app.base.EventType.TOGGLE_RIGHT_PANEL:
       var tWidth = goog.style.getBounds(this.mainCanvas.getElement()).width;
       this.picPal.setSlideSize(tWidth + 10);
       this.slidePanelToggle(/** @type bad.ui.Panel */ (this.picPal));
+      break;
+
+    case app.base.EventType.CLEAR_CANVAS:
+      this.mainCanvas.clearSvgDrawing();
+      this.reloadPicPalette();
       break;
 
     default:
@@ -120,7 +128,7 @@ app.base.view.Home.prototype.removeDrawing = function() {
   var svgId = svg.getAttribute('id');
 
   // Hand roll the direct JSON post.
-  this.getXMan().delete(
+  this.getXMan().del(
       new goog.Uri(contracts.urlMap.PICS.DELETE),
       JSON.stringify({svgId: svgId}),
       goog.bind(this.onRemove, this),

@@ -62,9 +62,24 @@ app.base.panel.MainCanvas.prototype.setSelectedTool = function(tool) {
 
 app.base.panel.MainCanvas.prototype.enterDocument = function() {
   this.dom_ = goog.dom.getDomHelper(this.getElement());
+  this.workbench_ = this.dom_.getElement('workbench');
   this.createSvgEl_();
   this.initListners();
 };
+
+app.base.panel.MainCanvas.prototype.createSvgEl_ = function() {
+  this.svgElement = this.dom_.getDocument().createElementNS(this.svgns, 'svg');
+  this.updateSvgSize();
+  goog.dom.appendChild(this.workbench_, this.svgElement);
+};
+
+app.base.panel.MainCanvas.prototype.updateSvgSize = function() {
+  var bounds = goog.style.getBounds(this.workbench_);
+  this.svgElement.setAttribute('width', bounds.width.toString());
+  this.svgElement.setAttribute('height', bounds.height.toString());
+};
+
+
 
 app.base.panel.MainCanvas.prototype.initListners = function() {
   this.getHandler().listen(
@@ -195,13 +210,6 @@ app.base.panel.MainCanvas.prototype.onMouseUp_ = function(e) {
   }
 };
 
-
-app.base.panel.MainCanvas.prototype.createSvgEl_ = function() {
-  this.svgElement = this.dom_.getDocument().createElementNS(this.svgns, 'svg');
-  this.svgElement.setAttribute('width', '500');
-  this.svgElement.setAttribute('height', '500');
-  goog.dom.appendChild(this.getElement(), this.svgElement);
-};
 
 //-----------------------------------------------------------------[ Squares ]--
 

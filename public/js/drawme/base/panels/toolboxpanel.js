@@ -30,7 +30,8 @@ app.base.panel.ToolBox.prototype.initDom = function() {
   );
 
   // Init the elements to buttons that fire action events with their ids.
-  var normalButtons = ['save_tool', 'delete_tool', 'remove_tool', 'list_tool'];
+  var normalButtons = ['save_tool', 'delete_tool', 'remove_tool', 'list_tool',
+      'clear_tool'];
   goog.array.forEach(tools, function(tool) {
     if (goog.array.contains(normalButtons, tool.id)) {
       this.buttonMap_[tool.id] = bad.utils.makeButton(
@@ -60,7 +61,9 @@ app.base.panel.ToolBox.prototype.onOwnAction = function(e) {
   }
 };
 
-app.base.panel.ToolBox.prototype.unSelectEveryoneElse = function(buttons, data) {
+app.base.panel.ToolBox.prototype.unSelectEveryoneElse = function(
+    buttons, data) {
+
   goog.array.forEach(buttons, function(button) {
       if (button.getElement().id != data) {
         button.setChecked(false);
@@ -69,9 +72,12 @@ app.base.panel.ToolBox.prototype.unSelectEveryoneElse = function(buttons, data) 
 };
 
 app.base.panel.ToolBox.prototype.doMore = function(buttons, data) {
-  switch(data) {
+  switch (data) {
     case 'list_tool':
       this.dispatchActionEvent(app.base.EventType.TOGGLE_RIGHT_PANEL);
+      break;
+    case 'clear_tool':
+      this.dispatchActionEvent(app.base.EventType.CLEAR_CANVAS);
       break;
     default:
       goog.nullFunction();

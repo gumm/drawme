@@ -1,6 +1,8 @@
 goog.provide('app.base.panel.PicsList');
 
+goog.require('app.base.EventType');
 goog.require('bad.ui.Panel');
+goog.require('bad.utils');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.dataset');
@@ -31,7 +33,7 @@ app.base.panel.PicsList.prototype.initDom = function() {
     var h = svg.getAttribute('height');
     var ratio = Math.max(w, h) / 200;
     var smallSvg = svg.cloneNode(true);
-    smallSvg.setAttribute('viewBox', '2 2 ' + w*ratio + ' ' + h*ratio);
+    smallSvg.setAttribute('viewBox', '2 2 ' + w * ratio + ' ' + h * ratio);
     smallSvg.removeAttribute('id');
     goog.dom.appendChild(picEl, smallSvg);
     svg.setAttribute('id', picEl.id);
