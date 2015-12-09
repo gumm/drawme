@@ -23,15 +23,42 @@ app.base.view.Home = function() {
 goog.inherits(app.base.view.Home, bad.ui.View);
 
 app.base.view.Home.prototype.configurePanels = function() {
+  /**
+   * @type {bad.ui.Layout}
+   */
   var layout = this.getLayout();
+
+  /**
+   * @type {bad.UserManager}
+   */
   var user = this.getUser();
 
+  this.mainCanvas = this.createCanvas(layout, user);
+  this.toolPal = this.createToolPalette(layout, user);
+  this.picPal = this.createPicPalette();
+  this.colPal = this.createColPal(layout, user);
+};
+
+/**
+ * @param {bad.ui.Layout} layout
+ * @param {bad.UserManager} user
+ * @return {app.base.panel.MainCanvas}
+ */
+app.base.view.Home.prototype.createCanvas = function(layout, user) {
   var mainCanvas = new app.base.panel.MainCanvas();
   mainCanvas.setUri(new goog.Uri(contracts.urlMap.DRAW.CANVAS));
   mainCanvas.setUser(user);
   mainCanvas.setNestAsTarget(layout.getNest('main', 'center'));
   this.addPanelToView('home', mainCanvas);
-  this.mainCanvas = mainCanvas;
+  return mainCanvas;
+};
+
+/**
+ * @param {bad.ui.Layout} layout
+ * @param {bad.UserManager} user
+ * @return {app.base.panel.ToolBox}
+ */
+app.base.view.Home.prototype.createToolPalette = function(layout, user) {
 
   // The tool panel
   var toolPal = new app.base.panel.ToolBox();
@@ -41,12 +68,13 @@ app.base.view.Home.prototype.configurePanels = function() {
   toolPal.setSlideNest(layout.getNest('main', 'left'));
   toolPal.setSlideSize(278);
   this.addPanelToView('left_pal', toolPal);
-  this.toolPal = toolPal;
-
-  this.createPicPalette();
+  return toolPal;
 
 };
 
+/**
+ * @return {app.base.panel.PicsList}
+ */
 app.base.view.Home.prototype.createPicPalette = function() {
   var layout = this.getLayout();
   var user = this.getUser();
@@ -59,8 +87,26 @@ app.base.view.Home.prototype.createPicPalette = function() {
   picPal.setSlideNest(layout.getNest('main', 'right'));
   picPal.setSlideSize(10);
   this.addPanelToView('right_pal', picPal);
-  this.picPal = picPal;
-  this.picPal.renderWithTemplate();
+  return picPal;
+};
+
+/**
+ * @param {bad.ui.Layout} layout
+ * @param {bad.UserManager} user
+ * @return {app.base.panel.ColorList}
+ */
+app.base.view.Home.prototype.createColPal = function(layout, user) {
+
+  // The existing pictures
+  var colPal = new app.base.panel.ColorList();
+  colPal.setUri(new goog.Uri(contracts.urlMap.PICS.COLORS));
+  colPal.setUser(user);
+  colPal.setNestAsTarget(layout.getNest('main', 'right', 'mid'));
+  colPal.setSlideNest(layout.getNest('main', 'right'));
+  colPal.setSlideSize(262);
+  this.addPanelToView('col_pal', colPal);
+  return colPal;
+
 };
 
 app.base.view.Home.prototype.reloadPicPalette = function() {
@@ -71,33 +117,17 @@ app.base.view.Home.prototype.reloadPicPalette = function() {
 app.base.view.Home.prototype.displayPanels = function() {
   this.mainCanvas.renderWithTemplate();
   this.toolPal.renderWithTemplate();
-};
-
-
-app.base.view.Home.prototype.createColPal = function(tpe) {
-  var layout = this.getLayout();
-  var user = this.getUser();
-
-  // The existing pictures
-  var colPal = new app.base.panel.ColorList(tpe);
-  colPal.setUri(new goog.Uri(contracts.urlMap.PICS.COLORS));
-  colPal.setUser(user);
-  colPal.setNestAsTarget(layout.getNest('main', 'right', 'mid'));
-  colPal.setSlideNest(layout.getNest('main', 'right'));
-  colPal.setSlideSize(262);
-  this.addPanelToView('right_pal', colPal);
-  this.colPal = colPal;
+  this.picPal.renderWithTemplate();
   this.colPal.renderWithTemplate();
 };
-
-
 
 /**
  * @param {bad.ActionEvent} e Event object.
  */
 app.base.view.Home.prototype.onPanelAction = function(e) {
 
-  var panel = e.target;
+
+  var panel = /** @type bad.ui.Panel */(e.target);
   var value = e.getValue();
   var data = e.getData();
   e.stopPropagation();
@@ -109,6 +139,9 @@ app.base.view.Home.prototype.onPanelAction = function(e) {
         this.mainCanvas.updateSvgSize();
       }, this);
       this.slidePanelIn(/** @type bad.ui.Panel */ (panel), cb);
+      if (panel == this.colPal) {
+        this.colPal.hide();
+      }
       break;
 
     case app.base.EventType.DRAWING_SELECTED:
@@ -120,15 +153,28 @@ app.base.view.Home.prototype.onPanelAction = function(e) {
       this.mainCanvas.setSelectedTool(data);
       data == 'save_tool' ? this.saveDrawing() : goog.nullFunction();
       data == 'remove_tool' ? this.removeDrawing() : goog.nullFunction();
-      data == 'fill_tool' ? this.createColPal('fill') : goog.nullFunction();
-      data == 'border_fill' ? this.createColPal('stroke') : goog.nullFunction();
+
+      if (data == 'fill_tool') {
+        this.colPal.setFillType('fill');
+        this.colPal.show();
+        this.picPal.hide();
+        this.slidePanelIn(this.colPal);
+      }
+      if (data == 'border_fill') {
+        this.colPal.setFillType('stroke');
+        this.colPal.show();
+        this.picPal.hide();
+        this.slidePanelIn(this.colPal);
+      }
       break;
 
     case app.base.EventType.TOGGLE_RIGHT_PANEL:
+      this.colPal.hide();
+      this.picPal.show();
+
       var tWidth = goog.style.getBounds(this.mainCanvas.getElement()).width;
       this.picPal.setSlideSize(tWidth + 10);
-      this.picPal.show();
-      this.slidePanelToggle(/** @type bad.ui.Panel */ (this.picPal));
+      this.slidePanelToggle(this.picPal);
       break;
 
     case app.base.EventType.CLEAR_CANVAS:
@@ -141,7 +187,7 @@ app.base.view.Home.prototype.onPanelAction = function(e) {
       break;
 
     default:
-      console.debug('Action not taken.');
+      goog.nullFunction();
   }
 };
 

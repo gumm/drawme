@@ -62,7 +62,6 @@ app.base.panel.MainCanvas.prototype.setSelectedTool = function(tool) {
   } else {
     this.activeTool = tool;
   }
-  console.debug('HERE THE TOOL', this.activeTool);
 };
 
 app.base.panel.MainCanvas.prototype.enterDocument = function() {
@@ -126,9 +125,8 @@ app.base.panel.MainCanvas.prototype.clearSvgDrawing = function() {
 };
 
 app.base.panel.MainCanvas.prototype.setColor = function(data) {
-  this.colMap[data.tpe] = data.color;
-  console.debug(this.colMap);
 
+  this.colMap[data.tpe] = data.color;
   var blessed = goog.dom.getElementsByClass('selected', this.svgElement);
   goog.array.forEach(blessed, function(node) {
     this.applyFilAndStroke(node);

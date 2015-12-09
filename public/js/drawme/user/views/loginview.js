@@ -136,7 +136,7 @@ app.user.view.Login.prototype.onPanelAction = function(e) {
       this.exitLostPasswordForm();
       break;
     default:
-      console.log('app.user.view.Login: No match for ', value);
+      goog.nullFunction();
   }
 };
 
@@ -209,7 +209,6 @@ app.user.view.Login.prototype.exitLostPasswordForm = function() {
  * @param {Object} data The logged in users profile data.
  */
 app.user.view.Login.prototype.fetchHomePage = function(data) {
-  console.debug('Logged in, Attempting to fetch home page...');
   var callback = goog.bind(function() {
 
     this.dispatchEvent(new bad.ui.ViewEvent(

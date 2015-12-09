@@ -8,14 +8,12 @@ goog.require('goog.events.EventType');
 
 /**
  * A delete account confirmation form.
- * @param {!string} type
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @extends {bad.ui.Panel}
  * @constructor
  */
-app.base.panel.ColorList = function(type, opt_domHelper) {
+app.base.panel.ColorList = function(opt_domHelper) {
   bad.ui.Panel.call(this, opt_domHelper);
-  this.fill_type = type;
 };
 goog.inherits(app.base.panel.ColorList, bad.ui.Panel);
 
@@ -26,6 +24,10 @@ app.base.panel.ColorList.prototype.initDom = function() {
       goog.events.EventType.CLICK,
       this.onClick_
   );
+};
+
+app.base.panel.ColorList.prototype.setFillType = function(tpe) {
+  this.fill_type = tpe;
 };
 
 app.base.panel.ColorList.prototype.onClick_ = function(e) {

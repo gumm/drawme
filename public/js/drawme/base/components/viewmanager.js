@@ -67,13 +67,11 @@ app.base.ViewManager.prototype.onPanelAction = function(e) {
         this.activeView_.slideAllClosed(cb);
       break;
     case app.user.EventType.VIEW_PIC:
-        console.debug('We need to go to the list drawings view');
       //this.switchView(goog.bind(
       //  this.appDo, this, app.doMap.VIEW_EDIT_USER, 'orgList'));
       break;
     default:
       goog.nullFunction();
-//      console.log('app.base.ViewManager No case for: ', value, data);
   }
 };
 
@@ -81,14 +79,13 @@ app.base.ViewManager.prototype.onViewAction = function(e) {
   var data = e.data;
   switch (e.type) {
     case app.base.ViewEventType.USER_LOGGED_IN:
-      console.debug('A user signed in - viewmanager knows about this...');
       this.userSignedIn(data);
       break;
     case app.base.ViewEventType.VIEW_HOME:
       this.viewHome();
       break;
     default:
-      console.debug('Not recognised...', e.value);
+      goog.nullFunction();
   }
 };
 

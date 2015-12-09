@@ -12,8 +12,6 @@ goog.require('goog.net.XhrManager');
  */
 drawme.initSite = function(opt_landing) {
 
-  console.debug('THE JS STARTED IN THE BROWSER!!! --> ', opt_landing);
-
   var opt_maxRetries = 0,
     opt_headers = null,
     opt_minCount = 1,

@@ -36,7 +36,6 @@ app.user.panel.Login.prototype.initDom = function() {
 app.user.panel.Login.prototype.submitLoginForm = function() {
   this.checkValidation();
   if (this.getForm().checkValidity()) {
-    console.debug('ALL GOOD');
     this.logIn(this.getPostContentFromForm(this.getForm()));
   }
 };
@@ -45,7 +44,6 @@ app.user.panel.Login.prototype.submitLoginForm = function() {
  * @param {string} credential The users login credentials.
  */
 app.user.panel.Login.prototype.logIn = function(credential) {
-  console.debug('logIn', credential);
   this.xMan.post(
     this.getUri(),
     credential,

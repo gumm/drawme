@@ -43,7 +43,7 @@ app.user.view.Account.prototype.onPanelAction = function(e) {
       this.goHome();
       break;
     default:
-      console.log('app.user.view.Account No action for: ', value);
+      goog.nullFunction();
   }
 };
 
