@@ -108,6 +108,7 @@ app.base.view.Home.prototype.onPanelAction = function(e) {
     case app.base.EventType.TOGGLE_RIGHT_PANEL:
       var tWidth = goog.style.getBounds(this.mainCanvas.getElement()).width;
       this.picPal.setSlideSize(tWidth + 10);
+      this.picPal.show();
       this.slidePanelToggle(/** @type bad.ui.Panel */ (this.picPal));
       break;
 
