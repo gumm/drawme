@@ -64,7 +64,7 @@ module.exports = {
      */
     var callback = function(err, account) {
       if (err) {
-        res.send(helper.makeReplyWith(err), 400);
+        res.status(400).send(helper.makeReplyWith(err));
       } else {
         req.session.user = account;
         res.status(200).send(helper.makeReplyWith(
