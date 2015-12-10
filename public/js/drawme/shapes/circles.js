@@ -12,6 +12,8 @@ goog.require('shapes.Rect');
  */
 shapes.Circle = function() {
   shapes.Rect.call(this);
+  this.ry = 0;
+  this.rx = 0;
 };
 goog.inherits(shapes.Circle, shapes.Rect);
 

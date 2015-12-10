@@ -3,30 +3,30 @@
 
 
 .toolbox
-  #draw_circle.tool-item
+  #draw_circle.tool-item(title='Draw Circles and Elipses')
     include ../../public/img/draw_circle.svg
-  #draw_rect.tool-item
+  #draw_rect.tool-item(title='Draw Rectangles and Squares')
     include ../../public/img/draw_rect.svg
 
 .toolbox
-  #select_tool.tool-item
-    i.material-icons.md-48 open_with
-  #pic_tool.tool-item
+  #pic_tool.tool-item(title='Select or un-select an element')
     i.material-icons.md-48 select_all
-  #fill_tool.tool-item
+  #select_tool.tool-item(title='Move a selected element')
+    i.material-icons.md-48 open_with
+  #fill_tool.tool-item(title='Change the fill color')
     i.material-icons.md-48.svg-icon-fill format_color_fill
-  #border_fill.tool-item
+  #border_fill.tool-item(title='Change the stroke color')
     i.material-icons.md-48.svg-icon-outline border_color
-  #delete_tool.tool-item
+  #delete_tool.tool-item(title='Delete a selected element')
     i.material-icons.md-48 clear
-  #clear_tool.tool-item
+  #clear_tool.tool-item(title='Discard this drawing and start over')
     i.material-icons.md-48 clear_all
 
 .toolbox
-  #save_tool.tool-item
+  #save_tool.tool-item(title='Save your drawing')
     i.material-icons.md-48 save
-  #list_tool.tool-item
+  #list_tool.tool-item(title='Open and close the right toolbox')
     i.material-icons.md-48 swap_horiz
 .toolbox
-  #remove_tool.tool-item
+  #remove_tool.tool-item(title='Delete a drawing')
     i.material-icons.md-48 delete

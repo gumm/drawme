@@ -194,6 +194,7 @@ app.base.view.Home.prototype.onPanelAction = function(e) {
   }
 };
 
+//------------------------------------------------------------------[ Delete ]--
 
 app.base.view.Home.prototype.removeDrawing = function() {
   // Get the drawing from the canvas.
@@ -202,8 +203,8 @@ app.base.view.Home.prototype.removeDrawing = function() {
 
   // Hand roll the direct JSON post.
   this.getXMan().del(
-      new goog.Uri(contracts.urlMap.PICS.DELETE),
-      JSON.stringify({svgId: svgId}),
+      new goog.Uri(contracts.urlMap.PICS.DELETE + '/' + svgId),
+      null,
       goog.bind(this.onRemove, this),
       goog.net.XhrIo.ResponseType.DEFAULT,
       {'Content-Type': 'application/json'}

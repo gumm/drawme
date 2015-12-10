@@ -399,8 +399,8 @@ module.exports = {
   deletePic: function(req, res) {
 
     var delCall = function() {
-      var svgId = req.body['svgId'];
       var uid =  req.session.user._id;
+      var SVG_ID = req.params.SVG_ID;
 
       var callback = function(err, reply) {
         if (err) {
@@ -410,7 +410,7 @@ module.exports = {
               null, reply, 'Pic Deleted'));
         }
       };
-      PicMan.deletePic(svgId, uid, callback);
+      PicMan.deletePic(SVG_ID, uid, callback);
     };
 
     helper.okGo(req, res, {'DELETE': delCall});

@@ -44,7 +44,7 @@ module.exports = {
     app.post(urlMap.PICS.CREATE, routeTo.createPic);
     app.get(urlMap.PICS.READ, routeTo.readPics);
     app.post(urlMap.PICS.UPDATE, routeTo.updatePic);
-    app.delete(urlMap.PICS.DELETE, routeTo.deletePic);
+    app.delete(urlMap.PICS.DELETE + '/:SVG_ID', routeTo.deletePic);
 
     // Colors
     app.get(urlMap.PICS.COLORS, routeTo.readColors);
