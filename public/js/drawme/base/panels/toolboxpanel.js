@@ -7,6 +7,7 @@ goog.require('bad.utils');
 goog.require('contracts.urlMap');
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.style');
 
 /**
  * A delete account confirmation form.
@@ -82,4 +83,20 @@ app.base.panel.ToolBox.prototype.doMore = function(buttons, data) {
     default:
       goog.nullFunction();
   }
+};
+
+app.base.panel.ToolBox.prototype.setColor = function(data) {
+  var selector = 'svg-icon-fill';
+  if (data.tpe == 'stroke') {
+    selector = 'svg-icon-outline';
+  }
+  var blessed = goog.dom.getElementsByClass(selector, this.getElement());
+  goog.array.forEach(blessed, function(node) {
+    goog.style.setStyle(node, {
+      'fill': data.color,
+      'color': data.color,
+      'fill-opacity': 1
+    });
+  }, this);
+
 };

@@ -110,7 +110,10 @@ app.base.view.Home.prototype.createColPal = function(layout, user) {
 };
 
 app.base.view.Home.prototype.reloadPicPalette = function() {
-  this.createPicPalette();
+  goog.dom.removeNode(this.picPal.getElement());
+  this.picPal.dispose();
+  delete this.picPal;
+  this.picPal = this.createPicPalette();
   this.picPal.renderWithTemplate();
 };
 
@@ -179,11 +182,11 @@ app.base.view.Home.prototype.onPanelAction = function(e) {
 
     case app.base.EventType.CLEAR_CANVAS:
       this.mainCanvas.clearSvgDrawing();
-      this.reloadPicPalette();
       break;
 
     case app.base.EventType.CHANGE_COLOR:
       this.mainCanvas.setColor(data);
+      this.toolPal.setColor(data);
       break;
 
     default:

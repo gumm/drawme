@@ -164,8 +164,7 @@ app.base.panel.MainCanvas.prototype.selectToDrag_ = function(e) {
     tool.initFromEl(this.activeEl_);
 
     var dragging = goog.bind(function(e) {
-      tool.translate(e);
-      tool.updateEl(this.activeEl_);
+      tool.translate(e, this.activeEl_);
     }, this);
 
     var dragStop = goog.bind(function(e) {
@@ -232,32 +231,27 @@ app.base.panel.MainCanvas.prototype.onMouseUp_ = function(e) {
 app.base.panel.MainCanvas.prototype.createRect = function(e) {
 
   this.rect.init(e);
-  this.activeIsInDoc = false;
   this.mouseDown_ = true;
-  var rect = this.dom_.getDocument().createElementNS(this.svgns, 'rect');
-  goog.dom.classlist.add(rect, 'svg-rect');
-  this.applyFilAndStroke(rect);
-  this.activeEl_ = rect;
-  this.rect.updateEl(this.activeEl_);
+  this.activeEl_ = this.dom_.getDocument().createElementNS(this.svgns, 'rect');
+  goog.dom.classlist.add(this.activeEl_, 'svg-rect');
+  this.applyFilAndStroke(this.activeEl_);
+  this.rect.move(e, this.activeEl_);
+  goog.dom.appendChild(this.svgElement, this.activeEl_);
 };
 
 app.base.panel.MainCanvas.prototype.drawRect = function(e) {
   if (this.mouseDown_ === true) {
-
-    this.rect.move(e);
-    this.rect.updateEl(this.activeEl_);
-
-    // Place the rect in the document if it was not there before...
-    if (!this.activeIsInDoc && this.rect.width != 0 && this.rect.height != 0) {
-      goog.dom.appendChild(this.svgElement, this.activeEl_);
-      this.activeIsInDoc = true;
-    }
-
+    this.rect.move(e, this.activeEl_);
   }
 };
 
 app.base.panel.MainCanvas.prototype.endRect = function(e) {
   this.drawRect(e);
+  if (!Number(this.activeEl_.getAttribute('width')) ||
+          !Number(this.activeEl_.getAttribute('y'))) {
+    goog.dom.removeNode(this.activeEl_);
+  }
+  this.stopActivity();
   this.stopActivity();
 };
 
@@ -265,33 +259,27 @@ app.base.panel.MainCanvas.prototype.endRect = function(e) {
 
 app.base.panel.MainCanvas.prototype.createCircle = function(e) {
   this.circle.init(e);
-  this.activeIsInDoc = false;
   this.mouseDown_ = true;
-  var circle = this.dom_.getDocument().createElementNS(this.svgns, 'ellipse');
-  goog.dom.classlist.add(circle, 'svg-circ');
-  this.applyFilAndStroke(circle);
-  this.activeEl_ = circle;
-  this.circle.updateEl(this.activeEl_);
+  this.activeEl_ = this.dom_.getDocument().createElementNS(
+      this.svgns, 'ellipse');
+  goog.dom.classlist.add(this.activeEl_, 'svg-circ');
+  this.applyFilAndStroke(this.activeEl_);
+  this.circle.move(e, this.activeEl_);
+  goog.dom.appendChild(this.svgElement, this.activeEl_);
 };
 
 app.base.panel.MainCanvas.prototype.drawCircle = function(e) {
   if (this.mouseDown_ === true) {
-
-    this.circle.move(e);
-    this.circle.updateEl(this.activeEl_);
-
-    // Place the rect in the document if it was not there before...
-    if (!this.activeIsInDoc && this.circle.width != 0 &&
-        this.circle.height != 0) {
-      goog.dom.appendChild(this.svgElement, this.activeEl_);
-      this.activeIsInDoc = true;
-    }
-
+    this.circle.move(e, this.activeEl_);
   }
 };
 
 app.base.panel.MainCanvas.prototype.endCircle = function(e) {
   this.drawCircle(e);
+  if (!Number(this.activeEl_.getAttribute('rx')) ||
+          !Number(this.activeEl_.getAttribute('ry'))) {
+    goog.dom.removeNode(this.activeEl_);
+  }
   this.stopActivity();
 };
 
@@ -301,16 +289,15 @@ app.base.panel.MainCanvas.prototype.stopActivity = function() {
   goog.dom.classlist.remove(this.activeEl_, 'selected');
   this.mouseDown_ = false;
   this.activeEl_ = null;
-  this.activeIsInDoc = false;
 };
 
 app.base.panel.MainCanvas.prototype.applyFilAndStroke = function(el) {
   goog.style.setStyle(el, {
     'fill': this.colMap['fill'],
     'stroke': this.colMap['stroke'],
-    'fill-opacity': 0.2,
-    'stroke-width': 1.5,
-    'stroke-opacity': 0.5
+    'fill-opacity': 1,
+    'stroke-width': 10,
+    'stroke-opacity': 1
   });
 };
 

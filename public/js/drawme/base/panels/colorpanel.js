@@ -5,6 +5,7 @@ goog.require('bad.ui.Panel');
 goog.require('goog.dom');
 goog.require('goog.dom.dataset');
 goog.require('goog.events.EventType');
+goog.require('goog.string');
 
 /**
  * A delete account confirmation form.
@@ -18,6 +19,7 @@ app.base.panel.ColorList = function(opt_domHelper) {
 goog.inherits(app.base.panel.ColorList, bad.ui.Panel);
 
 app.base.panel.ColorList.prototype.initDom = function() {
+  this.selectType = goog.dom.getElement('color_selector_type');
   var swatches = goog.dom.getElement('swatches');
   this.getHandler().listen(
       swatches,
@@ -28,6 +30,9 @@ app.base.panel.ColorList.prototype.initDom = function() {
 
 app.base.panel.ColorList.prototype.setFillType = function(tpe) {
   this.fill_type = tpe;
+  goog.dom.setTextContent(
+      this.selectType,
+      goog.string.toTitleCase(tpe + ' color'));
 };
 
 app.base.panel.ColorList.prototype.onClick_ = function(e) {
