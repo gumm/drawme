@@ -286,7 +286,9 @@ app.base.panel.MainCanvas.prototype.endCircle = function(e) {
 
 //-----------------------------------------------------------------[ Utility ]--
 app.base.panel.MainCanvas.prototype.stopActivity = function() {
-  goog.dom.classlist.remove(this.activeEl_, 'selected');
+  if (this.activeEl_) {
+    goog.dom.classlist.remove(this.activeEl_, 'selected');
+  }
   this.mouseDown_ = false;
   this.activeEl_ = null;
 };

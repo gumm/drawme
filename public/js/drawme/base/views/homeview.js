@@ -49,6 +49,8 @@ app.base.view.Home.prototype.createCanvas = function(layout, user) {
   mainCanvas.setUri(new goog.Uri(contracts.urlMap.DRAW.CANVAS));
   mainCanvas.setUser(user);
   mainCanvas.setNestAsTarget(layout.getNest('main', 'center'));
+  mainCanvas.setBeforeReadyCallback(goog.bind(
+      mainCanvas.dispatchActionEvent, mainCanvas, 'MAIN_CANVAS'));
   this.addPanelToView('home', mainCanvas);
   return mainCanvas;
 };
@@ -67,6 +69,8 @@ app.base.view.Home.prototype.createToolPalette = function(layout, user) {
   toolPal.setNestAsTarget(layout.getNest('main', 'left', 'mid'));
   toolPal.setSlideNest(layout.getNest('main', 'left'));
   toolPal.setSlideSize(278);
+  toolPal.setBeforeReadyCallback(goog.bind(
+      toolPal.dispatchActionEvent, toolPal, 'TOOL_PALETTE'));
   this.addPanelToView('left_pal', toolPal);
   return toolPal;
 
@@ -86,6 +90,8 @@ app.base.view.Home.prototype.createPicPalette = function() {
   picPal.setNestAsTarget(layout.getNest('main', 'right', 'mid'));
   picPal.setSlideNest(layout.getNest('main', 'right'));
   picPal.setSlideSize(10);
+  picPal.setBeforeReadyCallback(goog.bind(
+      picPal.dispatchActionEvent, picPal, 'PIC_PALETTE'));
   this.addPanelToView('right_pal', picPal);
   return picPal;
 };
@@ -104,6 +110,8 @@ app.base.view.Home.prototype.createColPal = function(layout, user) {
   colPal.setNestAsTarget(layout.getNest('main', 'right', 'mid'));
   colPal.setSlideNest(layout.getNest('main', 'right'));
   colPal.setSlideSize(262);
+  colPal.setBeforeReadyCallback(goog.bind(
+      colPal.dispatchActionEvent, colPal, 'COLOR_PALETTE'));
   this.addPanelToView('col_pal', colPal);
   return colPal;
 
@@ -138,13 +146,27 @@ app.base.view.Home.prototype.onPanelAction = function(e) {
   switch (value) {
 
     case bad.ui.EventType.READY:
-      var cb = goog.bind(function() {
-        this.mainCanvas.updateSvgSize();
-      }, this);
-      this.slidePanelIn(/** @type bad.ui.Panel */ (panel), cb);
-      if (panel == this.colPal) {
-        this.colPal.hide();
-      }
+      this.mainCanvas.updateSvgSize();
+      break;
+
+    case 'MAIN_CANVAS':
+      console.debug('Panel Ready:', panel);
+      panel.updateSvgSize();
+      break;
+
+    case 'TOOL_PALETTE':
+      console.debug('Panel Ready:', panel);
+      this.slidePanelIn(/** @type bad.ui.Panel */ (panel));
+      break;
+
+    case 'PIC_PALETTE':
+      console.debug('Panel Ready:', panel);
+      this.slidePanelIn(/** @type bad.ui.Panel */ (panel));
+      break;
+
+    case 'COLOR_PALETTE':
+      console.debug('Panel Ready:', panel);
+      panel.hide();
       break;
 
     case app.base.EventType.DRAWING_SELECTED:
