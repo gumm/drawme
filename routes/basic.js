@@ -98,6 +98,10 @@ module.exports = {
     }
   },
 
+  /**
+   * @param req
+   * @param res
+   */
   logout: function(req, res) {
     var postCall = function() {
       if (req.body['logout'] === 'true') {
@@ -110,49 +114,6 @@ module.exports = {
     };
     helper.okGo(req, res, {'POST': postCall});
   },
-
-
-  /**
-   * View the home page
-   * @param req
-   * @param res
-   */
-  canvas: function(req, res) {
-    var getCall = function() {
-      if (!req.session.user) {
-        res.redirect('/');
-      } else {
-        res.render('draw/canvas',
-            helper.makeReplyWith(null, req.session.user));
-      }
-    };
-    helper.okGo(req, res, {'GET': getCall});
-  },
-
-  panLeft: function(req, res) {
-    var getCall = function() {
-      if (!req.session.user) {
-        res.redirect('/');
-      } else {
-        res.render('draw/left',
-            helper.makeReplyWith(null, req.session.user));
-      }
-    };
-    helper.okGo(req, res, {'GET': getCall});
-  },
-
-  panRight: function(req, res) {
-    var getCall = function() {
-      if (!req.session.user) {
-        res.redirect('/');
-      } else {
-        res.render('draw/right',
-            helper.makeReplyWith(null, req.session.user));
-      }
-    };
-    helper.okGo(req, res, {'GET': getCall});
-  },
-
 
   /**
    * Creates a new account
@@ -286,6 +247,10 @@ module.exports = {
     helper.okGo(req, res, {'GET': getCall, 'POST': postCall});
   },
 
+  /**
+   * @param req
+   * @param res
+   */
   resetPassword: function(req, res) {
 
     var getCall = function() {
@@ -311,7 +276,8 @@ module.exports = {
           };
 
           if (setup['jsIsCompiled']) {
-            initDetail.jsCompiled = 'compiled/drawme.min.' + setup.version + '.js';
+            initDetail.jsCompiled = 'compiled/drawme.min.' +
+                setup.version + '.js';
           }
           res.render('resetpassword', initDetail);
         }
@@ -339,6 +305,56 @@ module.exports = {
     };
     helper.okGo(req, res, {'GET': getCall, 'POST': postCall});
   },
+
+  /**
+   * View the home page
+   * @param req
+   * @param res
+   */
+  canvas: function(req, res) {
+    var getCall = function() {
+      if (!req.session.user) {
+        res.redirect('/');
+      } else {
+        res.render('draw/canvas',
+            helper.makeReplyWith(null, req.session.user));
+      }
+    };
+    helper.okGo(req, res, {'GET': getCall});
+  },
+
+  /**
+   * @param req
+   * @param res
+   */
+  panLeft: function(req, res) {
+    var getCall = function() {
+      if (!req.session.user) {
+        res.redirect('/');
+      } else {
+        res.render('draw/left',
+            helper.makeReplyWith(null, req.session.user));
+      }
+    };
+    helper.okGo(req, res, {'GET': getCall});
+  },
+
+  /**
+   * @param req
+   * @param res
+   */
+  panRight: function(req, res) {
+    var getCall = function() {
+      if (!req.session.user) {
+        res.redirect('/');
+      } else {
+        res.render('draw/right',
+            helper.makeReplyWith(null, req.session.user));
+      }
+    };
+    helper.okGo(req, res, {'GET': getCall});
+  },
+
 
   /**
    * Save a picture to the db.
@@ -439,6 +455,10 @@ module.exports = {
     helper.okGo(req, res, {'GET': getCall});
   },
 
+  /**
+   * @param req
+   * @param res
+   */
   readColors: function(req, res) {
 
     var getCall = function() {
@@ -474,7 +494,7 @@ module.exports = {
         "PinkA400":                      "#F50057",
         "PinkA700":                      "#C51162",
 
-        /*-------------------------------------------------------------- [ Purple ] --*/
+        /*------------------------------------------------------ [ Purple ] --*/
         "Purple50":                      "#F3E5F5",
         "Purple100":                     "#E1BEE7",
         "Purple200":                     "#CE93D8",
@@ -490,7 +510,7 @@ module.exports = {
         "PurpleA400":                    "#D500F9",
         "PurpleA700":                    "#AA00FF",
 
-        /*--------------------------------------------------------- [ Deep Purple ] --*/
+        /*------------------------------------------------- [ Deep Purple ] --*/
         "DeepPurple50":                  "#EDE7F6",
         "DeepPurple100":                 "#D1C4E9",
         "DeepPurple200":                 "#B39DDB",
@@ -506,7 +526,7 @@ module.exports = {
         "DeepPurpleA400":                "#651FFF",
         "DeepPurpleA700":                "#6200EA",
 
-        /*-------------------------------------------------------------- [ Indigo ] --*/
+        /*------------------------------------------------------ [ Indigo ] --*/
         "Indigo50":                      "#E8EAF6",
         "Indigo100":                     "#C5CAE9",
         "Indigo200":                     "#9FA8DA",
@@ -522,7 +542,7 @@ module.exports = {
         "IndigoA400":                    "#3D5AFE",
         "IndigoA700":                    "#304FFE",
 
-        /*---------------------------------------------------------------- [ Blue ] --*/
+        /*-------------------------------------------------------- [ Blue ] --*/
         "Blue50":                        "#E3F2FD",
         "Blue100":                       "#BBDEFB",
         "Blue200":                       "#90CAF9",
@@ -538,7 +558,7 @@ module.exports = {
         "BlueA400":                      "#2979FF",
         "BlueA700":                      "#2962FF",
 
-        /*---------------------------------------------------------- [ Light Blue ] --*/
+        /*-------------------------------------------------- [ Light Blue ] --*/
         "LightBlue50":                   "#E1F5FE",
         "LightBlue100":                  "#B3E5FC",
         "LightBlue200":                  "#81D4FA",
@@ -554,7 +574,7 @@ module.exports = {
         "LightBlueA400":                 "#00B0FF",
         "LightBlueA700":                 "#0091EA",
 
-        /*---------------------------------------------------------------- [ Cyan ] --*/
+        /*-------------------------------------------------------- [ Cyan ] --*/
         "Cyan50":                        "#E0F7FA",
         "Cyan100":                       "#B2EBF2",
         "Cyan200":                       "#80DEEA",
@@ -570,7 +590,7 @@ module.exports = {
         "CyanA400":                      "#00E5FF",
         "CyanA700":                      "#00B8D4",
 
-        /*---------------------------------------------------------------- [ Teal ] --*/
+        /*-------------------------------------------------------- [ Teal ] --*/
         "Teal50":                        "#E0F2F1",
         "Teal100":                       "#B2DFDB",
         "Teal200":                       "#80CBC4",
@@ -586,7 +606,7 @@ module.exports = {
         "TealA400":                      "#1DE9B6",
         "TealA700":                      "#00BFA5",
 
-        /*--------------------------------------------------------------- [ Green ] --*/
+        /*------------------------------------------------------- [ Green ] --*/
         "Green50":                       "#E8F5E9",
         "Green100":                      "#C8E6C9",
         "Green200":                      "#A5D6A7",
@@ -602,7 +622,7 @@ module.exports = {
         "GreenA400":                     "#00E676",
         "GreenA700":                     "#00C853",
 
-        /*--------------------------------------------------------- [ Light Green ] --*/
+        /*------------------------------------------------- [ Light Green ] --*/
         "LightGreen50":                  "#F1F8E9",
         "LightGreen100":                 "#DCEDC8",
         "LightGreen200":                 "#C5E1A5",
@@ -618,7 +638,7 @@ module.exports = {
         "LightGreenA400":                "#76FF03",
         "LightGreenA700":                "#64DD17",
 
-        /*---------------------------------------------------------------- [ Lime ] --*/
+        /*-------------------------------------------------------- [ Lime ] --*/
         "Lime50":                        "#F9FBE7",
         "Lime100":                       "#F0F4C3",
         "Lime200":                       "#E6EE9C",
@@ -634,7 +654,7 @@ module.exports = {
         "LimeA400":                      "#C6FF00",
         "LimeA700":                      "#AEEA00",
 
-        /*-------------------------------------------------------------- [ Yellow ] --*/
+        /*------------------------------------------------------ [ Yellow ] --*/
         "Yellow50":                      "#FFFDE7",
         "Yellow100":                     "#FFF9C4",
         "Yellow200":                     "#FFF59D",
@@ -650,7 +670,7 @@ module.exports = {
         "YellowA400":                    "#FFEA00",
         "YellowA700":                    "#FFD600",
 
-        /*--------------------------------------------------------------- [ Amber ] --*/
+        /*------------------------------------------------------- [ Amber ] --*/
         "Amber50":                       "#FFF8E1",
         "Amber100":                      "#FFECB3",
         "Amber200":                      "#FFE082",
@@ -666,7 +686,7 @@ module.exports = {
         "AmberA400":                     "#FFC400",
         "AmberA700":                     "#FFAB00",
 
-        /*-------------------------------------------------------------- [ Orange ] --*/
+        /*------------------------------------------------------ [ Orange ] --*/
         "Orange50":                      "#FFF3E0",
         "Orange100":                     "#FFE0B2",
         "Orange200":                     "#FFCC80",
@@ -682,7 +702,7 @@ module.exports = {
         "OrangeA400":                    "#FF9100",
         "OrangeA700":                    "#FF6D00",
 
-        /*--------------------------------------------------------- [ Deep Orange ] --*/
+        /*------------------------------------------------- [ Deep Orange ] --*/
         "DeepOrange50":                  "#FBE9E7",
         "DeepOrange100":                 "#FFCCBC",
         "DeepOrange200":                 "#FFAB91",
@@ -698,7 +718,7 @@ module.exports = {
         "DeepOrangeA400":                "#FF3D00",
         "DeepOrangeA700":                "#DD2C00",
 
-        /*--------------------------------------------------------------- [ Brown ] --*/
+        /*------------------------------------------------------- [ Brown ] --*/
         "Brown50":                       "#EFEBE9",
         "Brown100":                      "#D7CCC8",
         "Brown200":                      "#BCAAA4",
@@ -710,7 +730,7 @@ module.exports = {
         "Brown800":                      "#4E342E",
         "Brown900":                      "#3E2723",
 
-        /*---------------------------------------------------------------- [ Grey ] --*/
+        /*-------------------------------------------------------- [ Grey ] --*/
         "Grey50":                        "#FAFAFA",
         "Grey100":                       "#F5F5F5",
         "Grey200":                       "#EEEEEE",
@@ -722,7 +742,7 @@ module.exports = {
         "Grey800":                       "#424242",
         "Grey900":                       "#212121",
 
-        /*----------------------------------------------------------- [ Blue Grey ] --*/
+        /*--------------------------------------------------- [ Blue Grey ] --*/
         "BlueGrey50":                    "#ECEFF1",
         "BlueGrey100":                   "#CFD8DC",
         "BlueGrey200":                   "#B0BEC5",
@@ -734,12 +754,12 @@ module.exports = {
         "BlueGrey800":                   "#37474F",
         "BlueGrey900":                   "#263238",
 
-        /*----------------------------------------------------------------- [ B&W ] --*/
+        /*--------------------------------------------------------- [ B&W ] --*/
         "Black":                         "#000000",
         "White":                         "#FFFFFF",
 
 
-        /*--------------------------------------------------------------- [ Black ] --*/
+        /*------------------------------------------------------- [ Black ] --*/
         "Black00":                       "#FFFFFF",
         "Black04":                       "#F5F5F5",
         "Black12":                       "#E0E0E0",
