@@ -13,7 +13,7 @@ module.exports = {
 
   /**
    * @param data
-   * @returns {Object.<string, (Object|boolean|string|number)>}
+   * @return {Object.<string, string>}
    */
   accountMap: function(data) {
     return {
@@ -30,6 +30,11 @@ module.exports = {
    * @param callback
    */
   manualLogin: function(user, pass, callback) {
+
+    /**
+     * An error object that maps to the form's field names.
+     * @type {{user: (null|string), pass: (null|string)}}
+     */
     var error = {
       user: null,
       pass: null
@@ -41,24 +46,21 @@ module.exports = {
       accounts.find({'user': user}).limit(1).next(
           function(err, account) {
             if (account) {
-              pwHashes.find({'user': user}).limit(1).next(
+              pwHashes.find({'user': account._id}).limit(1).next(
                   function(err, hashDoc) {
                     if (hashDoc) {
 
                       // Validate a match
                       validatePassword(pass, hashDoc.pw, function(isValid) {
                         if (!isValid) {
-                          db.close();
                           error.pass = 'User password mismatch.';
                           cb(error);
                         } else {
-                          db.close();
                           cb(null, account);
                         }
                       });
 
                     } else {
-                      db.close();
                       // Password hash not found...
                       // This is a problem
                       cb(error);
@@ -66,18 +68,13 @@ module.exports = {
                   }
               )
             } else {
-              db.close();
               error.pass = 'User password mismatch';
               cb(error);
             }
           }
       );
     };
-
-    MongoClient.connect(url, function(err, db) {
-      assert.equal(null, err);
-      matchUsers(db, callback);
-    });
+    connectCallClose(matchUsers, callback);
   },
 
   /**
@@ -116,15 +113,10 @@ module.exports = {
           ]}
       ).limit(1).next(function(err, doc) {
         if (doc && doc.user == targetUName) {
-          db.close();
-          // Username is taken...
           error.user = 'This username is not available';
           cb(error, null);
 
         } else if (doc &&  doc.email == targetEmail) {
-          db.close();
-
-          // Email exists...
           error.email = 'This email is already registered. ' +
               'Maybe request a password reset.';
           cb(error, null);
@@ -136,14 +128,11 @@ module.exports = {
             accounts.insertOne(newAccount, function(err, r) {
               if (r) {
                 var newUser = r.ops[0];
-                var pWord = {'user': targetUName, 'pw': hash};
+                var pWord = {'user': newUser._id, 'pw': hash};
                 pwHashes.insertOne(pWord, function(err, pRes) {
-                  db.close();
                   cb(err, newUser);
                 })
               } else {
-                db.close();
-
                 // Email exists...
                 cb(error, null);
               }
@@ -155,10 +144,7 @@ module.exports = {
       });
     };
 
-    MongoClient.connect(url, function(err, db) {
-      assert.equal(null, err);
-      insertAccount(db, callback);
-    });
+    connectCallClose(insertAccount, callback);
   },
 
   /**
@@ -179,22 +165,17 @@ module.exports = {
               accounts.deleteOne(
                   { 'user': account.user },
                   function(err, results) {
-                    db.close();
                     cb(err, results);
                   }
               );
             } else {
-              db.close();
               cb('Could not delete account.');
             }
           }
       );
     };
 
-    MongoClient.connect(url, function(err, db) {
-      assert.equal(null, err);
-      removeAccount(db, callback);
-    });
+    connectCallClose(removeAccount, callback);
   },
 
   /**
@@ -224,18 +205,13 @@ module.exports = {
                 cb(null, account);}
               else {
                 cb(err);}
-              db.close();
             }
         );
 
       });
     };
 
-    MongoClient.connect(url, function(err, db) {
-      assert.equal(null, err);
-      seedAccount(db, callback);
-    });
-
+    connectCallClose(seedAccount, callback);
   },
 
   /**
@@ -254,19 +230,14 @@ module.exports = {
           ]}
       ).limit(1).next(function(err, doc) {
         if (doc) {
-          db.close();
           cb(null, doc);
         } else {
-          db.close();
           cb('Really user not found??', null);
         }
       })
     };
 
-    MongoClient.connect(url, function(err, db) {
-      assert.equal(null, err);
-      validate(db, callback);
-    });
+    connectCallClose(validate, callback);
   },
 
   /**
@@ -301,7 +272,6 @@ module.exports = {
                       upsert: false
                     },
                     function(err, hashDoc) {
-                      db.close();
                       if (hashDoc) {
                         cb(null, account);
                       } else {
@@ -310,22 +280,27 @@ module.exports = {
                     }
                 )
               } else {
-                db.close();
                 cb(err);
               }
             }
         );
       });
     };
-
-    MongoClient.connect(url, function(err, db) {
-      assert.equal(null, err);
-      reset(db, callback);
-    });
-
+    connectCallClose(reset, callback);
   }
+};
 
-
+//--------------------------------------------------------------[ Some utils ]--
+var connectCallClose = function(func, callback) {
+  MongoClient.connect(url, function(err, db) {
+    func(db, function(err, data) {
+      if (err) {
+        console.log('ERROR:', err);
+      }
+      db.close();
+      callback(err, data)
+    });
+  });
 };
 
 

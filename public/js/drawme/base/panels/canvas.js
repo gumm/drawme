@@ -57,18 +57,14 @@ goog.inherits(app.base.panel.MainCanvas, bad.ui.Panel);
 
 
 app.base.panel.MainCanvas.prototype.setSelectedTool = function(tool) {
-  if (tool == 'delete_tool') {
-    this.onDelete_();
-  } else {
-    this.activeTool = tool;
-  }
+  this.activeTool = tool;
 };
 
 app.base.panel.MainCanvas.prototype.enterDocument = function() {
   this.dom_ = goog.dom.getDomHelper(this.getElement());
   this.workbench_ = this.dom_.getElement('workbench');
   this.createSvgEl_();
-  this.initListners();
+  this.initListeners();
 };
 
 app.base.panel.MainCanvas.prototype.createSvgEl_ = function() {
@@ -87,7 +83,7 @@ app.base.panel.MainCanvas.prototype.updateSvgId = function(id) {
   this.svgElement.setAttribute('id', id);
 };
 
-app.base.panel.MainCanvas.prototype.initListners = function() {
+app.base.panel.MainCanvas.prototype.initListeners = function() {
   this.getHandler().listen(
       this.svgElement,
       goog.events.EventType.MOUSEDOWN,
@@ -114,14 +110,14 @@ app.base.panel.MainCanvas.prototype.getSvgDrawing = function() {
 app.base.panel.MainCanvas.prototype.setSvgDrawing = function(svg) {
   goog.dom.replaceNode(svg, this.svgElement);
   this.svgElement = svg;
-  this.initListners();
+  this.initListeners();
 };
 
 app.base.panel.MainCanvas.prototype.clearSvgDrawing = function() {
   goog.dom.removeNode(this.svgElement);
   this.svgElement = null;
   this.createSvgEl_();
-  this.initListners();
+  this.initListeners();
 };
 
 app.base.panel.MainCanvas.prototype.setColor = function(data) {
@@ -135,13 +131,19 @@ app.base.panel.MainCanvas.prototype.setColor = function(data) {
 };
 
 //--------------------------------------------------------------[ Transforms ]--
+app.base.panel.MainCanvas.prototype.unSelectAll = function() {
+  Array.from(goog.dom.getElementsByClass('selected', this.svgElement)).forEach(
+      function(el) {goog.dom.classlist.remove(el, 'selected');}
+  );
+  this.mouseDown_ = false;
+  this.activeEl_ = null;
+};
 
-app.base.panel.MainCanvas.prototype.onDelete_ = function() {
+app.base.panel.MainCanvas.prototype.deleteSelected = function() {
   // Delete selected
-  var condemned = goog.dom.getElementsByClass('selected', this.svgElement);
-  goog.array.forEach(condemned, function(node) {
-    goog.dom.removeNode(node);
-  });
+  Array.from(goog.dom.getElementsByClass('selected', this.svgElement)).forEach(
+      function(el) {goog.dom.removeNode(el);}
+  );
 };
 
 app.base.panel.MainCanvas.prototype.onClick_ = function(e) {

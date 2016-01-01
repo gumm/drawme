@@ -29,6 +29,14 @@ app.base.view.Home.prototype.configurePanels = function() {
   var layout = this.getLayout();
 
   /**
+   * @type {Object}
+   * @private
+   */
+  this.rightSlider_ = layout.getNest('main', 'right');
+
+  this.rightPanelTarget_ = layout.getNest('main', 'right', 'mid');
+
+  /**
    * @type {bad.UserManager}
    */
   var user = this.getUser();
@@ -87,8 +95,8 @@ app.base.view.Home.prototype.createPicPalette = function() {
   var picPal = new app.base.panel.PicsList();
   picPal.setUri(new goog.Uri(contracts.urlMap.PICS.READ));
   picPal.setUser(user);
-  picPal.setNestAsTarget(layout.getNest('main', 'right', 'mid'));
-  picPal.setSlideNest(layout.getNest('main', 'right'));
+  picPal.setNestAsTarget(this.rightPanelTarget_);
+  picPal.setSlideNest(this.rightSlider_);
   picPal.setSlideSize(10);
   picPal.setBeforeReadyCallback(goog.bind(
       picPal.dispatchActionEvent, picPal, 'PIC_PALETTE'));
@@ -107,8 +115,8 @@ app.base.view.Home.prototype.createColPal = function(layout, user) {
   var colPal = new app.base.panel.ColorList();
   colPal.setUri(new goog.Uri(contracts.urlMap.PICS.COLORS));
   colPal.setUser(user);
-  colPal.setNestAsTarget(layout.getNest('main', 'right', 'mid'));
-  colPal.setSlideNest(layout.getNest('main', 'right'));
+  colPal.setNestAsTarget(this.rightPanelTarget_);
+  colPal.setSlideNest(this.rightSlider_);
   colPal.setSlideSize(262);
   colPal.setBeforeReadyCallback(goog.bind(
       colPal.dispatchActionEvent, colPal, 'COLOR_PALETTE'));
@@ -146,74 +154,123 @@ app.base.view.Home.prototype.onPanelAction = function(e) {
   switch (value) {
 
     case bad.ui.EventType.READY:
-      this.mainCanvas.updateSvgSize();
+      console.debug('SIMPLE PANEL READY');
       break;
 
     case 'MAIN_CANVAS':
-      console.debug('Panel Ready:', panel);
+      console.debug('MAIN_CANVAS Panel Ready');
       panel.updateSvgSize();
       break;
 
     case 'TOOL_PALETTE':
-      console.debug('Panel Ready:', panel);
+      console.debug('TOOL_PALETTE Panel Ready');
       this.slidePanelIn(/** @type bad.ui.Panel */ (panel));
       break;
 
     case 'PIC_PALETTE':
-      console.debug('Panel Ready:', panel);
+      console.debug('PIC_PALETTE Panel Ready');
       this.slidePanelIn(/** @type bad.ui.Panel */ (panel));
       break;
 
     case 'COLOR_PALETTE':
-      console.debug('Panel Ready:', panel);
+      console.debug('COLOR_PALETTE Panel Ready');
       panel.hide();
       break;
 
     case app.base.EventType.DRAWING_SELECTED:
+      console.debug('DRAWING_SELECTED');
       this.slidePanelClosed(/** @type bad.ui.Panel */ (this.picPal));
       this.mainCanvas.setSvgDrawing(data);
+      this.toolPal.unSelectToggles();
       break;
 
     case app.base.EventType.DRAWING_TOOL_SELECTED:
-      this.mainCanvas.setSelectedTool(data);
-      data == 'save_tool' ? this.saveDrawing() : goog.nullFunction();
-      data == 'remove_tool' ? this.removeDrawing() : goog.nullFunction();
-
-      if (data == 'fill_tool') {
-        this.colPal.setFillType('fill');
-        this.colPal.show();
-        this.picPal.hide();
-        this.slidePanelIn(this.colPal);
-      }
-      if (data == 'border_fill') {
-        this.colPal.setFillType('stroke');
-        this.colPal.show();
-        this.picPal.hide();
-        this.slidePanelIn(this.colPal);
-      }
-      break;
-
-    case app.base.EventType.TOGGLE_RIGHT_PANEL:
-      this.colPal.hide();
-      this.picPal.show();
-
-      var tWidth = goog.style.getBounds(this.mainCanvas.getElement()).width;
-      this.picPal.setSlideSize(tWidth + 10);
-      this.slidePanelToggle(this.picPal);
-      break;
-
-    case app.base.EventType.CLEAR_CANVAS:
-      this.mainCanvas.clearSvgDrawing();
+      console.debug('DRAWING_TOOL_SELECTED', data);
+      this.onToolSelected(data);
       break;
 
     case app.base.EventType.CHANGE_COLOR:
+      console.debug('CHANGE_COLOR', data);
       this.mainCanvas.setColor(data);
       this.toolPal.setColor(data);
       break;
 
     default:
+      console.debug('NO ACTION', value, data);
       goog.nullFunction();
   }
+};
+
+
+//----------------------------------------------------[ Drawing tool actions ]--
+/**
+ * @param {Function=} opt_cb
+ * @private
+ */
+app.base.view.Home.prototype.updateRightPanel_ = function(opt_cb) {
+  this.rightSlider_.slideClosed(opt_cb);
+};
+
+
+app.base.view.Home.prototype.onToolSelected = function(data) {
+  var slideColPanelIn = goog.bind(function() {
+    this.picPal.hide();
+    this.colPal.show();
+    this.slidePanelIn(this.colPal);
+  }, this);
+
+  var slidePicPanelIn = goog.bind(function() {
+    this.colPal.hide();
+    this.picPal.show();
+    var tWidth = goog.style.getBounds(this.mainCanvas.getElement()).width;
+    this.picPal.setSlideSize(tWidth + 10);
+    this.slidePanelIn(this.picPal);
+  }, this);
+
+  switch (data.name) {
+    case 'save_tool':
+      this.mainCanvas.unSelectAll();
+      this.saveDrawing();
+      break;
+    case 'remove_tool':
+      this.removeDrawing();
+      break;
+    case 'clear_tool':
+      this.mainCanvas.clearSvgDrawing();
+      break;
+    case 'pic_tool':
+      this.mainCanvas.setSelectedTool(data.name);
+      if (!data.isChecked) {
+        this.mainCanvas.unSelectAll();
+      }
+      break;
+    case 'select_tool':
+    case 'draw_circle':
+    case 'draw_rect':
+      this.mainCanvas.setSelectedTool(data.name);
+      this.mainCanvas.unSelectAll();
+      break;
+    case 'border_fill':
+      this.colPal.setFillType('stroke');
+      data.isChecked ? this.updateRightPanel_(slideColPanelIn) :
+          this.updateRightPanel_();
+      break;
+    case 'fill_tool':
+      this.colPal.setFillType('fill');
+      data.isChecked ? this.updateRightPanel_(slideColPanelIn) :
+          this.updateRightPanel_();
+      break;
+    case 'list_tool':
+      data.isChecked ? this.updateRightPanel_(slidePicPanelIn) :
+          this.updateRightPanel_();
+      break;
+    case 'delete_tool':
+      this.mainCanvas.deleteSelected();
+      break;
+    default:
+      console.debug('No action...');
+  }
+
 };
 
 //------------------------------------------------------------------[ Delete ]--
