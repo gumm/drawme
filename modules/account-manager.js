@@ -1,8 +1,6 @@
-var crypto = require('crypto');
-var MongoClient = require('mongodb').MongoClient;
-var ObjectId = require('mongodb').ObjectID;
-var assert = require('assert');
-var url = 'mongodb://localhost:27017/DRAWME';
+var connectAndClose = require('./mongo-helpers').connectAndClose;
+var saltAndHash = require('./mongo-helpers').saltAndHash;
+var validatePassword = require('./mongo-helpers').validatePassword;
 var ACCOUNTS = 'accounts';
 var PASSWORDS = 'pwhash';
 
@@ -74,7 +72,7 @@ module.exports = {
           }
       );
     };
-    connectCallClose(matchUsers, callback);
+    connectAndClose(matchUsers, callback);
   },
 
   /**
@@ -144,7 +142,7 @@ module.exports = {
       });
     };
 
-    connectCallClose(insertAccount, callback);
+    connectAndClose(insertAccount, callback);
   },
 
   /**
@@ -175,7 +173,7 @@ module.exports = {
       );
     };
 
-    connectCallClose(removeAccount, callback);
+    connectAndClose(removeAccount, callback);
   },
 
   /**
@@ -211,7 +209,7 @@ module.exports = {
       });
     };
 
-    connectCallClose(seedAccount, callback);
+    connectAndClose(seedAccount, callback);
   },
 
   /**
@@ -237,7 +235,7 @@ module.exports = {
       })
     };
 
-    connectCallClose(validate, callback);
+    connectAndClose(validate, callback);
   },
 
   /**
@@ -286,46 +284,6 @@ module.exports = {
         );
       });
     };
-    connectCallClose(reset, callback);
+    connectAndClose(reset, callback);
   }
-};
-
-//--------------------------------------------------------------[ Some utils ]--
-var connectCallClose = function(func, callback) {
-  MongoClient.connect(url, function(err, db) {
-    func(db, function(err, data) {
-      if (err) {
-        console.log('ERROR:', err);
-      }
-      db.close();
-      callback(err, data)
-    });
-  });
-};
-
-
-//----------------------------------------------------[ Passwords and Hashes ]--
-var generateSalt = function() {
-  var set = '0123456789abcdefghijklmnopqurstuvwxyzABCDEFGHIJKLMNOPURSTUVWXYZ';
-  var salt = '';
-  for (var i = 0; i < 10; i++) {
-    var p = Math.floor(Math.random() * set.length);
-    salt += set[p];
-  }
-  return salt;
-};
-
-var md5 = function(str) {
-  return crypto.createHash('md5').update(str).digest('hex');
-};
-
-var saltAndHash = function(pass, callback) {
-  var salt = generateSalt();
-  callback(salt + md5(pass + salt));
-};
-
-var validatePassword = function(plainPass, hashedPass, callback) {
-  var salt = hashedPass.substr(0, 10);
-  var validHash = salt + md5(plainPass + salt);
-  callback(hashedPass === validHash);
 };
