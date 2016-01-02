@@ -305,20 +305,22 @@ app.base.view.Home.prototype.saveDrawing = function() {
 
   // Get the drawing from the canvas.
   var svg = this.mainCanvas.getSvgDrawing();
-  var svgId = svg.getAttribute('id');
   var svgText = goog.dom.getOuterHtml(svg);
-  var url = svgId ? contracts.urlMap.PICS.UPDATE : contracts.urlMap.PICS.CREATE;
+  var payload = JSON.stringify({'svgText': svgText});
+  var onSaveCallback = goog.bind(this.onSave, this);
+  var responseType = goog.net.XhrIo.ResponseType.DEFAULT;
+  var header = {'Content-Type': 'application/json'};
+  var svgId = svg.getAttribute('id');
+  var uri = svgId ? new goog.Uri(contracts.urlMap.PICS.UPDATE + '/' + svgId) :
+      new goog.Uri(contracts.urlMap.PICS.CREATE);
 
-  // Hand roll the direct JSON post.
-  this.getXMan().post(
-      new goog.Uri(url),
-      JSON.stringify({'svgText': svgText, svgId: svgId}),
-      goog.bind(this.onSave, this),
-      goog.net.XhrIo.ResponseType.DEFAULT,
-      {'Content-Type': 'application/json'}
-  );
+  if (svgId) {
+    this.getXMan().put(uri, payload, onSaveCallback, responseType, header);
+  } else {
+    this.getXMan().post(uri, payload, onSaveCallback, responseType, header);
+  }
+
 };
-
 
 app.base.view.Home.prototype.onSave = function(e) {
   var xhr = e.target;

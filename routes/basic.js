@@ -388,9 +388,9 @@ module.exports = {
    */
   updatePic: function(req, res) {
 
-    var postCall = function() {
+    var putCall = function() {
       var pic = req.body['svgText'];
-      var svgId = req.body['svgId'];
+      var svgId = req.params.SVG_ID;
       var uid =  req.session.user._id;
 
       var callback = function(err, reply) {
@@ -404,7 +404,7 @@ module.exports = {
       PicMan.updatePic('some name', pic, svgId, uid, callback);
     };
 
-    helper.okGo(req, res, {'POST': postCall});
+    helper.okGo(req, res, {'PUT': putCall});
   },
 
   /**
