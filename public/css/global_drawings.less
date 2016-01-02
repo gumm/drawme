@@ -1,8 +1,11 @@
+@import (reference) url('./global_shadows.less');
+
 #workbench {
-    background-color: rgba(101, 72, 116, 0.13);
+    background-color: white;
     width: 800px;
     height: 600px;
     margin: 20px auto;
+    .shadow-2dp();
 }
 
 #workbench:hover {
@@ -50,8 +53,14 @@
     border-radius: 3px;
     padding: 0;
     overflow:hidden;
+    .shadow-2dp();
+    &.flat-button-hover {
+      .shadow-4dp();
+    }
+    &.flat-button-active {
+      .shadow-6dp();
+    }
   }
-
 
   .tool-item {
     float: left;

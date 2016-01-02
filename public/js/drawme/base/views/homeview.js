@@ -237,20 +237,24 @@ app.base.view.Home.prototype.onToolSelected = function(data) {
       break;
     case 'clear_tool':
       this.mainCanvas.clearSvgDrawing();
+      if (this.rightSlider_.isOpen()) {
+        this.updateRightPanel_();
+        this.toolPal.unSelectToggles();
+      }
       break;
-    case 'pic_tool':
+    case 'select_tool':
       this.mainCanvas.setSelectedTool(data.name);
       if (!data.isChecked) {
         this.mainCanvas.unSelectAll();
       }
       break;
-    case 'select_tool':
-    case 'draw_circle':
-    case 'draw_rect':
+    case 'move_tool':
+    case 'circle_tool':
+    case 'rectangle_tool':
       this.mainCanvas.setSelectedTool(data.name);
       this.mainCanvas.unSelectAll();
       break;
-    case 'border_fill':
+    case 'stroke_tool':
       this.colPal.setFillType('stroke');
       data.isChecked ? this.updateRightPanel_(slideColPanelIn) :
           this.updateRightPanel_();
@@ -268,7 +272,7 @@ app.base.view.Home.prototype.onToolSelected = function(data) {
       this.mainCanvas.deleteSelected();
       break;
     default:
-      console.debug('No action...');
+      console.debug('No action...', data.name);
   }
 
 };
@@ -302,6 +306,7 @@ app.base.view.Home.prototype.onRemove = function(e) {
 
 //--------------------------------------------------------------------[ Save ]--
 app.base.view.Home.prototype.saveDrawing = function() {
+  this.toolPal.spinSaveTool(true);
 
   // Get the drawing from the canvas.
   var svg = this.mainCanvas.getSvgDrawing();
@@ -331,6 +336,8 @@ app.base.view.Home.prototype.onSave = function(e) {
     if (data['data'] && data['data']['_id']) {
       this.mainCanvas.updateSvgId(data['data']['_id']);
     }
+
+    this.toolPal.spinSaveTool(false);
 
   } else {
     // Display the errors

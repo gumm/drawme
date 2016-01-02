@@ -7,6 +7,7 @@ goog.require('bad.utils');
 goog.require('contracts.urlMap');
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.dom.classlist');
 goog.require('goog.style');
 
 /**
@@ -23,10 +24,10 @@ goog.inherits(app.base.panel.ToolBox, bad.ui.Panel);
 app.base.panel.ToolBox.prototype.initDom = function() {
 
   var shapeGroup = new bad.ui.ExButtonGroup();
-  var shapeIds = ['draw_circle', 'draw_rect', 'select_tool', 'pic_tool'];
+  var shapeIds = ['circle_tool', 'rectangle_tool', 'move_tool', 'select_tool'];
 
   var strokeFillGroup = new bad.ui.ExButtonGroup();
-  var strokeFillIds = ['fill_tool', 'border_fill'];
+  var strokeFillIds = ['fill_tool', 'stroke_tool'];
 
   this.flyOutGroup_ = new bad.ui.ExButtonGroup();
   var flyOutIds = ['list_tool'];
@@ -93,4 +94,16 @@ app.base.panel.ToolBox.prototype.setColor = function(data) {
 
 app.base.panel.ToolBox.prototype.unSelectToggles = function() {
   this.flyOutGroup_.setChecked(false);
+};
+
+app.base.panel.ToolBox.prototype.spinSaveTool = function(bool) {
+  if (!this.saveIcon_) {
+    this.saveIcon_ = goog.dom.getFirstElementChild(
+        goog.dom.getElement('save_tool'));
+  }
+  if (bool) {
+    goog.dom.classlist.add(this.saveIcon_, 'rotate');
+  } else {
+    goog.dom.classlist.remove(this.saveIcon_, 'rotate');
+  }
 };

@@ -267,3 +267,38 @@ div[role="button"] {
     top: 4px;
   }
 }
+
+//---------------------------------------------------------------[ Spin Icon ]--
+.rotate {
+    color:#afafaf;
+    -moz-animation: spin .4s 1 linear;
+    -o-animation: spin .4s 1 linear;
+    -webkit-animation: spin .4s 1 linear;
+    animation: spin .4s 1 linear;
+    animation-iteration-count: infinite;
+}
+
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(359deg); }
+}
+
+@-moz-keyframes spin {
+    0% { -moz-transform: rotate(0deg); }
+    100% { -moz-transform: rotate(359deg); }
+}
+
+@-o-keyframes spin {
+    0% { -o-transform: rotate(0deg); }
+    100% { -o-transform: rotate(359deg); }
+}
+
+@-ms-keyframes spin {
+    0% { -ms-transform: rotate(0deg); }
+    100% { -ms-transform: rotate(359deg); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(359deg); }
+}

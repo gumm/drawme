@@ -148,7 +148,7 @@ app.base.panel.MainCanvas.prototype.deleteSelected = function() {
 
 app.base.panel.MainCanvas.prototype.onClick_ = function(e) {
   // Select or un-select
-  if (e.target != this.svgElement && this.activeTool == 'pic_tool') {
+  if (e.target != this.svgElement && this.activeTool == 'select_tool') {
     this.activeEl_ = e.target;
     goog.dom.classlist.toggle(this.activeEl_, 'selected');
   }
@@ -187,13 +187,13 @@ app.base.panel.MainCanvas.prototype.selectToDrag_ = function(e) {
 
 app.base.panel.MainCanvas.prototype.onMouseDown_ = function(e) {
   switch (this.activeTool) {
-    case 'draw_circle':
+    case 'circle_tool':
       this.createCircle(e);
       break;
-    case 'draw_rect':
+    case 'rectangle_tool':
       this.createRect(e);
       break;
-    case 'select_tool':
+    case 'move_tool':
       this.selectToDrag_(e);
       break;
     default:
@@ -203,10 +203,10 @@ app.base.panel.MainCanvas.prototype.onMouseDown_ = function(e) {
 
 app.base.panel.MainCanvas.prototype.onMouseMove_ = function(e) {
   switch (this.activeTool) {
-    case 'draw_circle':
+    case 'circle_tool':
       this.drawCircle(e);
       break;
-    case 'draw_rect':
+    case 'rectangle_tool':
       this.drawRect(e);
       break;
     default:
@@ -216,10 +216,10 @@ app.base.panel.MainCanvas.prototype.onMouseMove_ = function(e) {
 
 app.base.panel.MainCanvas.prototype.onMouseUp_ = function(e) {
   switch (this.activeTool) {
-    case 'draw_circle':
+    case 'circle_tool':
       this.endCircle(e);
       break;
-    case 'draw_rect':
+    case 'rectangle_tool':
       this.endRect(e);
       break;
     default:

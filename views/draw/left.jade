@@ -3,19 +3,19 @@
 
 
 .toolbox
-  #draw_circle.tool-item(title='Draw Circles and Elipses')
+  #circle_tool.tool-item(title='Draw Circles and Elipses')
     include ../../public/img/draw_circle.svg
-  #draw_rect.tool-item(title='Draw Rectangles and Squares')
+  #rectangle_tool.tool-item(title='Draw Rectangles and Squares')
     include ../../public/img/draw_rect.svg
 
 .toolbox
-  #pic_tool.tool-item(title='Select or un-select an element')
+  #select_tool.tool-item(title='Select or un-select an element')
     i.material-icons.md-48 select_all
-  #select_tool.tool-item(title='Move a selected element')
+  #move_tool.tool-item(title='Move a selected element')
     i.material-icons.md-48 open_with
   #fill_tool.tool-item(title='Change the fill color')
     i.material-icons.md-48.svg-icon-fill format_color_fill
-  #border_fill.tool-item(title='Change the stroke color')
+  #stroke_tool.tool-item(title='Change the stroke color')
     i.material-icons.md-48.svg-icon-outline border_color
   #delete_tool.tool-item(title='Delete a selected element')
     i.material-icons.md-48 clear
