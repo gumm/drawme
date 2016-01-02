@@ -10,5 +10,3 @@ logs
 # Local settings file. Used for deploayment box specific things, or de settings
 /settings_local.json
 
-# This is a sym-link to a node module
-/public/js/google-closure-library
