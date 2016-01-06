@@ -344,7 +344,7 @@ java -server -XX:+TieredCompilation -jar ${CLOSURE_COMPILER_PATH}/compiler.jar \
     --externs               ${CLOSURE_COMPILER_PATH}/contrib/externs/maps/google_maps_api_v3_22.js \
     --output_wrapper        "(function(){%output%})();//# sourceMappingURL=${PROJECT_NAME}.min.${SITE_VERSION}.js.map" \
     ${CLOSURE_LIBRARY_PATH}/ \
-    ${JS_PATH}/bad-library/ \
+    ${JS_PATH}/bad-library/bad/ \
     ${JS_PATH}/contracts/ \
     ${JS_PATH}/${PROJECT_NAME}/ 2>${BUILD_LOG_FILE}
 
