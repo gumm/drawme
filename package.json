@@ -25,7 +25,7 @@
     "express": "~4.13.1",
     "express-session": "^1.12.1",
     "google-closure-compiler": "^20151015.0.0",
-    "google-closure-library": "^20151015.0.0",
+    "google-closure-library": "*",
     "jade": "~1.11.0",
     "kerberos": "0.0.17",
     "less": "^2.5.3",
