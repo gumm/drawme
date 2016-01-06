@@ -46,10 +46,9 @@ java -version
 ```
 
 ###Finally install the drawme app.
-####Note git clone is recursive to get the git submodules
 ```bash
 cd /opt
-git clone --recursive https://github.com/gumm/drawme.git
+git clone https://github.com/gumm/drawme.git
 ```
 
 
