@@ -17,6 +17,7 @@
     "compile": "npm run deps && npm run lint && npm run compile:js && npm run compile:css"
   },
   "dependencies": {
+    "bad-library": "^2.0.0",
     "body-parser": "~1.13.2",
     "cookie-parser": "^1.4.0",
     "crypto": "0.0.3",

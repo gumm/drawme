@@ -42,6 +42,13 @@ if [ ! -d "${JS_PATH}/google-closure-library/closure" ]; then
     echo "There is no symlink to the closure library. Make it now"
     ln -sf ${NODE_MODULES}/google-closure-library ${JS_PATH}/google-closure-library
 fi
+
+# Make sure the Bad Library is sym-linked into the public js space.
+if [ ! -d "${JS_PATH}/bad-library/bad" ]; then
+    echo "There is no symlink to the Bad Library. Make it now"
+    ln -sf ${NODE_MODULES}/bad-library ${JS_PATH}/bad-library
+fi
+
 CLOSURE_LIBRARY_PATH=${JS_PATH}/google-closure-library/closure
 GOOG_BIN_PATH=${CLOSURE_LIBRARY_PATH}/bin/build
 
