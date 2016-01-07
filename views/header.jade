@@ -1,15 +1,13 @@
 //- preset form values if we receive a userdata object
-- profile = typeof(data) != 'undefined' ? data : { }
+- reply = typeof(data) != 'undefined' ? data : { }
 
-logo_container
-  //img#logoImg(src="img/explogo.png")
-
-if (profile.name)
+if (reply.profile)
   .active_user_container
     .salutation Welcome
     #user_button
-      i.material-icons.md-18 face
-      | #{profile.name} #{profile.surname}
+      if (reply.gravatar)
+        .avatar_container
+          img#buttonAvatar(src="http:" + reply.gravatar)
+      .uname_container
+        | #{reply.profile.name} #{reply.profile.surname}
 
-
-//

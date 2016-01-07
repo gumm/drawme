@@ -2,7 +2,16 @@
   "title": "Circles & Squares",
   "theme": "abstract",
   "jsIsCompiled": true,
-  "mailUser": "blah",
-  "mailPass": "blee",
+  "smtp": {
+    "from": {
+      "user": "spinup",
+      "alias": "Spinup - System",
+      "domain": "should.probably.be.a.domain.name.you.own"
+    },
+    "host": "smtp.server",
+    "port": 2525,
+    "user": "smtpuser",
+    "pass": "smtppass"
+  },
   "siteUrl": "http://localhost:3000"
 }

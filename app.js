@@ -24,13 +24,15 @@ mSettings.version = require('./package.json').version;
 
 // ----------------------------------------------------[ An Email Dispatcher ]--
 var nodemailer = require('nodemailer');
-var transporter = nodemailer.createTransport({
-  service: 'Gmail',
-  auth: {
-    user: mSettings.mailUser,
-    pass: mSettings.mailPass
-  }
-});
+var smtpTransport = require('nodemailer-smtp-transport');
+var transporter = nodemailer.createTransport(smtpTransport({
+    host: mSettings.smtp.host,
+    port: mSettings.smtp.port,
+    auth: {
+        user: mSettings.smtp.user,
+        pass: mSettings.smtp.pass
+    }
+}));
 mSettings.transporter = transporter;
 
 // -----------------------------------------------------------[ Seed the app ]--

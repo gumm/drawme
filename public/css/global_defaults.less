@@ -179,8 +179,6 @@ div[role="button"] {
   }
 }
 
-
-
 //---------------------------------------------------------[ Utility Classes ]--
 
 .dom-remove {
@@ -258,15 +256,33 @@ div[role="button"] {
 }
 
 .active_user_container {
-  float: right;
-  margin-right: 20px;
-  margin-top: 14px;
-  .salutation{
+  position: absolute;
+  top: 18px;
+  right:20px;
+  .salutation {
     .typoLightHeadline(white);
     display: inline-block;
-    margin-right: 10px;
-    position: relative;
-    top: 4px;
+    vertical-align: middle;
+  }
+  #user_button {
+    height: 28px;
+    max-height: 28px;
+    margin: 0 0 0 20px;
+    top: 1px;
+    .flat-button-caption {
+      .avatar_container {
+        max-height: 28px;
+        max-width: 28px;
+        margin-top: -2px;
+        margin-left: -8px;
+        overflow: hidden;
+        float: left;
+        padding-right: 10px;
+      }
+      .uname_container  {
+        display: inline-block;
+      }
+    }
   }
 }
 

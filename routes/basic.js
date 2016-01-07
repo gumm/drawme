@@ -1,3 +1,4 @@
+var gravatar = require('gravatar');
 var helper = require('./helper');
 var AccMan = require('../modules/account-manager');
 var PicMan = require('../modules/pic-manager');
@@ -24,18 +25,20 @@ module.exports = {
   },
 
   /**
-   * This is the top bar bits. It really should not need to come here for this.
+   * This is the top bar bits.
    * @param req
    * @param res
    */
   header: function(req, res) {
     var getCall = function() {
-      if (!req.session.user) {
-        res.render('header', {});
-      } else {
-        res.render('header',
-            helper.makeReplyWith(null, req.session.user));
+      var payload = {};
+      if (req.session.user) {
+        payload = helper.makeReplyWith(null, {
+          profile: req.session.user,
+          gravatar: gravatar.url(req.session.user.email, {s: '28', r: 'pg'})
+        });
       }
+      res.render('header', payload);
     };
     helper.okGo(req, res, {'GET': getCall});
   },
@@ -194,6 +197,7 @@ module.exports = {
   lostPassword: function(req, res) {
     var settings = req.app.get('setup');
     var transporter = settings.transporter;
+    var from = settings.smtp.from;
 
     //noinspection JSUnresolvedVariable
     var siteUrl = settings.siteUrl;
@@ -204,15 +208,22 @@ module.exports = {
 
     var postCall = function() {
       var email = req.body['email'];
+      var onAnyReply = function() {
+        res.status(200).send(helper.makeReplyWith(
+            null,
+            null,
+            'Reset link sent. Please check your email.'
+        ));
+      };
       AccMan.seedAccountWithResetKey(email, function(err, accountDoc) {
-        if (accountDoc) {
+        if (accountDoc.value) {
 
           var account = accountDoc.value;
           var content = composeEmail(account, siteUrl);
 
           // setup e-mail data with unicode symbols
           var mailOptions = {
-            from: "Circles and Squares <explore.iot@gmail.com>",
+            from: from.alias + ' <' + from.user + '@' + from.domain + '>',
             to: {
               name: account.name,
               address: account.email
@@ -231,15 +242,11 @@ module.exports = {
               return console.log(err);
             } else {
               console.log('Message sent: ' + info.response);
-              res.status(200).send(helper.makeReplyWith(
-                  null,
-                  null,
-                  'Reset link sent. Please check your email.'
-              ));
+              onAnyReply();
             }
           });
         } else {
-          res.status(400).send(helper.makeReplyWith(err));
+          onAnyReply();
         }
       });
     };
