@@ -2,7 +2,7 @@ goog.provide('app.user.panel.SignUp');
 
 goog.require('app.user.EventType');
 goog.require('bad.ui.Form');
-goog.require('bad.utils');
+goog.require('bad.ui.button');
 goog.require('goog.dom');
 goog.require('goog.dom.forms');
 goog.require('goog.uri.utils');
@@ -21,17 +21,17 @@ goog.inherits(app.user.panel.SignUp, bad.ui.Form);
 
 app.user.panel.SignUp.prototype.initDom = function() {
 
-  bad.utils.makeButton('account-cancel', this,
+  bad.ui.button.makeButton('account-cancel', this,
     goog.bind(this.onCancel, this)
   );
 
-  bad.utils.makeButton('account-submit', this,
+  bad.ui.button.makeButton('account-submit', this,
     goog.bind(this.submitSignUp, this)
   );
 
   var removeAccount = goog.dom.getElement('remove-account');
   if (removeAccount) {
-    bad.utils.makeButton('remove-account', this,
+    bad.ui.button.makeButton('remove-account', this,
       goog.bind(this.dispatchActionEvent, this,
         app.user.EventType.ACCOUNT_REMOVE)
     );

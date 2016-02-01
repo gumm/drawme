@@ -31,7 +31,7 @@
     "jade": "~1.11.0",
     "kerberos": "0.0.17",
     "less": "^2.5.3",
-    "less-middleware": "1.0.x",
+    "less-middleware": "^2.0.1",
     "less-plugin-clean-css": "^1.5.1",
     "merge": "^1.2.0",
     "mongodb": "^2.1.0",

@@ -10,6 +10,7 @@ goog.require('bad.ui.EventType');
 goog.require('bad.ui.Panel');
 goog.require('bad.ui.View');
 goog.require('bad.ui.ViewEvent');
+goog.require('bad.ui.button');
 goog.require('bad.utils');
 goog.require('contracts.urlMap');
 goog.require('goog.Uri');
@@ -55,7 +56,7 @@ app.user.view.Login.prototype.configurePanels = function() {
   this.loginPanel.setUri(new goog.Uri(contracts.urlMap.LOG.IN));
   this.loginPanel.setNestAsTarget(layout.getNest('main', 'right', 'mid'));
   this.loginPanel.setBeforeReadyCallback(goog.bind(function() {
-    bad.utils.makeButton('create-account', this.loginPanel,
+    bad.ui.button.makeButton('create-account', this.loginPanel,
       goog.bind(this.enterSignUpForm, this)
     );
   }, this));

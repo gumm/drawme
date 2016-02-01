@@ -2,7 +2,7 @@ goog.provide('app.user.panel.Login');
 
 goog.require('app.user.EventType');
 goog.require('bad.ui.Form');
-goog.require('bad.utils');
+goog.require('bad.ui.button');
 goog.require('goog.dom');
 goog.require('goog.events.EventType');
 
@@ -20,9 +20,8 @@ goog.inherits(app.user.panel.Login, bad.ui.Form);
 
 app.user.panel.Login.prototype.initDom = function() {
 
-  bad.utils.makeButton('btn-login', this,
-    goog.bind(this.submitLoginForm, this)
-  );
+  bad.ui.button.makeButton('btn-login', this,
+      goog.bind(this.submitLoginForm, this));
 
   this.getHandler().listen(
     goog.dom.getElement('forgot-password'),

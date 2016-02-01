@@ -2,7 +2,7 @@ goog.provide('app.user.panel.LostPassword');
 
 goog.require('app.user.EventType');
 goog.require('bad.ui.Form');
-goog.require('bad.utils');
+goog.require('bad.ui.button');
 
 /**
  * The basic login form controller.
@@ -17,14 +17,14 @@ app.user.panel.LostPassword = function(id, opt_domHelper) {
 goog.inherits(app.user.panel.LostPassword, bad.ui.Form);
 
 app.user.panel.LostPassword.prototype.initDom = function() {
-  bad.utils.makeButton('cancel', this,
+  bad.ui.button.makeButton('cancel', this,
     goog.bind(function() {
       this.clearAlerts();
       this.dispatchActionEvent(app.user.EventType.FORGOT_PW_CANCEL);
     }, this)
   );
 
-  bad.utils.makeButton('submit', this,
+  bad.ui.button.makeButton('submit', this,
     goog.bind(this.submitLostPasswordForm, this)
   );
 };

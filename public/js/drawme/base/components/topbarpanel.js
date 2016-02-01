@@ -1,15 +1,11 @@
 goog.provide('app.base.TopBarPanel');
 
 goog.require('app.base.EventType');
-goog.require('bad.ui.MenuButtonRenderer');
-goog.require('bad.ui.MenuFloatRenderer');
-goog.require('bad.ui.MenuItemRenderer');
 goog.require('bad.ui.Panel');
-goog.require('bad.utils');
+goog.require('bad.ui.button');
 goog.require('contracts.urlMap');
 goog.require('goog.Uri');
 goog.require('goog.dom');
-goog.require('goog.ui.MenuButton');
 goog.require('goog.uri.utils');
 
 /**
@@ -37,7 +33,7 @@ app.base.TopBarPanel.prototype.initDom = function() {
 app.base.TopBarPanel.prototype.buildUserButton = function() {
 
   /**
-   * @type {Array}
+   * @type {!Array}
    */
   var menuItems = [
     ['Delete Profile', 'icon-user', goog.bind(this.dispatchActionEvent,
@@ -48,27 +44,20 @@ app.base.TopBarPanel.prototype.buildUserButton = function() {
     ['Sign Out', 'icon-signout', goog.bind(this.logOut, this)]
   ];
 
-  var renderer = /** @type {bad.ui.MenuFloatRenderer} */ (
-      bad.ui.MenuFloatRenderer.getInstance());
-
-  var itemRenderer = /** @type {bad.ui.MenuItemRenderer} */ (
-      bad.ui.MenuItemRenderer.getInstance());
-
-  var menuButRender = /** @type {bad.ui.MenuButtonRenderer} */ (
-      bad.ui.MenuButtonRenderer.getInstance());
-
-  var menu = bad.utils.makeMenu(
-    menuItems, this.dom_, this.getHandler(), this, renderer, itemRenderer);
-
   // Menu Button
-  var menuButton = new goog.ui.MenuButton('', menu, menuButRender, this.dom_);
-  menuButton.decorate(goog.dom.getElement('user_button'));
-
-  this.userButton = menuButton;
+  this.userButton = bad.ui.button.makeMenuButton(
+      'user_button',      // elId
+      menuItems,          // menuItems
+      this.dom_,          // domHelper
+      this.getHandler(),  // handler
+      this,               // scope
+      true,               // opt_sticky
+      'flat_menu');       // opt_cssClass
 };
 
+
 /**
- * @param {bad.UserManager} user
+ * @param {!bad.UserManager} user
  */
 app.base.TopBarPanel.prototype.setUser = function(user) {
   app.base.TopBarPanel.superClass_.setUser.call(this, user);

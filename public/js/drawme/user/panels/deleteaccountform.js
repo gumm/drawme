@@ -2,7 +2,7 @@ goog.provide('app.user.panel.DeleteAccount');
 
 goog.require('app.user.EventType');
 goog.require('bad.ui.Form');
-goog.require('bad.utils');
+goog.require('bad.ui.button');
 goog.require('contracts.urlMap');
 goog.require('goog.dom.forms');
 goog.require('goog.uri.utils');
@@ -20,11 +20,11 @@ app.user.panel.DeleteAccount = function(id, opt_domHelper) {
 goog.inherits(app.user.panel.DeleteAccount, bad.ui.Form);
 
 app.user.panel.DeleteAccount.prototype.initDom = function() {
-  bad.utils.makeButton(
+  bad.ui.button.makeButton(
     'but-cancel', this,
     goog.bind(this.cancel, this));
 
-  bad.utils.makeButton(
+  bad.ui.button.makeButton(
     'remove-account-confirm', this,
     goog.bind(this.submitConfirmation, this)
   );

@@ -2,7 +2,7 @@ goog.provide('app.base.panel.PicsList');
 
 goog.require('app.base.EventType');
 goog.require('bad.ui.Panel');
-goog.require('bad.utils');
+goog.require('bad.ui.button');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.dataset');
@@ -39,7 +39,7 @@ app.base.panel.PicsList.prototype.initDom = function() {
     svg.setAttribute('id', picEl.id);
 
     // Convert the container to a button.
-    bad.utils.makeButton(
+    bad.ui.button.makeButton(
         picEl, this,
         goog.bind(this.dispatchActionEvent, this,
             app.base.EventType.DRAWING_SELECTED, svg));

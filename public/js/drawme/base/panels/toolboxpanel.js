@@ -3,6 +3,7 @@ goog.provide('app.base.panel.ToolBox');
 goog.require('app.base.EventType');
 goog.require('bad.ui.ExButtonGroup');
 goog.require('bad.ui.Panel');
+goog.require('bad.ui.button');
 goog.require('bad.utils');
 goog.require('contracts.urlMap');
 goog.require('goog.array');
@@ -39,7 +40,7 @@ app.base.panel.ToolBox.prototype.initDom = function() {
   var tools = goog.dom.getElementsByClass('tool-item', this.getElement());
   goog.array.forEach(tools, function(tool) {
     if (goog.array.contains(normalButtons, tool.id)) {
-      bad.utils.makeButton(
+      bad.ui.button.makeButton(
           tool.id,
           this,
           goog.bind(
